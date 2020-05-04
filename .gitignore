@@ -37,3 +37,7 @@
 # Debug
 Debug/
 .vs/
+
+# Release
+Bin/Win32/Release/
+Bin/x64/Release/

@@ -5,28 +5,46 @@
       <UniqueIdentifier>3bf364fc-9537-4c79-a545-8b14fdcb0331</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{659ab4d6-e2f1-47ea-b82b-cf3516fd28ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{02ab0696-0ad4-411a-b533-273de1b25ade}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Game.h" />
-    <ClInclude Include="Source\pch.h" />
-    <ClInclude Include="Source\StepTimer.h" />
+    <ClInclude Include="Source\pch.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StepTimer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Game.cpp" />
-    <ClCompile Include="Source\pch.cpp" />
-    <ClCompile Include="Source\Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="directx.ico">
-      <Filter>Assets</Filter>
-    </Image>
+    <ClCompile Include="Source\pch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
       <Filter>Assets</Filter>
     </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\directx.ico">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
 </Project>
