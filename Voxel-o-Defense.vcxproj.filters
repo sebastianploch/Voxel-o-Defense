@@ -11,27 +11,33 @@
     <Filter Include="Headers">
       <UniqueIdentifier>{02ab0696-0ad4-411a-b533-273de1b25ade}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Utils">
+      <UniqueIdentifier>{390f2794-e5b8-41f3-8308-ea9a0b8aa41e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Utils">
+      <UniqueIdentifier>{462ad0af-adb7-42f8-b0b6-22688729548e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\pch.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\pch.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Source\StepTimer.h">
-      <Filter>Headers</Filter>
+      <Filter>Headers\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\pch.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\pch.cpp">
+      <Filter>Source\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,11 +46,13 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Source\resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="Resources\directx.ico">
       <Filter>Assets</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\resource.rc">
+      <Filter>Source\Utils</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
