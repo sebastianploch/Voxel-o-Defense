@@ -17,6 +17,15 @@
     <Filter Include="Source\Utils">
       <UniqueIdentifier>{462ad0af-adb7-42f8-b0b6-22688729548e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{f7f06c61-7f30-4328-919d-8dfaec6b482e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\GameObjects">
+      <UniqueIdentifier>{93bb69cb-4f41-4ad6-a2da-d3440b3c719f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameObjects">
+      <UniqueIdentifier>{1a6a98d0-a115-439c-8400-f0a2f4a56e93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -28,6 +37,12 @@
     <ClInclude Include="Source\StepTimer.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\IGameObject.h">
+      <Filter>Headers\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SimpleShape.h">
+      <Filter>Headers\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -38,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="Source\pch.cpp">
       <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IGameObject.cpp">
+      <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SimpleShape.cpp">
+      <Filter>Source\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,5 +75,13 @@
     <ResourceCompile Include="Source\resource.rc">
       <Filter>Source\Utils</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\BasicVertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\BasicPixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

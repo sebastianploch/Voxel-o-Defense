@@ -1,8 +1,3 @@
-//
-// pch.h
-// Header for standard system include files.
-//
-
 #pragma once
 
 #include <winsdkver.h>
@@ -29,17 +24,31 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
+// ComPtr
 #include <wrl/client.h>
 
+// Direct3D
 #include <d3d11_1.h>
 #include <dxgi1_2.h>
-#include <DirectXMath.h>
 #include <DirectXColors.h>
 
+#pragma comment(lib,"d3dcompiler.lib")
+#include <d3dcompiler.h>
+
+// DirectXTK
+#include <SimpleMath.h>
+#include <Effects.h>
+#include <CommonStates.h>
+#include <VertexTypes.h>
+#include <PrimitiveBatch.h>
+#include <GeometricPrimitive.h>
+
+// STD
 #include <algorithm>
 #include <exception>
 #include <memory>
 #include <stdexcept>
+#include <vector>
 
 namespace DX
 {
