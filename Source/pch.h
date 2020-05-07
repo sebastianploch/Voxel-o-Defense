@@ -37,10 +37,8 @@
 
 // DirectXTK
 #include <SimpleMath.h>
-#include <Effects.h>
 #include <CommonStates.h>
 #include <VertexTypes.h>
-#include <PrimitiveBatch.h>
 #include <GeometricPrimitive.h>
 
 // STD

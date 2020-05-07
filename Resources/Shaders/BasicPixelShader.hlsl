@@ -1,4 +1,9 @@
 
+cbuffer constantBuffer : register(b0)
+{
+    float4 objectColour;
+}
+
 struct PS_INPUT
 {
 	float3 normal : NORMAL;
@@ -7,5 +12,5 @@ struct PS_INPUT
 
 float4 PSMain(PS_INPUT Input) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+	return objectColour;
 }

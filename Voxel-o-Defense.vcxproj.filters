@@ -40,9 +40,6 @@
     <ClInclude Include="Source\IGameObject.h">
       <Filter>Headers\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SimpleShape.h">
-      <Filter>Headers\GameObjects</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -55,9 +52,6 @@
       <Filter>Source\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\IGameObject.cpp">
-      <Filter>Source\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SimpleShape.cpp">
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>

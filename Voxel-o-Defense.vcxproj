@@ -185,7 +185,6 @@
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\IGameObject.h" />
     <ClInclude Include="Source\pch.h" />
-    <ClInclude Include="Source\SimpleShape.h" />
     <ClInclude Include="Source\StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -198,7 +197,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\SimpleShape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\resource.rc" />

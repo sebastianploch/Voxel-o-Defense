@@ -64,7 +64,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
 
     // Game Objects
-    std::vector<std::unique_ptr<IGameObject>>       m_gameObjects;
+    std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
 
     // Rendering
     std::unique_ptr<DirectX::CommonStates>          m_states;

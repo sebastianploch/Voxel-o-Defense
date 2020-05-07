@@ -128,8 +128,7 @@ void Game::CreateResources()
 			// If the device was removed for any reason, a new device and swap chain will need to be created.
 			OnDeviceLost();
 
-			// Everything is set up now. Do not continue execution of this method. OnDeviceLost will reenter this method 
-			// and correctly set up the new device.
+			// OnDeviceLost will reenter this method and correctly set up the new device.
 			return;
 		}
 		else
@@ -174,7 +173,6 @@ void Game::CreateResources()
 			m_swapChain.ReleaseAndGetAddressOf()
 		));
 
-		// This template does not support exclusive fullscreen mode and prevents DXGI from responding to the ALT+ENTER shortcut.
 		DX::ThrowIfFailed(dxgiFactory->MakeWindowAssociation(m_window, DXGI_MWA_NO_ALT_ENTER));
 	}
 
@@ -185,8 +183,7 @@ void Game::CreateResources()
 	// Create a view interface on the render target to use on bind.
 	DX::ThrowIfFailed(m_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, m_renderTargetView.ReleaseAndGetAddressOf()));
 
-	// Allocate a 2-D surface as the depth/stencil buffer and
-	// create a DepthStencil view on this surface to use on bind.
+	// Create a DepthStencil view on this surface to use on bind.
 	CD3D11_TEXTURE2D_DESC depthStencilDesc(depthBufferFormat, backBufferWidth, backBufferHeight, 1, 1, D3D11_BIND_DEPTH_STENCIL);
 
 	ComPtr<ID3D11Texture2D> depthStencil;
@@ -260,22 +257,20 @@ void Game::OnDeviceLost()
 void Game::Tick()
 {
 	m_timer.Tick([&]()
-		{
-			Update(m_timer);
-		});
+	{
+		Update(m_timer);
+	});
 
 	Render();
 }
 
-// Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
-    deltaTime;
+	deltaTime;
 }
 
-// Draws the scene.
 void Game::Render()
 {
     // Don't try to render anything before the first Update.
@@ -285,6 +280,7 @@ void Game::Render()
     }
 
     Clear();
+
 
 
 	// Swap backbuffer
@@ -302,7 +298,7 @@ void Game::GetDefaultSize(int& width,
 	height = 600;
 }
 
-// Compiles shader (hlsl) using d3dcompiler
+// Compile shader (hlsl) using d3dcompiler
 HRESULT Game::CompileShader(LPCTSTR path,
 							LPCSTR entryPoint,
 							LPCSTR profile,
