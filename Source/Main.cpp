@@ -50,14 +50,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
             nullptr);
 
-        // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"Voxel_o_DefenseWindowClass", L"Voxel-o-Defense", WS_POPUP,
-        // to default to fullscreen.
-
         if (!hwnd)
             return 1;
 
         ShowWindow(hwnd, nCmdShow);
-        // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
 
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(g_game.get()) );
 
@@ -95,7 +91,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static bool s_in_suspend = false;
     static bool s_minimized = false;
     static bool s_fullscreen = false;
-    // TODO: Set s_fullscreen to true if defaulting to fullscreen.
 
     auto game = reinterpret_cast<Game*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
