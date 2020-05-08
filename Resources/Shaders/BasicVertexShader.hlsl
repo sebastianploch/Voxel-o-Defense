@@ -1,5 +1,5 @@
 
-cbuffer constantBuffer : register(b0)
+cbuffer constantBuffer : register( b0 )
 {
     matrix mvpMat;
     matrix worldMat;
@@ -7,25 +7,22 @@ cbuffer constantBuffer : register(b0)
 
 struct VS_INPUT
 {
-	float4 position : POSITION;
-	float3 normal : NORMAL;
-	float2 texCoord : TEXCOORD0;
+    float4 position : SV_Position;
+	float4 colour : COLOR;
 };
 
 struct VS_OUTPUT
 {
+    float4 colour : COLOR;
 	float4 position : SV_POSITION;
-	float3 normal : NORMAL;
-	float2 texCoord : TEXCOORD0;
 };
 
 VS_OUTPUT VSMain(VS_INPUT Input)
 {
 	VS_OUTPUT Output;
 	
-    Output.position = mul(Input.position, mvpMat);
-    Output.normal = mul(Input.normal, (float3x3)worldMat);
-    Output.texCoord = Input.texCoord;
-	
+    Output.position = mul(mvpMat, Input.position);
+    Output.colour = Input.colour;
+
 	return Output;
 }
