@@ -31,15 +31,12 @@
 #include <d3d11_1.h>
 #include <dxgi1_2.h>
 #include <DirectXColors.h>
-
-#pragma comment(lib,"d3dcompiler.lib")
 #include <d3dcompiler.h>
 
 // DirectXTK
 #include <SimpleMath.h>
 #include <CommonStates.h>
 #include <VertexTypes.h>
-#include <GeometricPrimitive.h>
 
 // STD
 #include <algorithm>
