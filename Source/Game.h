@@ -5,6 +5,11 @@
 
 using VertexType = DirectX::VertexPositionColor;
 
+struct ConstantBuffer
+{
+    DirectX::SimpleMath::Matrix mvpMatrix;
+    DirectX::SimpleMath::Matrix worldMatrix;
+};
 
 class Game
 {
@@ -27,7 +32,6 @@ public:
     void OnResuming();
     void OnWindowSizeChanged(int width,
                              int height);
-
     // Properties
     void GetDefaultSize(int& width,
                         int& height) const noexcept;
@@ -36,18 +40,20 @@ private:
     void Update(DX::StepTimer const& timer);
     void Render();
 
-    void Clear();
-    void Present();
-    HRESULT CompileShader(LPCTSTR path,
-                          LPCSTR entryPoint,
-                          LPCSTR profile,
-                          ID3DBlob** blob);
-
     void CreateDevice();
     void CreateResources();
     void CreateShaders();
+    void CreateConstantBuffer();
 
     void OnDeviceLost();
+
+	void Clear();
+	void Present();
+	void Prepare();
+	HRESULT CompileShader(LPCTSTR path,
+						  LPCSTR entryPoint,
+						  LPCSTR profile,
+						  ID3DBlob** blob);
 
 private:
     // Device resources.
@@ -69,6 +75,7 @@ private:
     // Rendering
     std::unique_ptr<DirectX::CommonStates>          m_states;
     Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
+    Microsoft::WRL::ComPtr<ID3D11InputLayout>       m_posColInputLayout;
     Microsoft::WRL::ComPtr<ID3D11PixelShader>       m_basicPixelShader;
     Microsoft::WRL::ComPtr<ID3D11VertexShader>      m_basicVertexShader;
 

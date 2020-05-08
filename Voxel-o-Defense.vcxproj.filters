@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Assets">
-      <UniqueIdentifier>3bf364fc-9537-4c79-a545-8b14fdcb0331</UniqueIdentifier>
-      <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Source">
       <UniqueIdentifier>{659ab4d6-e2f1-47ea-b82b-cf3516fd28ce}</UniqueIdentifier>
     </Filter>
@@ -26,6 +22,10 @@
     <Filter Include="Source\GameObjects">
       <UniqueIdentifier>{1a6a98d0-a115-439c-8400-f0a2f4a56e93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>3bf364fc-9537-4c79-a545-8b14fdcb0331</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -38,6 +38,9 @@
       <Filter>Headers\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\IGameObject.h">
+      <Filter>Headers\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DebugSimpleCube.h">
       <Filter>Headers\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -54,15 +57,18 @@
     <ClCompile Include="Source\IGameObject.cpp">
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\DebugSimpleCube.cpp">
+      <Filter>Source\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
-      <Filter>Assets</Filter>
+      <Filter>Resources</Filter>
     </Manifest>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\directx.ico">
-      <Filter>Assets</Filter>
+      <Filter>Resources</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

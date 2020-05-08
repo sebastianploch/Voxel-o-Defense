@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+#include "DebugSimpleCube.h"
 
 extern void ExitGame() noexcept;
 
@@ -33,10 +34,15 @@ void Game::Initialize(HWND window,
     CreateDevice();
     CreateResources();
 	CreateShaders();
+	CreateConstantBuffer();
 
     // Set locked framerate (60fps)
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60.0);
+
+	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
+
+	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>());
 }
 
 // Create context for window (directX)
@@ -97,7 +103,6 @@ void Game::CreateDevice()
 
 	DX::ThrowIfFailed(device.As(&m_d3dDevice));
 	DX::ThrowIfFailed(context.As(&m_d3dContext));
-
 
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 }
@@ -192,16 +197,18 @@ void Game::CreateResources()
 	CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
 	DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
 
+	// Set Primitive Topology
+	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Matrices
-	m_viewMat = Matrix::CreateLookAt(Vector3(2.0f, 2.0f, 2.0f),
+	// Matrices #Camera
+	m_viewMat = Matrix::CreateLookAt(Vector3(5.0f, 5.0f, 5.0f),
 									 Vector3::Zero,
 									 Vector3::UnitY);
+
 	m_projMat = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.0f,
 													 static_cast<float>(backBufferWidth) / static_cast<float>(backBufferHeight),
 													 0.1f,
 													 100.0f);
-
 }
 
 void Game::CreateShaders()
@@ -232,9 +239,30 @@ void Game::CreateShaders()
 													 nullptr,
 													 m_basicPixelShader.ReleaseAndGetAddressOf()));
 
+	// Create Position & Colour Input Layout
+	m_d3dDevice->CreateInputLayout(VertexPositionColor::InputElements,
+								   VertexPositionColor::InputElementCount,
+								   vsBlob->GetBufferPointer(),
+								   vsBlob->GetBufferSize(),
+								   m_posColInputLayout.GetAddressOf());
+
 	// Clear blobs
 	vsBlob->Release();
 	psBlob->Release();
+}
+
+void Game::CreateConstantBuffer()
+{
+	D3D11_BUFFER_DESC cbd;
+	ZeroMemory(&cbd, sizeof(cbd));
+	cbd.Usage = D3D11_USAGE_DEFAULT;
+	cbd.ByteWidth = sizeof(ConstantBuffer);
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.CPUAccessFlags = 0;
+
+	DX::ThrowIfFailed(m_d3dDevice->CreateBuffer(&cbd,
+												nullptr,
+												m_constantBuffer.ReleaseAndGetAddressOf()));
 }
 
 void Game::OnDeviceLost()
@@ -246,9 +274,15 @@ void Game::OnDeviceLost()
 	m_d3dDevice.Reset();
 
 	m_states.reset();
+	m_constantBuffer.Reset();
+	m_posColInputLayout.Reset();
+	m_basicPixelShader.Reset();
+	m_basicVertexShader.Reset();
 
 	CreateDevice();
 	CreateResources();
+	CreateShaders();
+	CreateConstantBuffer();
 }
 #pragma endregion Initialise
 
@@ -268,7 +302,11 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
-	deltaTime;
+	// Update all objects
+	for (auto object : m_gameObjects)
+	{
+		object->Update(deltaTime);
+	}
 }
 
 void Game::Render()
@@ -280,8 +318,24 @@ void Game::Render()
     }
 
     Clear();
+	Prepare();
 
+	ConstantBuffer cb;
 
+	// Render all objects
+	for (const auto& object : m_gameObjects)
+	{
+		cb.mvpMatrix = object->GetWorldMatrix() * m_viewMat * m_projMat;
+		cb.worldMatrix = object->GetWorldMatrix();
+
+		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+										0,
+										nullptr,
+										&cb,
+										0, 0);
+
+		object->Draw(m_d3dContext.Get());
+	}
 
 	// Swap backbuffer
     Present();
@@ -356,6 +410,16 @@ void Game::Clear()
 	// Set the viewport.
 	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_windowWidth), static_cast<float>(m_windowHeight));
 	m_d3dContext->RSSetViewports(1, &viewport);
+}
+
+// Helper method to prepare scene (set shaders/constant buffer)
+void Game::Prepare()
+{
+	m_d3dContext->IASetInputLayout(m_posColInputLayout.Get());
+	m_d3dContext->VSSetShader(m_basicVertexShader.Get(), nullptr, 0);
+	m_d3dContext->PSSetShader(m_basicPixelShader.Get(), nullptr, 0);
+	m_d3dContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+	m_d3dContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 }
 
 // Presents the back buffer contents to the screen.

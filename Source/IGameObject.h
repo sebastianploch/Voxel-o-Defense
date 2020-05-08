@@ -16,6 +16,6 @@ protected:
 	IGameObject() = default;
 
 protected:
-	DirectX::SimpleMath::Matrix m_worldMat;
-};
+	DirectX::SimpleMath::Matrix m_worldMat{ DirectX::SimpleMath::Matrix::Identity };
 
+};
