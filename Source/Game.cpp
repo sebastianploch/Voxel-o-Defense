@@ -2,16 +2,17 @@
 #include "Game.h"
 #include "DebugSimpleCube.h"
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
+
 extern void ExitGame() noexcept;
 
 using namespace DirectX;
 
-// Ignore 'unscoped enum' warning
-#pragma warning(disable : 26812)
-
 using Microsoft::WRL::ComPtr;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Matrix;
+
 
 Game::Game() noexcept :
     m_window(nullptr),
@@ -40,8 +41,10 @@ void Game::Initialize(HWND window,
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60.0);
 
+	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 
+	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>());
 }
 
@@ -65,18 +68,16 @@ void Game::CreateDevice()
 	// Create the DX11 API device object, and get a corresponding context.
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
-	DX::ThrowIfFailed(D3D11CreateDevice(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		creationFlags,
-		featureLevels,
-		_countof(featureLevels),
-		D3D11_SDK_VERSION,
-		device.ReleaseAndGetAddressOf(),
-		&m_featureLevel,
-		context.ReleaseAndGetAddressOf()
-	));
+	DX::ThrowIfFailed(D3D11CreateDevice(nullptr,
+										D3D_DRIVER_TYPE_HARDWARE,
+										nullptr,
+										creationFlags,
+										featureLevels,
+										_countof(featureLevels),
+										D3D11_SDK_VERSION,
+										device.ReleaseAndGetAddressOf(),
+										&m_featureLevel,
+										context.ReleaseAndGetAddressOf()));
 
 #ifndef NDEBUG
 	ComPtr<ID3D11Debug> d3dDebug;
@@ -126,7 +127,10 @@ void Game::CreateResources()
 	// If the swap chain already exists, resize it, otherwise create one.
 	if (m_swapChain)
 	{
-		HRESULT hr = m_swapChain->ResizeBuffers(backBufferCount, backBufferWidth, backBufferHeight, backBufferFormat, 0);
+		HRESULT hr = m_swapChain->ResizeBuffers(backBufferCount,
+												backBufferWidth,
+												backBufferHeight,
+												backBufferFormat, 0);
 
 		if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
 		{
@@ -169,14 +173,12 @@ void Game::CreateResources()
 		fsSwapChainDesc.Windowed = TRUE;
 
 		// Create a SwapChain from a Win32 window.
-		DX::ThrowIfFailed(dxgiFactory->CreateSwapChainForHwnd(
-			m_d3dDevice.Get(),
-			m_window,
-			&swapChainDesc,
-			&fsSwapChainDesc,
-			nullptr,
-			m_swapChain.ReleaseAndGetAddressOf()
-		));
+		DX::ThrowIfFailed(dxgiFactory->CreateSwapChainForHwnd(m_d3dDevice.Get(),
+															  m_window,
+															  &swapChainDesc,
+															  &fsSwapChainDesc,
+															  nullptr,
+															  m_swapChain.ReleaseAndGetAddressOf()));
 
 		DX::ThrowIfFailed(dxgiFactory->MakeWindowAssociation(m_window, DXGI_MWA_NO_ALT_ENTER));
 	}
@@ -186,16 +188,26 @@ void Game::CreateResources()
 	DX::ThrowIfFailed(m_swapChain->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf())));
 
 	// Create a view interface on the render target to use on bind.
-	DX::ThrowIfFailed(m_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, m_renderTargetView.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(m_d3dDevice->CreateRenderTargetView(backBuffer.Get(),
+														  nullptr,
+														  m_renderTargetView.ReleaseAndGetAddressOf()));
 
 	// Create a DepthStencil view on this surface to use on bind.
-	CD3D11_TEXTURE2D_DESC depthStencilDesc(depthBufferFormat, backBufferWidth, backBufferHeight, 1, 1, D3D11_BIND_DEPTH_STENCIL);
+	CD3D11_TEXTURE2D_DESC depthStencilDesc(depthBufferFormat,
+										   backBufferWidth,
+										   backBufferHeight,
+										   1, 1, D3D11_BIND_DEPTH_STENCIL);
 
 	ComPtr<ID3D11Texture2D> depthStencil;
-	DX::ThrowIfFailed(m_d3dDevice->CreateTexture2D(&depthStencilDesc, nullptr, depthStencil.GetAddressOf()));
+	DX::ThrowIfFailed(m_d3dDevice->CreateTexture2D(&depthStencilDesc,
+												   nullptr,
+												   depthStencil.GetAddressOf()));
 
 	CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
-	DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(),
+														  &depthStencilViewDesc,
+														  m_depthStencilView.ReleaseAndGetAddressOf()));
+
 
 	// Set Primitive Topology
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -325,15 +337,18 @@ void Game::Render()
 	// Render all objects
 	for (const auto& object : m_gameObjects)
 	{
+		// Fill Constant Buffer Info
 		cb.mvpMatrix = object->GetWorldMatrix() * m_viewMat * m_projMat;
 		cb.worldMatrix = object->GetWorldMatrix();
 
+		// Update Constant Buffer
 		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
 										0,
 										nullptr,
 										&cb,
 										0, 0);
 
+		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
 
@@ -412,7 +427,7 @@ void Game::Clear()
 	m_d3dContext->RSSetViewports(1, &viewport);
 }
 
-// Helper method to prepare scene (set shaders/constant buffer)
+// Helper method to prepare the scene (set shaders/constant buffer)
 void Game::Prepare()
 {
 	m_d3dContext->IASetInputLayout(m_posColInputLayout.Get());

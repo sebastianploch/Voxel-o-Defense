@@ -30,20 +30,23 @@
 // Direct3D
 #include <d3d11_1.h>
 #include <dxgi1_2.h>
-#include <DirectXColors.h>
 #include <d3dcompiler.h>
+#include <DirectXColors.h>
 
 // DirectXTK
 #include <SimpleMath.h>
-#include <CommonStates.h>
 #include <VertexTypes.h>
+#include <CommonStates.h>
 
 // STD
+#include <vector>
+#include <memory>
 #include <algorithm>
 #include <exception>
-#include <memory>
 #include <stdexcept>
-#include <vector>
+
+// Common Structs
+#include "Commons.h"
 
 namespace DX
 {

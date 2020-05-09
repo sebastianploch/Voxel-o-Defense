@@ -15,8 +15,6 @@ public:
 	static void InitBuffers(ID3D11Device* device);
 
 private:
-
-private:
 	static Microsoft::WRL::ComPtr<ID3D11Buffer> s_cubeVertexBuffer;
 	static Microsoft::WRL::ComPtr<ID3D11Buffer> s_cubeIndexBuffer;
 

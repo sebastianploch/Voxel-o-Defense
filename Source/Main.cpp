@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "Game.h"
 
-using namespace DirectX;
-
 #pragma warning(disable : 4061)
+
+using namespace DirectX;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 

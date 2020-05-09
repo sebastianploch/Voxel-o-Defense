@@ -13,9 +13,6 @@
     <Filter Include="Source\Utils">
       <UniqueIdentifier>{462ad0af-adb7-42f8-b0b6-22688729548e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{f7f06c61-7f30-4328-919d-8dfaec6b482e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers\GameObjects">
       <UniqueIdentifier>{93bb69cb-4f41-4ad6-a2da-d3440b3c719f}</UniqueIdentifier>
     </Filter>
@@ -25,6 +22,9 @@
     <Filter Include="Resources">
       <UniqueIdentifier>3bf364fc-9537-4c79-a545-8b14fdcb0331</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{f7f06c61-7f30-4328-919d-8dfaec6b482e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +42,9 @@
     </ClInclude>
     <ClInclude Include="Source\DebugSimpleCube.h">
       <Filter>Headers\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commons.h">
+      <Filter>Headers\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -78,10 +81,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\BasicVertexShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\BasicPixelShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

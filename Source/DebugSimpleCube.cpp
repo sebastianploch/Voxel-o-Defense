@@ -8,17 +8,15 @@ using DirectX::SimpleMath::Vector4;
 
 DebugSimpleCube::DebugSimpleCube()
 {
-
 }
 
 DebugSimpleCube::~DebugSimpleCube()
 {
-
 }
 
 void DebugSimpleCube::Update(float deltaTime)
 {
-
+	UNREFERENCED_PARAMETER(deltaTime);
 }
 
 void DebugSimpleCube::Draw(ID3D11DeviceContext* context)

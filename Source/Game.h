@@ -1,15 +1,8 @@
 #pragma once
-
 #include "StepTimer.h"
-#include "IGameObject.h"
 
-using VertexType = DirectX::VertexPositionColor;
+class IGameObject;
 
-struct ConstantBuffer
-{
-    DirectX::SimpleMath::Matrix mvpMatrix;
-    DirectX::SimpleMath::Matrix worldMatrix;
-};
 
 class Game
 {
