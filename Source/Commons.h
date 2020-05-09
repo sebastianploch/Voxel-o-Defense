@@ -1,5 +1,6 @@
 #pragma once
 
+
 struct ConstantBuffer
 {
 	DirectX::SimpleMath::Matrix projection;

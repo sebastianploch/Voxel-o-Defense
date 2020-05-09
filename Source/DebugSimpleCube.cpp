@@ -6,12 +6,25 @@ using namespace DirectX;
 using DirectX::SimpleMath::Vector2;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector4;
+using DirectX::SimpleMath::Matrix;
 
 using Vertex = VertexPositionNormalTexture;
 
 
 DebugSimpleCube::DebugSimpleCube()
 {
+}
+
+DebugSimpleCube::DebugSimpleCube(const DirectX::SimpleMath::Vector3& position,
+								 const DirectX::SimpleMath::Vector3& rotation,
+								 const DirectX::SimpleMath::Vector3& scale) :
+	m_position(position),
+	m_rotation(rotation),
+	m_scaling(scale)
+{
+	m_worldMat *= Matrix::CreateScale(m_scaling);
+	m_worldMat *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
+	m_worldMat *= Matrix::CreateTranslation(m_position);
 }
 
 DebugSimpleCube::~DebugSimpleCube()

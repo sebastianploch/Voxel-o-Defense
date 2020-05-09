@@ -17,5 +17,4 @@ protected:
 
 protected:
 	DirectX::SimpleMath::Matrix m_worldMat{ DirectX::SimpleMath::Matrix::Identity };
-
 };

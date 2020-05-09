@@ -44,7 +44,7 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Create one debug cube
-	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>());
+	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -215,7 +215,7 @@ void Game::CreateResources()
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Matrices #Camera
-	m_viewMat = Matrix::CreateLookAt(Vector3(3.0f, 3.0f, 3.0f),
+	m_viewMat = Matrix::CreateLookAt(Vector3(2.0f, 2.0f, 2.0f),
 									 Vector3::Zero,
 									 Vector3::UnitY);
 
