@@ -37,6 +37,7 @@
 #include <SimpleMath.h>
 #include <VertexTypes.h>
 #include <CommonStates.h>
+#include <DDSTextureLoader.h>
 
 // STD
 #include <vector>

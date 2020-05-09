@@ -2,8 +2,12 @@
 #include "DebugSimpleCube.h"
 
 using namespace DirectX;
+
+using DirectX::SimpleMath::Vector2;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector4;
+
+using Vertex = VertexPositionNormalTexture;
 
 
 DebugSimpleCube::DebugSimpleCube()
@@ -21,8 +25,12 @@ void DebugSimpleCube::Update(float deltaTime)
 
 void DebugSimpleCube::Draw(ID3D11DeviceContext* context)
 {
-	auto stride = static_cast<UINT>(sizeof(VertexPositionColor));
+	auto stride = static_cast<UINT>(sizeof(Vertex));
 	UINT offset = 0;
+
+	context->PSSetShaderResources(0,
+								  1,
+								  s_debugTexture.GetAddressOf());
 
 	context->IASetVertexBuffers(0,
 								1,
@@ -45,7 +53,7 @@ void DebugSimpleCube::InitBuffers(ID3D11Device* device)
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(VertexPositionColor) * 24;
+	bd.ByteWidth = sizeof(Vertex) * 24;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -74,42 +82,52 @@ void DebugSimpleCube::InitBuffers(ID3D11Device* device)
 										   s_cubeIndexBuffer.ReleaseAndGetAddressOf()));
 }
 
+void DebugSimpleCube::InitDebugTexture(const wchar_t* texturePath, ID3D11Device* device)
+{
+	CreateDDSTextureFromFile(device,
+							 texturePath,
+							 nullptr,
+							 s_debugTexture.ReleaseAndGetAddressOf());
+}
+
 // Init Static Variables
 Microsoft::WRL::ComPtr<ID3D11Buffer> DebugSimpleCube::s_cubeVertexBuffer;
 
 Microsoft::WRL::ComPtr<ID3D11Buffer> DebugSimpleCube::s_cubeIndexBuffer;
 
-VertexPositionColor DebugSimpleCube::s_cubeVertices[24] = 
+Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> DebugSimpleCube::s_debugTexture;
+
+Vertex DebugSimpleCube::s_cubeVertices[24] = 
 {
-	VertexPositionColor(Vector3(-1.0f, 1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, 1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(-1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
+	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
+	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(1.0f, 1.0f)),
 
-	VertexPositionColor(Vector3(-1.0f, -1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, -1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, -1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(-1.0f, -1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(0.0f, 0.0f)),
+	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(1.0f, 0.0f)),
+	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
 
-	VertexPositionColor(Vector3(-1.0f, -1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(-1.0f, -1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(-1.0f, 1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(-1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f)),
 
-	VertexPositionColor(Vector3(1.0f, -1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, -1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, 1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
+	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(1.0f, -1.0f, -1.0f),Vector3(1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
+	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f)),
 
-	VertexPositionColor(Vector3(-1.0f, -1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, -1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, 1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(-1.0f, 1.0f, -1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, -1.0f),Vector3(-1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
 
-	VertexPositionColor(Vector3(-1.0f, -1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, -1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-	VertexPositionColor(Vector3(-1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f))
+	Vertex(Vector3(-1.0f, -1.0f, 1.0f),Vector3(-1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f))
 };
 
 WORD DebugSimpleCube::s_cubeIndices[36] = 
