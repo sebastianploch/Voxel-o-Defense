@@ -34,9 +34,6 @@ void Game::Initialize(HWND window,
 
     CreateDevice();
     CreateResources();
-	CreateShaders();
-	CreateSampler();
-	CreateConstantBuffer();
 
     // Set locked framerate (60fps)
     m_timer.SetFixedTimeStep(true);
@@ -50,7 +47,7 @@ void Game::Initialize(HWND window,
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>());
 }
 
-// Create context for window (directX).
+// Create direct3d context and allocate resources that don't depend on window size change.
 void Game::CreateDevice()
 {
 	UINT creationFlags = 0;
@@ -108,6 +105,9 @@ void Game::CreateDevice()
 	DX::ThrowIfFailed(context.As(&m_d3dContext));
 
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
+
+	CreateShaders();
+	CreateConstantBuffer();
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -211,11 +211,11 @@ void Game::CreateResources()
 														  m_depthStencilView.ReleaseAndGetAddressOf()));
 
 
-	// Set Primitive Topology
+	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Matrices #Camera
-	m_viewMat = Matrix::CreateLookAt(Vector3(5.0f, 5.0f, 5.0f),
+	m_viewMat = Matrix::CreateLookAt(Vector3(3.0f, 3.0f, 3.0f),
 									 Vector3::Zero,
 									 Vector3::UnitY);
 
@@ -225,7 +225,7 @@ void Game::CreateResources()
 													 100.0f);
 }
 
-// Compile and Assign Shaders to buffer & Create Input Layout.
+// Compile and Assign Shaders to buffers & Create Input Layout.
 void Game::CreateShaders()
 {
 	// Compile vertex shader byte code
@@ -266,23 +266,6 @@ void Game::CreateShaders()
 	psBlob->Release();
 }
 
-// Create sampler for shader to utilise.
-void Game::CreateSampler()
-{
-	D3D11_SAMPLER_DESC sd;
-	ZeroMemory(&sd, sizeof(sd));
-	sd.Filter = D3D11_FILTER_ANISOTROPIC;
-	sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	sd.MinLOD = 0;
-	sd.MaxLOD = D3D11_FLOAT32_MAX;
-
-	DX::ThrowIfFailed(m_d3dDevice->CreateSamplerState(&sd,
-													  m_samplerLinear.ReleaseAndGetAddressOf()));
-}
-
 // Create constant buffer to be used as a resource by shader.
 void Game::CreateConstantBuffer()
 {
@@ -308,7 +291,6 @@ void Game::OnDeviceLost()
 	m_d3dDevice.Reset();
 
 	m_states.reset();
-	m_samplerLinear.Reset();
 	m_constantBuffer.Reset();
 	m_posNorTextInputLayout.Reset();
 	m_basicPixelShader.Reset();
@@ -316,9 +298,6 @@ void Game::OnDeviceLost()
 
 	CreateDevice();
 	CreateResources();
-	CreateShaders();
-	CreateSampler();
-	CreateConstantBuffer();
 }
 #pragma endregion Initialise
 
@@ -356,14 +335,16 @@ void Game::Render()
     Clear();
 	Prepare();
 
+	// Create ConstantBuffer and assign camera mat's
 	ConstantBuffer cb;
+	cb.projection = m_projMat;
+	cb.view = m_viewMat;
 
 	// Render all objects
 	for (const auto& object : m_gameObjects)
 	{
-		// Fill Constant Buffer Info
-		cb.mvpMatrix = object->GetWorldMatrix() * m_viewMat * m_projMat;
-		cb.worldMatrix = object->GetWorldMatrix();
+		// Assign Object World Mat data to ConstantBuffer
+		cb.world = object->GetWorldMatrix();
 
 		// Update Constant Buffer
 		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
@@ -437,31 +418,42 @@ HRESULT Game::CompileShader(LPCTSTR path,
 	return hr;
 }
 
-// Helper method to clear the back buffers.
+// Helper method to clear the back buffers and set device states.
 void Game::Clear()
 {
 	// Clear the views.
 	m_d3dContext->ClearRenderTargetView(m_renderTargetView.Get(), Colors::Salmon);
 	m_d3dContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+	// Set Target
 	m_d3dContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
+
+	// Set Depth buffer
 	m_d3dContext->OMSetDepthStencilState(m_states->DepthDefault(), 0);
 
 	// Set the viewport.
 	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_windowWidth), static_cast<float>(m_windowHeight));
 	m_d3dContext->RSSetViewports(1, &viewport);
 
-	// Rasterizer State
+	// Rasterizer State (Clockwise)
 	m_d3dContext->RSSetState(m_states->CullClockwise());
 }
 
 // Helper method to prepare the scene (set shaders/constant buffer)
 void Game::Prepare()
 {
+	// Set Texture Sampler
+	auto sampler = m_states->LinearClamp();
+	m_d3dContext->PSSetSamplers(0, 1, &sampler);
+
+	// Set Input Layout 
 	m_d3dContext->IASetInputLayout(m_posNorTextInputLayout.Get());
+
+	// Set VS and PS Shaders
 	m_d3dContext->VSSetShader(m_basicVertexShader.Get(), nullptr, 0);
 	m_d3dContext->PSSetShader(m_basicPixelShader.Get(), nullptr, 0);
-	m_d3dContext->PSSetSamplers(0, 1, m_samplerLinear.GetAddressOf());
+
+	// Set Constant Buffer for VS and PS Shaders
 	m_d3dContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 	m_d3dContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 }

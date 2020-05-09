@@ -1,9 +1,10 @@
 
 cbuffer constantBuffer : register( b0 )
 {
-    matrix mvpMat;
-    matrix worldMat;
-};
+    matrix projection;
+    matrix view;
+    matrix world;
+};  
 
 struct VS_INPUT
 {
@@ -23,7 +24,9 @@ VS_OUTPUT VSMain(VS_INPUT Input)
 {
 	VS_OUTPUT Output;
 	
-    Output.position = mul(mvpMat, Input.position);
+    Output.position = mul(world, Input.position);
+    Output.position = mul(view, Output.position);
+    Output.position = mul(projection, Output.position);
     Output.normal = Input.normal;
     Output.texCoord = Input.texCoord;
 

@@ -36,7 +36,6 @@ private:
     void CreateDevice();
     void CreateResources();
     void CreateShaders();
-    void CreateSampler();
     void CreateConstantBuffer();
 
     void OnDeviceLost();
@@ -69,7 +68,6 @@ private:
     // Rendering
     std::unique_ptr<DirectX::CommonStates>          m_states;
     Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
-    Microsoft::WRL::ComPtr<ID3D11SamplerState>      m_samplerLinear;
     Microsoft::WRL::ComPtr<ID3D11InputLayout>       m_posNorTextInputLayout;
     Microsoft::WRL::ComPtr<ID3D11PixelShader>       m_basicPixelShader;
     Microsoft::WRL::ComPtr<ID3D11VertexShader>      m_basicVertexShader;

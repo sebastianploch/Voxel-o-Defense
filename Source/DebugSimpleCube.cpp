@@ -99,35 +99,35 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> DebugSimpleCube::s_debugTexture
 
 Vertex DebugSimpleCube::s_cubeVertices[24] = 
 {
-	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
-	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(1.0f, 1.0f)),
-
-	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(1.0f, 0.0f)),
-	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
-
-	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f)),
-
-	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(1.0f, -1.0f, -1.0f),Vector3(1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f)),
-
-	Vertex(Vector3(-1.0f, -1.0f, -1.0f),Vector3(-1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
 	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
+	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
+	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(0.0f, 1.0f)),
 
-	Vertex(Vector3(-1.0f, -1.0f, 1.0f),Vector3(-1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(1.0f, 0.0f)),
+	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(0.0f, 0.0f)),
 	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+
+	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f)),
+
+	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(1.0f, -1.0f, -1.0f),Vector3(1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
 	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f))
+
+	Vertex(Vector3(-1.0f, -1.0f, -1.0f),Vector3(-1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
+
+	Vertex(Vector3(-1.0f, -1.0f, 1.0f),Vector3(-1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
+	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
+	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f)),
+	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f))
 };
 
 WORD DebugSimpleCube::s_cubeIndices[36] = 

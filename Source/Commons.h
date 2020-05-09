@@ -2,6 +2,7 @@
 
 struct ConstantBuffer
 {
-	DirectX::SimpleMath::Matrix mvpMatrix;
-	DirectX::SimpleMath::Matrix worldMatrix;
+	DirectX::SimpleMath::Matrix projection;
+	DirectX::SimpleMath::Matrix view;
+	DirectX::SimpleMath::Matrix world;
 };
