@@ -19,11 +19,17 @@
     <Filter Include="Source\GameObjects">
       <UniqueIdentifier>{1a6a98d0-a115-439c-8400-f0a2f4a56e93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
+    <Filter Include="Headers\JSONLoader">
+      <UniqueIdentifier>{c37ff298-5fa3-4a5a-bb37-70075f94a13a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\JSONLoader">
+      <UniqueIdentifier>{91395fda-1300-4cd8-abd5-5bac52d6d393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Resources">
       <UniqueIdentifier>3bf364fc-9537-4c79-a545-8b14fdcb0331</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resources\Shaders">
+    <Filter Include="Headers\Resources\Shaders">
       <UniqueIdentifier>{f7f06c61-7f30-4328-919d-8dfaec6b482e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -46,6 +52,9 @@
     <ClInclude Include="Source\Commons.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\JSONLoader.h">
+      <Filter>Headers\JSONLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -63,15 +72,18 @@
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\JSONLoader.cpp">
+      <Filter>Source\JSONLoader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
-      <Filter>Resources</Filter>
+      <Filter>Headers\Resources</Filter>
     </Manifest>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\directx.ico">
-      <Filter>Resources</Filter>
+      <Filter>Headers\Resources</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -81,10 +93,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\BasicVertexShader.hlsl">
-      <Filter>Resources\Shaders</Filter>
+      <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\BasicPixelShader.hlsl">
-      <Filter>Resources\Shaders</Filter>
+      <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -45,6 +45,7 @@ void Game::Initialize(HWND window,
 
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
+	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.

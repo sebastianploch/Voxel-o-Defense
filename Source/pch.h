@@ -45,9 +45,13 @@
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
+#include <fstream>
 
+// JSON nlohmann library
+#include <nlohmann/json.hpp>
 // Common Structs
 #include "Commons.h"
+#include "JSONLoader.h"
 
 namespace DX
 {
