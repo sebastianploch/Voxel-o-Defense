@@ -49,6 +49,9 @@
     <ClInclude Include="Source\InputState.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -67,6 +70,9 @@
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Source\InputState.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
       <Filter>Source\Utils</Filter>
     </ClCompile>
   </ItemGroup>

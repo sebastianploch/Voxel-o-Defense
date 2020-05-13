@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+
 #include "DebugSimpleCube.h"
 
 // Ignore 'unscoped enum' warning
@@ -217,15 +218,12 @@ void Game::CreateResources()
 	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Matrices #Camera
-	m_viewMat = Matrix::CreateLookAt(Vector3(2.0f, 2.0f, 2.0f),
-									 Vector3::Zero,
-									 Vector3::UnitY);
-
-	m_projMat = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.0f,
-													 static_cast<float>(backBufferWidth) / static_cast<float>(backBufferHeight),
-													 0.1f,
-													 100.0f);
+	// Initialise camera
+	m_camera = std::make_unique<Camera>((float)backBufferWidth,
+										(float)backBufferHeight,
+										0.1f,
+										100.0f,
+										Vector3(4.0f, 4.0f, 4.0f));
 }
 
 // Compile and Assign Shaders to buffers & Create Input Layout.
@@ -293,6 +291,8 @@ void Game::OnDeviceLost()
 	m_d3dContext.Reset();
 	m_d3dDevice.Reset();
 
+	m_camera.reset();
+
 	m_states.reset();
 	m_constantBuffer.Reset();
 	m_posNorTextInputLayout.Reset();
@@ -343,8 +343,8 @@ void Game::Render()
 
 	// Create ConstantBuffer and assign camera mat's
 	ConstantBuffer cb;
-	cb.projection = m_projMat;
-	cb.view = m_viewMat;
+	cb.projection = m_camera->GetProjection();
+	cb.view = m_camera->GetView();
 
 	// Render all objects
 	for (const auto& object : m_gameObjects)
