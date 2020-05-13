@@ -46,6 +46,9 @@
     <ClInclude Include="Source\Commons.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\InputState.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InputState.cpp">
+      <Filter>Source\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
