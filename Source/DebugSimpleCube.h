@@ -34,9 +34,9 @@ private:
 	static DirectX::VertexPositionNormalTexture				s_cubeVertices[24];
 	static WORD												s_cubeIndices[36];
 
-	// Transformation
-	JSONINFO m_config;
+	GameObjectCfg m_config;
 
+	//Transformation
 	DirectX::SimpleMath::Vector3 m_position;
 	DirectX::SimpleMath::Vector3 m_rotation;
 	DirectX::SimpleMath::Vector3 m_scaling;

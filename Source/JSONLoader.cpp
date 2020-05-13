@@ -37,7 +37,7 @@ void JSONLoader::LoadFile(std::string filePath, JSONINFO& cfg, CONFIG_TYPE cfgTy
 {
 	GameObjectCfg* gObjCfg; //create local members since switch statements can't hold members
 	CamCfg* camCfg;
-
+	
 	switch (cfgType)
 	{
 	case CONFIG_TYPE::GAMEOBJECT:

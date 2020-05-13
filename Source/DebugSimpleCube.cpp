@@ -35,6 +35,7 @@ DebugSimpleCube::DebugSimpleCube(std::string filePath, std::string name)
 
 DebugSimpleCube::~DebugSimpleCube()
 {
+	
 }
 
 void DebugSimpleCube::Update(float deltaTime)
