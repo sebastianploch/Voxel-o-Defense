@@ -62,6 +62,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_renderTargetView;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
 
+    // Input Handler
+    std::unique_ptr<InputState>                     m_inputState;
+
     // Game Objects
     std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
 
