@@ -44,7 +44,7 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Create one debug cube
-	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
+	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 }
 
