@@ -182,17 +182,27 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Chunk.h" />
+    <ClInclude Include="Source\ChunkHandler.h" />
+    <ClInclude Include="Source\ChunkObject.h" />
     <ClInclude Include="Source\Commons.h" />
     <ClInclude Include="Source\DebugSimpleCube.h" />
     <ClInclude Include="Source\Game.h" />
+    <ClInclude Include="Source\GreedyVoxelMeshGeneration.h" />
     <ClInclude Include="Source\IGameObject.h" />
     <ClInclude Include="Source\JSONLoader.h" />
     <ClInclude Include="Source\pch.h" />
+    <ClInclude Include="Source\PerlinNoise.h" />
     <ClInclude Include="Source\StepTimer.h" />
+    <ClInclude Include="Source\WorldManipulation.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Chunk.cpp" />
+    <ClCompile Include="Source\ChunkHandler.cpp" />
+    <ClCompile Include="Source\ChunkObject.cpp" />
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
     <ClCompile Include="Source\Game.cpp" />
+    <ClCompile Include="Source\GreedyVoxelMeshGeneration.cpp" />
     <ClCompile Include="Source\IGameObject.cpp" />
     <ClCompile Include="Source\JSONLoader.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -202,6 +212,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\PerlinNoise.cpp" />
+    <ClCompile Include="Source\WorldManipulation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\resource.rc" />

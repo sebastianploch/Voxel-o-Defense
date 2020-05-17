@@ -338,6 +338,44 @@ namespace DirectX
         Vector3 operator* (float S, const Vector3& V) noexcept;
 
         //------------------------------------------------------------------------------
+        // 3D int vector
+        struct Vector3Int {
+            int x, y, z;
+            Vector3Int() noexcept : x(0), y(0), z(0) {}
+            Vector3Int(int ix) noexcept : x(ix), y(ix), z(ix) {}
+            Vector3Int(int ix, int iy, int iz) noexcept : x(ix), y(iy), z(iz) {}
+            Vector3Int(Vector3 floorVec) noexcept : x(floor(floorVec.x)), y(floor(floorVec.y)), z(floor(floorVec.z)) {}
+
+            operator Vector3() const noexcept { return Vector3(x, y, z); }
+            operator XMVECTOR() const noexcept { return XMLoadFloat3(&Vector3(x, y, z)); }
+
+            // Constants
+            static const Vector3Int Zero;
+            static const Vector3Int One;
+            static const Vector3Int UnitX;
+            static const Vector3Int UnitY;
+            static const Vector3Int UnitZ;
+            static const Vector3Int Up;
+            static const Vector3Int Down;
+            static const Vector3Int Right;
+            static const Vector3Int Left;
+            static const Vector3Int Forward;
+            static const Vector3Int Backward;
+        };
+
+        // Binary operators
+        /*  Wouldn't build with these. Other operators don't appear to be defined in this class?
+
+        Vector3Int operator+ (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x + V2.x, V1.y + V2.y, V1.z + V2.z); }
+        Vector3Int operator- (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z); }
+        Vector3Int operator* (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x * V2.x, V1.y * V2.y, V1.z * V2.z); }
+        Vector3Int operator* (const Vector3Int& V, float S) noexcept { return Vector3Int(V.x * S, V.y * S, V.z * S); }
+        Vector3Int operator/ (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x / V2.x, V1.y / V2.y, V1.z / V2.z); }
+        Vector3Int operator/ (const Vector3Int& V, float S) noexcept { return Vector3Int(V.x / S, V.y / S, V.z / S); }
+        Vector3Int operator* (float S, const Vector3Int& V) noexcept { return Vector3Int(V.x * S, V.y * S, V.z * S); }
+        */
+
+        //------------------------------------------------------------------------------
         // 4D vector
         struct Vector4 : public XMFLOAT4
         {
