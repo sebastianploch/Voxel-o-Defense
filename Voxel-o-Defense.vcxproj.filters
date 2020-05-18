@@ -77,7 +77,7 @@
       <Filter>Headers\Voxel Terrain</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChunkObject.h">
-      <Filter>Headers\GameObjects</Filter>
+      <Filter>Headers\Voxel Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -115,7 +115,7 @@
       <Filter>Source\Voxel Terrain</Filter>
     </ClCompile>
     <ClCompile Include="Source\ChunkObject.cpp">
-      <Filter>Source\GameObjects</Filter>
+      <Filter>Source\Voxel Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
