@@ -1,15 +1,15 @@
 #pragma once
 #include "Chunk.h"
 
-#define MAP_SIZE	15
+#define MAP_SIZE 15
 
 class ChunkHandler {
 private:
-	static Chunk s_chunks[15][15];
+	static Chunk s_chunks[MAP_SIZE][MAP_SIZE];
 
 public:
-	static Chunk GetChunk(int cx, int cz);
-	static Chunk GetChunk(DirectX::SimpleMath::Vector3Int worldPos);
+	static Chunk* GetChunk(int cx, int cz);
+	static Chunk* GetChunk(DirectX::SimpleMath::Vector3Int worldPos);
 
 	//Used to initialise without needing an instance
 	static class _init {

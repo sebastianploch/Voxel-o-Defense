@@ -16,10 +16,10 @@ public:
 	void Update(float deltaTime);
 	void Draw(ID3D11DeviceContext* context);
 
-	const char GetBlock(int x, int y, int z);
-	const char GetBlock(DirectX::SimpleMath::Vector3Int pos);
-	void SetBlock(char c, int x, int y, int z);
-	void SetBlock(char c, DirectX::SimpleMath::Vector3Int pos);
+	const char GetVoxel(int x, int y, int z);
+	const char GetVoxel(DirectX::SimpleMath::Vector3Int pos);
+	void SetVoxel(char v, int x, int y, int z);
+	void SetVoxel(char v, DirectX::SimpleMath::Vector3Int pos);
 
 	const int GetWidth();
 	const int GetHeight();

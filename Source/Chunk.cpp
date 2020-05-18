@@ -3,20 +3,20 @@
 
 using namespace DirectX;
 
-#define CHUNK_WIDTH		32
-#define CHUNK_HEIGHT	150
-#define	CHUNK_DEPTH		32
+#define CHUNK_W	32
+#define CHUNK_H	150
+#define	CHUNK_D	32
 
 Chunk::Chunk() : 
 			m_cx(0),
 			m_cz(0),
-			m_blocks(new char[CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_DEPTH]),
+			m_blocks(new char[CHUNK_W * CHUNK_H * CHUNK_D]),
 			m_chunkGameObject(std::make_shared<ChunkObject>()) {
 	//Default constructor should always be followed up with SetIndex() functions.
 }
 
 Chunk::~Chunk() {
-	delete[] m_blocks;
+	delete m_blocks;
 }
 
 void Chunk::Update(float deltaTime) {
@@ -30,29 +30,42 @@ void Chunk::Draw(ID3D11DeviceContext* context) {
 }
 
 #pragma region Block Getters/Setters
-const char Chunk::GetBlock(int x, int y, int z) { 
-	return m_blocks[x + CHUNK_WIDTH * (y + CHUNK_HEIGHT * z)]; 
+const char Chunk::GetVoxel(int x, int y, int z) { 
+	int index = x + CHUNK_W * (y + CHUNK_H * z);
+	if (index >= (CHUNK_W * CHUNK_H * CHUNK_D))
+		return 0x00;
+	if (index < 0)
+		return 0x00;
+
+	return m_blocks[index]; 
 }
 
-const char Chunk::GetBlock(DirectX::SimpleMath::Vector3Int pos) { 
-	return GetBlock(pos.x, pos.y, pos.z); 
+const char Chunk::GetVoxel(DirectX::SimpleMath::Vector3Int pos) { 
+	return GetVoxel(pos.x, pos.y, pos.z); 
 }
 
-void Chunk::SetBlock(char c, int x, int y, int z) {
-	m_blocks[x + CHUNK_WIDTH * (y + CHUNK_HEIGHT * z)] = c;
+
+void Chunk::SetVoxel(char c, int x, int y, int z) {
+	int index = x + CHUNK_W * (y + CHUNK_H * z);
+	if (index >= (CHUNK_W * CHUNK_H * CHUNK_D))
+		return;
+	if (index < 0)
+		return;
+
+	m_blocks[index] = c;
 	m_meshNeedsRegenerating = true;
 }
 
-void Chunk::SetBlock(char c, SimpleMath::Vector3Int pos) {
-	SetBlock(c, pos.x, pos.y, pos.z);
+void Chunk::SetVoxel(char c, SimpleMath::Vector3Int pos) {
+	SetVoxel(c, pos.x, pos.y, pos.z);
 }
 const int Chunk::GetWidth() {
-	return CHUNK_WIDTH;
+	return CHUNK_W;
 }
 const int Chunk::GetHeight() {
-	return CHUNK_HEIGHT;
+	return CHUNK_H;
 }
 const int Chunk::GetDepth() {
-	return CHUNK_DEPTH;
+	return CHUNK_D;
 }
 #pragma endregion
