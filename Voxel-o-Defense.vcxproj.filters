@@ -52,6 +52,9 @@
     <ClInclude Include="Source\Commons.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\InputState.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Source\JSONLoader.h">
       <Filter>Headers\JSONLoader</Filter>
     </ClInclude>
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InputState.cpp">
+      <Filter>Source\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\JSONLoader.cpp">
       <Filter>Source\JSONLoader</Filter>

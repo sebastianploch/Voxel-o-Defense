@@ -39,6 +39,9 @@ void Game::Initialize(HWND window,
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60.0);
 
+	// Initialise Input Handler
+	m_inputState = std::make_unique<InputState>(m_window);
+
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
@@ -318,6 +321,9 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
+	// Update Input Handler
+	m_inputState->Update();
+
 	// Update all objects
 	for (auto object : m_gameObjects)
 	{
@@ -484,16 +490,19 @@ void Game::Present()
 void Game::OnActivated()
 {
     // TODO: Game is becoming active window.
+	m_inputState->Reset();
 }
 
 void Game::OnDeactivated()
 {
     // TODO: Game is becoming background window.
+	m_inputState->Reset();
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
+	m_inputState->Reset();
 }
 
 void Game::OnResuming()
@@ -501,6 +510,7 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
+	m_inputState->Reset();
 }
 
 void Game::OnWindowSizeChanged(int width, int height)

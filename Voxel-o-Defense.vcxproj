@@ -186,6 +186,7 @@
     <ClInclude Include="Source\DebugSimpleCube.h" />
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\IGameObject.h" />
+    <ClInclude Include="Source\InputState.h" />
     <ClInclude Include="Source\JSONLoader.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\StepTimer.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\IGameObject.cpp" />
+    <ClCompile Include="Source\InputState.cpp" />
     <ClCompile Include="Source\JSONLoader.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\pch.cpp">
