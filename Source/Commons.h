@@ -27,3 +27,23 @@ struct CamCfg : public JSONINFO
 	DirectX::SimpleMath::Vector3 at;
 	std::string* type = new std::string();
 };
+
+enum VOXEL_TYPE {
+    AIR = 0,
+    STONE,
+    GRASS,
+    DIRT,
+    WOOD_LOG,
+    RED_BRICK,
+    SAND,
+    STONE_BRICK,
+    MOSSY_STONE_BRICK,
+    GRAVEL,
+    WOOD_PLANKS,
+    STONE_TILES_SMALL,
+    STONE_TILES_SMALL_CRACKED,
+    STONE_TILE_LARGE,
+    BOOKCASE,
+    REDWOOD_LOGS,
+    REDWOOD_PLANKS,
+};

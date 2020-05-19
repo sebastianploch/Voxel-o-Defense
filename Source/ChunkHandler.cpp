@@ -13,8 +13,12 @@ Chunk* ChunkHandler::GetChunk(int cx, int cz) {
 }
 
 Chunk* ChunkHandler::GetChunk(DirectX::SimpleMath::Vector3Int worldPos) {
-	int cx = static_cast<int>(floor(worldPos.x / MAP_SIZE));
-	int cz = static_cast<int>(floor(worldPos.z / MAP_SIZE));
+	int cx = (int)floorf(worldPos.x / s_chunks[0][0].GetWidth());
+	int cz = (int)floorf(worldPos.z / s_chunks[0][0].GetDepth());
 
 	return GetChunk(cx, cz);
+}
+
+const int ChunkHandler::GetMapSize() {
+	return MAP_SIZE;
 }

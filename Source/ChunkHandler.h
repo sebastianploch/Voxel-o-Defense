@@ -1,5 +1,6 @@
 #pragma once
 #include "Chunk.h"
+#include "WorldManipulation.h"
 
 #define MAP_SIZE 15
 
@@ -11,6 +12,8 @@ public:
 	static Chunk* GetChunk(int cx, int cz);
 	static Chunk* GetChunk(DirectX::SimpleMath::Vector3Int worldPos);
 
+	static const int GetMapSize();
+
 	//Used to initialise without needing an instance
 	static class _init {
 	public:
@@ -20,6 +23,7 @@ public:
 				for (int z = 0; z < MAP_SIZE; z++) {
 					ChunkHandler::s_chunks[x][z].SetXIndex(x);
 					ChunkHandler::s_chunks[x][z].SetZIndex(z);
+					WorldManipulation::GenerateTerrainData(&s_chunks[x][z]);
 				}
 			}
 		}

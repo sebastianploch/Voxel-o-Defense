@@ -26,6 +26,11 @@ namespace DirectX
         const Vector2 Vector2::UnitX = { 1.f, 0.f };
         const Vector2 Vector2::UnitY = { 0.f, 1.f };
 
+        const Vector2Int Vector2Int::Zero = { 0, 0 };
+        const Vector2Int Vector2Int::One = { 1, 1 };
+        const Vector2Int Vector2Int::UnitX = { 1, 0 };
+        const Vector2Int Vector2Int::UnitY = { 0, 1 };
+
         const Vector3 Vector3::Zero = { 0.f, 0.f, 0.f };
         const Vector3 Vector3::One = { 1.f, 1.f, 1.f };
         const Vector3 Vector3::UnitX = { 1.f, 0.f, 0.f };

@@ -218,6 +218,25 @@ namespace DirectX
         Vector2 operator* (float S, const Vector2& V) noexcept;
 
         //------------------------------------------------------------------------------
+        // 2D int vector
+        struct Vector2Int {
+            int x, y;
+            Vector2Int() noexcept : x(0), y(0) {}
+            Vector2Int(int ix) noexcept : x(ix), y(ix) {}
+            Vector2Int(int ix, int iy) noexcept : x(ix), y(iy) {}
+            Vector2Int(Vector2 floorVec) noexcept : x(floor(floorVec.x)), y(floor(floorVec.y)) {}
+
+            operator Vector2() const noexcept { return Vector2(x, y); }
+            operator XMVECTOR() const noexcept { return XMLoadFloat2(&Vector2(x, y)); }
+
+            // Constants
+            static const Vector2Int Zero;
+            static const Vector2Int One;
+            static const Vector2Int UnitX;
+            static const Vector2Int UnitY;
+        };
+
+        //------------------------------------------------------------------------------
         // 3D vector
         struct Vector3 : public XMFLOAT3
         {
