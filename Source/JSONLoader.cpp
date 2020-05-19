@@ -67,6 +67,7 @@ nlohmann::json JSONLoader::_CHECKFILE(std::string filePath)
 	catch (std::exception e)
 	{
 		OutputDebugStringA("Error loading file into project!");
+		throw;
 	}
 }
 
