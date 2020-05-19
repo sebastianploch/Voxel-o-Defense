@@ -14,11 +14,12 @@ Camera::Camera(float width,
                const Vector3& position,
                const Vector3& target,
                const Vector3& up) :
-    m_eye(position),
+    m_position(position),
     m_target(target),
-    m_up(up)
+    m_up(up),
+    m_movementSpeed(2.0f)
 {
-    m_view = Matrix::CreateLookAt(m_eye,
+    m_view = Matrix::CreateLookAt(m_position,
                                   m_target,
                                   m_up);
 
@@ -30,9 +31,4 @@ Camera::Camera(float width,
 
 Camera::~Camera()
 {
-}
-
-void Camera::Update(float deltaTime, const InputState& state)
-{
-
 }
