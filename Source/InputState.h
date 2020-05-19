@@ -10,10 +10,10 @@ public:
 	void Update();
 	void Reset();
 
-	inline const DirectX::Mouse& GetMouse() const { return *m_mouse; }
+	inline DirectX::Mouse& GetMouse() const { return *m_mouse; }
 	inline const DirectX::Mouse::ButtonStateTracker& GetMouseState() const { return m_mouseTracker; }
 
-	inline const DirectX::Keyboard& GetKeyboard() const { return *m_keyboard; }
+	inline DirectX::Keyboard& GetKeyboard() const { return *m_keyboard; }
 	inline const DirectX::Keyboard::KeyboardStateTracker& GetKeyboardState() const { return m_keyboardTracker; }
 
 private:
