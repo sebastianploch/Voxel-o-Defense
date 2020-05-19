@@ -219,11 +219,11 @@ void Game::CreateResources()
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Initialise camera
-	m_camera = std::make_unique<Camera>((float)backBufferWidth,
+	m_camera = std::make_unique<FPSCamera>((float)backBufferWidth,
 										(float)backBufferHeight,
 										0.1f,
 										100.0f,
-										Vector3(4.0f, 4.0f, 4.0f));
+										Vector3(0.0f, 0.0f, 4.0f));
 }
 
 // Compile and Assign Shaders to buffers & Create Input Layout.
@@ -319,6 +319,9 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
+
+	m_camera->Update(deltaTime,
+					 *m_inputState);
 
 	// Update Input Handler
 	m_inputState->Update();

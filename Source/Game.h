@@ -1,6 +1,6 @@
 #pragma once
 #include "StepTimer.h"
-#include "Camera.h"
+#include "FPSCamera.h"
 
 class IGameObject;
 
