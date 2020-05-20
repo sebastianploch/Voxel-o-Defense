@@ -24,7 +24,9 @@ public:
 	inline void SetRotationSpeed(float speed) { m_rotationSpeed = speed; }
 
 private:
-	void ProcessMouseInput(const InputState& input);
+	void ProcessMouseInput(float deltaTime,
+						   const InputState& input);
+
 	DirectX::SimpleMath::Vector3 ProcessKeyboardInput(float deltaTime,
 													  const InputState& input);
 
@@ -35,4 +37,5 @@ private:
 	float m_yaw;
 	float m_pitch;
 	float m_rotationSpeed;
+	float m_cameraBoost;
 };
