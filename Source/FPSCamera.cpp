@@ -10,6 +10,8 @@ using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Quaternion;
 
+constexpr float s_pitchLimit = XM_PI / 2.0f - 0.01f;
+
 
 FPSCamera::FPSCamera(float width,
                      float height,
@@ -71,6 +73,8 @@ void FPSCamera::ProcessMouseInput(float deltaTime,
 
     // Switch to relative mode when LBM is held
     input.GetMouse().SetMode(state.leftButton ? Mouse::MODE_RELATIVE : Mouse::MODE_ABSOLUTE);
+
+	WrapRotation();
 }
 
 Vector3 FPSCamera::ProcessKeyboardInput(float deltaTime,
@@ -124,6 +128,23 @@ void FPSCamera::ResetCamera()
 	m_up = Vector3::Up;
 	m_yaw = 0.0f;
 	m_pitch = 0.0f;
+}
+
+void FPSCamera::WrapRotation()
+{
+	// Limit pitch
+	m_pitch = std::max(-s_pitchLimit, m_pitch);
+	m_pitch = std::min(s_pitchLimit, m_pitch);
+
+	// Wrap yaw
+	if (m_yaw > XM_PI)
+	{
+		m_yaw -= XM_PI * 2.0f;
+	}
+	else if (m_yaw < -XM_PI)
+	{
+		m_yaw += XM_PI * 2.0f;
+	}
 }
 
 void FPSCamera::UpdateTargetPosition()

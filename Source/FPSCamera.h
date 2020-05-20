@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Camera.h"
 
 
@@ -31,6 +30,7 @@ private:
 													  const InputState& input);
 
 	void ResetCamera();
+	void WrapRotation();
 	void UpdateTargetPosition();
 
 private:
