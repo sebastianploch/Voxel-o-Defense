@@ -51,8 +51,8 @@ protected:
 	DirectX::SimpleMath::Vector3 m_up;
 
 	// Camera Moving Speed
-	float						m_movementSpeed;
+	float						 m_movementSpeed;
 
-	DirectX::SimpleMath::Matrix	m_projection;
-	DirectX::SimpleMath::Matrix	m_view;
+	DirectX::SimpleMath::Matrix	 m_projection;
+	DirectX::SimpleMath::Matrix	 m_view;
 };

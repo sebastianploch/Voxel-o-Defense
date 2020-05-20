@@ -27,7 +27,7 @@ FPSCamera::FPSCamera(float width,
            up),
     m_yaw(0.0f),
     m_pitch(0.0f),
-    m_rotationSpeed(0.004f)
+    m_rotationSpeed(0.008f)
 {
 }
 
