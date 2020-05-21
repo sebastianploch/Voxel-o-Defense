@@ -1,5 +1,6 @@
 #pragma once
-#include "Shader.h"
+
+class Shader;
 
 
 class ShaderManager
@@ -8,7 +9,8 @@ public:
 	ShaderManager(ID3D11Device1* device);
 	~ShaderManager();
 
-	void SetShader(const Shaders& shader, ID3D11DeviceContext1* context);
+	void SetShader(const Shaders& shader,
+				   ID3D11DeviceContext1* context);
 
 	void InitialiseShaders(ID3D11Device1* device);
 

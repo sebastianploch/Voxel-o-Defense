@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ShaderManager.h"
 
+#include "Shader.h"
+
 
 ShaderManager::ShaderManager(ID3D11Device1* device) :
 	m_currentShader(Shaders::NONE)
@@ -13,7 +15,8 @@ ShaderManager::~ShaderManager()
 	m_shaders.clear();
 }
 
-void ShaderManager::SetShader(const Shaders& shader, ID3D11DeviceContext1* context)
+void ShaderManager::SetShader(const Shaders& shader,
+							  ID3D11DeviceContext1* context)
 {
 	if (shader != m_currentShader)
 	{

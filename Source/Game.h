@@ -1,9 +1,9 @@
 #pragma once
+
 #include "StepTimer.h"
 #include "FPSCamera.h"
+#include "IGameObject.h"
 #include "ShaderManager.h"
-
-class IGameObject;
 
 
 class Game

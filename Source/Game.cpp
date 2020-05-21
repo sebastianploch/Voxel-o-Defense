@@ -217,7 +217,6 @@ void Game::CreateResources()
 														  &depthStencilViewDesc,
 														  m_depthStencilView.ReleaseAndGetAddressOf()));
 
-
 	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -254,6 +253,7 @@ void Game::OnDeviceLost()
 	m_d3dDevice.Reset();
 
 	m_camera.reset();
+	m_inputState.reset();
 
 	m_states.reset();
 	m_constantBuffer.Reset();
