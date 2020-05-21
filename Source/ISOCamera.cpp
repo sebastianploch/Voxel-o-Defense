@@ -30,5 +30,6 @@ ISOCamera::~ISOCamera()
 
 void ISOCamera::Update(float deltaTime, const InputState& state)
 {
-
+    UNREFERENCED_PARAMETER(deltaTime);
+    UNREFERENCED_PARAMETER(state);
 }
