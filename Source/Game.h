@@ -1,5 +1,6 @@
 #pragma once
 #include "StepTimer.h"
+#include "FPSCamera.h"
 
 class IGameObject;
 
@@ -76,8 +77,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11VertexShader>      m_basicVertexShader;
 
     // Basic Camera
-	DirectX::SimpleMath::Matrix                     m_viewMat;
-	DirectX::SimpleMath::Matrix                     m_projMat;
+    std::unique_ptr<Camera>                         m_camera;
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;

@@ -32,6 +32,12 @@
     <Filter Include="Headers\Resources\Shaders">
       <UniqueIdentifier>{f7f06c61-7f30-4328-919d-8dfaec6b482e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Camera">
+      <UniqueIdentifier>{f20cf6fc-d128-49fc-8623-cc6ac36d11c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Camera">
+      <UniqueIdentifier>{d28cdef6-e4e0-46df-a678-9bf5b6a56db0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -58,6 +64,15 @@
     <ClInclude Include="Source\JSONLoader.h">
       <Filter>Headers\JSONLoader</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Headers\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FPSCamera.h">
+      <Filter>Headers\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ISOCamera.h">
+      <Filter>Headers\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -80,6 +95,15 @@
     </ClCompile>
     <ClCompile Include="Source\JSONLoader.cpp">
       <Filter>Source\JSONLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FPSCamera.cpp">
+      <Filter>Source\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ISOCamera.cpp">
+      <Filter>Source\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
