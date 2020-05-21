@@ -192,6 +192,7 @@
     <ClInclude Include="Source\JSONLoader.h" />
     <ClInclude Include="Source\ISOCamera.h" />
     <ClInclude Include="Source\pch.h" />
+    <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +211,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\resource.rc" />

@@ -73,6 +73,9 @@
     <ClInclude Include="Source\ISOCamera.h">
       <Filter>Headers\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Shader.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="Source\ISOCamera.cpp">
       <Filter>Source\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shader.cpp">
+      <Filter>Source\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
