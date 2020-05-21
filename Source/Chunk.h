@@ -4,16 +4,16 @@
 class Chunk {
 private:
 	char* m_blocks;
-	int m_cx, m_cz;	//Chunk X and Z index
+	int m_cx = 0, m_cz = 0;	//Chunk X and Z index
 
-	std::shared_ptr<ChunkObject> m_chunkGameObject;
-	bool m_meshNeedsRegenerating = false;
+	std::shared_ptr<ChunkObject> m_chunkGameObject = std::make_shared<ChunkObject>();
+	bool m_meshNeedsRegenerating = true;
 
 public:
 	Chunk();
 	~Chunk(); 
 
-	void Update(float deltaTime);
+	void UpdateMesh(ID3D11Device* device);
 	void Draw(ID3D11DeviceContext* context);
 
 	const char GetVoxel(int x, int y, int z);

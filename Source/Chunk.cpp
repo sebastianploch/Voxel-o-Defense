@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Chunk.h"
+#include "GreedyVoxelMeshGeneration.h"
 
 using namespace DirectX;
 
@@ -7,21 +8,18 @@ using namespace DirectX;
 #define CHUNK_H	150
 #define	CHUNK_D	32
 
-Chunk::Chunk() : 
-			m_cx(0),
-			m_cz(0),
-			m_blocks(new char[CHUNK_W * CHUNK_H * CHUNK_D]),
-			m_chunkGameObject(std::make_shared<ChunkObject>()) {
-	//Default constructor should always be followed up with SetIndex() functions.
+Chunk::Chunk() : m_blocks(new char[CHUNK_W * CHUNK_H * CHUNK_D]) {
+	//Default constructor should always be followed up with Set_Index() functions.
 }
 
 Chunk::~Chunk() {
-	delete m_blocks;
+	delete[] m_blocks;
 }
 
-void Chunk::Update(float deltaTime) {
+void Chunk::UpdateMesh(ID3D11Device* device) {
 	if (m_meshNeedsRegenerating) {
-		//TODO: Regenerate mesh for m_chunkGameObject
+		m_chunkGameObject->UpdateMesh(GreedyVoxelMeshGeneration::GenerateMesh(this, device));
+		m_meshNeedsRegenerating = false;
 	}
 }
 

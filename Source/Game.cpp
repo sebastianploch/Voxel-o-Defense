@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Game.h"
 #include "DebugSimpleCube.h"
+#include "ChunkObject.h"
+#include "ChunkHandler.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -42,6 +44,10 @@ void Game::Initialize(HWND window,
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
+
+	// Initialise Voxel Chunk Objects
+	ChunkObject::InitTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 
 	// Create one debug cube
 	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
@@ -318,6 +324,9 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
+	// Update chunks if they have been modified
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+
 	// Update all objects
 	for (auto object : m_gameObjects)
 	{
@@ -340,6 +349,9 @@ void Game::Render()
 	ConstantBuffer cb;
 	cb.projection = m_projMat;
 	cb.view = m_viewMat;
+
+	// Render chunks
+	ChunkHandler::DrawChunks(m_d3dContext.Get());
 
 	// Render all objects
 	for (const auto& object : m_gameObjects)

@@ -12,6 +12,9 @@ public:
 	static Chunk* GetChunk(int cx, int cz);
 	static Chunk* GetChunk(DirectX::SimpleMath::Vector3Int worldPos);
 
+	static void UpdateChunkMeshes(ID3D11Device* device);
+	static void DrawChunks(ID3D11DeviceContext* context);
+
 	static const int GetMapSize();
 
 	//Used to initialise without needing an instance

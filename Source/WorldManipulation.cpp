@@ -101,8 +101,8 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 	}
 }
 
-char WorldManipulation::GetVoxelType(DirectX::SimpleMath::Vector3Int pos, int terrainHeight) {
-	if (terrainHeight < 15)
+char WorldManipulation::GetVoxelType(Vector3Int pos, int terrainHeight) {
+	if (terrainHeight < 15)					//Sand around edges of island
 		return VOXEL_TYPE::SAND;
 
 	if (pos.y == terrainHeight - 1)         //Set grass as top layer
@@ -113,7 +113,7 @@ char WorldManipulation::GetVoxelType(DirectX::SimpleMath::Vector3Int pos, int te
 		return VOXEL_TYPE::STONE;
 }
 
-DirectX::SimpleMath::Vector3Int WorldManipulation::GetRelativePos(Chunk* c, DirectX::SimpleMath::Vector3Int worldPos) {
+Vector3Int WorldManipulation::GetRelativePos(Chunk* c, Vector3Int worldPos) {
 	return Vector3Int(worldPos.x - (c->GetXIndex() * c->GetWidth()),
 					  worldPos.y,
 					  worldPos.z - (c->GetZIndex() * c->GetDepth()));
