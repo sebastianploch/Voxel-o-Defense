@@ -274,6 +274,41 @@ namespace DirectX
         static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
     };
 
+        // Vertex struct holding position, normal vector, and dual texture mapping information.
+    struct VertexPositionNormalDualTexture
+    {
+        VertexPositionNormalDualTexture() = default;
+
+        VertexPositionNormalDualTexture(const VertexPositionNormalDualTexture&) = default;
+        VertexPositionNormalDualTexture& operator=(const VertexPositionNormalDualTexture&) = default;
+
+        VertexPositionNormalDualTexture(VertexPositionNormalDualTexture&&) = default;
+        VertexPositionNormalDualTexture& operator=(VertexPositionNormalDualTexture&&) = default;
+
+        VertexPositionNormalDualTexture(XMFLOAT3 const& iposition, XMFLOAT3 const& inormal, XMFLOAT2 const& itextureCoordinate0, XMFLOAT2 const& itextureCoordinate1) noexcept
+            : position(iposition),
+            normal(inormal),
+            textureCoordinate0(itextureCoordinate0),
+            textureCoordinate1(itextureCoordinate1)
+        {
+        }
+
+        VertexPositionNormalDualTexture(FXMVECTOR iposition, FXMVECTOR inormal, FXMVECTOR itextureCoordinate0, FXMVECTOR const& itextureCoordinate1) noexcept
+        {
+            XMStoreFloat3(&this->position, iposition);
+            XMStoreFloat3(&this->normal, inormal);
+            XMStoreFloat2(&this->textureCoordinate0, itextureCoordinate0);
+            XMStoreFloat2(&this->textureCoordinate1, itextureCoordinate1);
+        }
+
+        XMFLOAT3 position;
+        XMFLOAT3 normal;
+        XMFLOAT2 textureCoordinate0;
+        XMFLOAT2 textureCoordinate1;
+
+        static const int InputElementCount = 4;
+        static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
+    };
 
     // Vertex struct holding position, normal vector, color, and texture mapping information.
     struct VertexPositionNormalColorTexture
