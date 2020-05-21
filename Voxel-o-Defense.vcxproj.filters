@@ -37,6 +37,7 @@
     </Filter>
     <Filter Include="Source\Voxel Terrain">
       <UniqueIdentifier>{ca92a1e2-6cc7-44b7-b17e-7e4f00bdb6ba}</UniqueIdentifier>
+  	</Filter>
     <Filter Include="Headers\Camera">
       <UniqueIdentifier>{f20cf6fc-d128-49fc-8623-cc6ac36d11c4}</UniqueIdentifier>
     </Filter>
@@ -86,6 +87,7 @@
     </ClInclude>
     <ClInclude Include="Source\ChunkObject.h">
       <Filter>Headers\Voxel Terrain</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Camera.h">
       <Filter>Headers\Camera</Filter>
     </ClInclude>
@@ -135,6 +137,7 @@
     </ClCompile>
     <ClCompile Include="Source\ChunkObject.cpp">
       <Filter>Source\Voxel Terrain</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
       <Filter>Source\Camera</Filter>
     </ClCompile>
