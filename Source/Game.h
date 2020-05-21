@@ -1,6 +1,7 @@
 #pragma once
 #include "StepTimer.h"
 #include "FPSCamera.h"
+#include "Shader.h"
 
 class IGameObject;
 
@@ -70,11 +71,9 @@ private:
     std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
 
     // Rendering
+    std::unique_ptr<Shader>                         m_basicShader;
     std::unique_ptr<DirectX::CommonStates>          m_states;
     Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout>       m_posNorTextInputLayout;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader>       m_basicPixelShader;
-    Microsoft::WRL::ComPtr<ID3D11VertexShader>      m_basicVertexShader;
 
     // Basic Camera
     std::unique_ptr<Camera>                         m_camera;
