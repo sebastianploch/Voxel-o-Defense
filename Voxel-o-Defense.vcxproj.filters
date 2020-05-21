@@ -134,5 +134,11 @@
     <FxCompile Include="Resources\Shaders\BasicPixelShader.hlsl">
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shaders\basicVoxelPixelShader.hlsl">
+      <Filter>Headers\Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\BasicVoxelVertexShader.hlsl">
+      <Filter>Headers\Resources\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

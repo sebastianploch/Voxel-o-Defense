@@ -2,9 +2,9 @@
 #include "Shader.h"
 
 static constexpr LPCSTR s_vertexEntry = "VSMain";
-static constexpr LPCSTR s_vertexVersion = "vs_4_0_level_9_3";
+static constexpr LPCSTR s_vertexVersion = "vs_5_0";
 static constexpr LPCSTR s_pixelEntry = "PSMain";
-static constexpr LPCSTR s_pixelVersion = "ps_4_0_level_9_3";
+static constexpr LPCSTR s_pixelVersion = "ps_5_0";
 
 
 Shader::Shader(ID3D11Device1* device,
