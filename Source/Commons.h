@@ -1,5 +1,14 @@
 #pragma once
 
+
+enum class Shaders
+{
+	BASIC_SHADER = 0,
+	VOXEL_SHADER,
+	TOON_SHADER,
+	NONE
+};
+
 struct ConstantBuffer
 {
 	DirectX::SimpleMath::Matrix projection;

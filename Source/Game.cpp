@@ -108,9 +108,12 @@ void Game::CreateDevice()
 	DX::ThrowIfFailed(device.As(&m_d3dDevice));
 	DX::ThrowIfFailed(context.As(&m_d3dContext));
 
+	// Create Common States Instance
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 
-	CreateShaders();
+	// Create Shader Manager Instance
+	m_shaderManager = std::make_unique<ShaderManager>(m_d3dDevice.Get());
+
 	CreateConstantBuffer();
 }
 
@@ -226,14 +229,6 @@ void Game::CreateResources()
 										Vector3(0.0f, 0.0f, 4.0f));
 }
 
-// Compile and Assign Shaders to buffers & Create Input Layout.
-void Game::CreateShaders()
-{
-	m_basicShader = std::make_unique<Shader>(m_d3dDevice.Get(),
-											 L"Resources/Shaders/BasicVertexShader.hlsl",
-											 L"Resources/Shaders/BasicPixelShader.hlsl");
-}
-
 // Create constant buffer to be used as a resource by shader.
 void Game::CreateConstantBuffer()
 {
@@ -262,7 +257,7 @@ void Game::OnDeviceLost()
 
 	m_states.reset();
 	m_constantBuffer.Reset();
-	m_basicShader.reset();
+	m_shaderManager.reset();
 
 	CreateDevice();
 	CreateResources();
@@ -323,6 +318,9 @@ void Game::Render()
 	// Render all objects
 	for (const auto& object : m_gameObjects)
 	{
+		// Assign Shader to be used to render upcoming object
+		m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
+
 		// Assign Object World Mat data to ConstantBuffer
 		cb.world = object->GetWorldMatrix();
 
@@ -425,13 +423,6 @@ void Game::Prepare()
 	// Set Texture Sampler
 	auto sampler = m_states->LinearClamp();
 	m_d3dContext->PSSetSamplers(0, 1, &sampler);
-
-	// Set Input Layout 
-	m_d3dContext->IASetInputLayout(m_basicShader->GetInputLayout());
-
-	// Set VS and PS Shaders
-	m_d3dContext->VSSetShader(m_basicShader->GetVertexShader(), nullptr, 0);
-	m_d3dContext->PSSetShader(m_basicShader->GetPixelShader(), nullptr, 0);
 
 	// Set Constant Buffer for VS and PS Shaders
 	m_d3dContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());

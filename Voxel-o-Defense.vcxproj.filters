@@ -76,6 +76,9 @@
     <ClInclude Include="Source\Shader.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ShaderManager.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -111,6 +114,9 @@
     <ClCompile Include="Source\Shader.cpp">
       <Filter>Source\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ShaderManager.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -134,10 +140,10 @@
     <FxCompile Include="Resources\Shaders\BasicPixelShader.hlsl">
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\basicVoxelPixelShader.hlsl">
+    <FxCompile Include="Resources\Shaders\BasicVoxelVertexShader.hlsl">
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\BasicVoxelVertexShader.hlsl">
+    <FxCompile Include="Resources\Shaders\BasicVoxelPixelShader.hlsl">
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
