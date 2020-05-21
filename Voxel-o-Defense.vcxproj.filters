@@ -37,6 +37,11 @@
     </Filter>
     <Filter Include="Source\Voxel Terrain">
       <UniqueIdentifier>{ca92a1e2-6cc7-44b7-b17e-7e4f00bdb6ba}</UniqueIdentifier>
+    <Filter Include="Headers\Camera">
+      <UniqueIdentifier>{f20cf6fc-d128-49fc-8623-cc6ac36d11c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Camera">
+      <UniqueIdentifier>{d28cdef6-e4e0-46df-a678-9bf5b6a56db0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +61,9 @@
       <Filter>Headers\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Source\Commons.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InputState.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\JSONLoader.h">
@@ -78,6 +86,14 @@
     </ClInclude>
     <ClInclude Include="Source\ChunkObject.h">
       <Filter>Headers\Voxel Terrain</Filter>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Headers\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FPSCamera.h">
+      <Filter>Headers\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ISOCamera.h">
+      <Filter>Headers\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InputState.cpp">
+      <Filter>Source\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\JSONLoader.cpp">
       <Filter>Source\JSONLoader</Filter>
@@ -116,6 +135,14 @@
     </ClCompile>
     <ClCompile Include="Source\ChunkObject.cpp">
       <Filter>Source\Voxel Terrain</Filter>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FPSCamera.cpp">
+      <Filter>Source\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ISOCamera.cpp">
+      <Filter>Source\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

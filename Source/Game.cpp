@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+
 #include "DebugSimpleCube.h"
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
@@ -41,6 +42,9 @@ void Game::Initialize(HWND window,
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60.0);
 
+	// Initialise Input Handler
+	m_inputState = std::make_unique<InputState>(m_window);
+
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
@@ -50,7 +54,6 @@ void Game::Initialize(HWND window,
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 
 	// Create one debug cube
-	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 }
 
@@ -221,15 +224,12 @@ void Game::CreateResources()
 	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Matrices #Camera
-	m_viewMat = Matrix::CreateLookAt(Vector3(2.0f, 2.0f, 2.0f),
-									 Vector3::Zero,
-									 Vector3::UnitY);
-
-	m_projMat = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.0f,
-													 static_cast<float>(backBufferWidth) / static_cast<float>(backBufferHeight),
-													 0.1f,
-													 100.0f);
+	// Initialise camera
+	m_camera = std::make_unique<FPSCamera>((float)backBufferWidth,
+										(float)backBufferHeight,
+										0.1f,
+										100.0f,
+										Vector3(0.0f, 0.0f, 4.0f));
 }
 
 // Compile and Assign Shaders to buffers & Create Input Layout.
@@ -297,6 +297,8 @@ void Game::OnDeviceLost()
 	m_d3dContext.Reset();
 	m_d3dDevice.Reset();
 
+	m_camera.reset();
+
 	m_states.reset();
 	m_constantBuffer.Reset();
 	m_posNorTextInputLayout.Reset();
@@ -326,6 +328,18 @@ void Game::Update(DX::StepTimer const& timer)
 
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+	
+	m_camera->Update(deltaTime,
+					 *m_inputState);
+
+	// Update Input Handler
+	m_inputState->Update();
+
+	// Exit game on 'Escape' key press
+	if (m_inputState->GetKeyboardState().pressed.Escape)
+	{
+		ExitGame();
+	}
 
 	// Update all objects
 	for (auto object : m_gameObjects)
@@ -347,8 +361,8 @@ void Game::Render()
 
 	// Create ConstantBuffer and assign camera mat's
 	ConstantBuffer cb;
-	cb.projection = m_projMat;
-	cb.view = m_viewMat;
+	cb.projection = m_camera->GetProjection();
+	cb.view = m_camera->GetView();
 
 	// Render chunks
 	ChunkHandler::DrawChunks(m_d3dContext.Get());
@@ -496,16 +510,19 @@ void Game::Present()
 void Game::OnActivated()
 {
     // TODO: Game is becoming active window.
+	m_inputState->Reset();
 }
 
 void Game::OnDeactivated()
 {
     // TODO: Game is becoming background window.
+	m_inputState->Reset();
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
+	m_inputState->Reset();
 }
 
 void Game::OnResuming()
@@ -513,6 +530,7 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
+	m_inputState->Reset();
 }
 
 void Game::OnWindowSizeChanged(int width, int height)

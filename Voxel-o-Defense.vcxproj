@@ -185,12 +185,16 @@
     <ClInclude Include="Source\Chunk.h" />
     <ClInclude Include="Source\ChunkHandler.h" />
     <ClInclude Include="Source\ChunkObject.h" />
+    <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Commons.h" />
     <ClInclude Include="Source\DebugSimpleCube.h" />
+    <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\GreedyVoxelMeshGeneration.h" />
     <ClInclude Include="Source\IGameObject.h" />
+    <ClInclude Include="Source\InputState.h" />
     <ClInclude Include="Source\JSONLoader.h" />
+    <ClInclude Include="Source\ISOCamera.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\PerlinNoise.h" />
     <ClInclude Include="Source\StepTimer.h" />
@@ -200,11 +204,15 @@
     <ClCompile Include="Source\Chunk.cpp" />
     <ClCompile Include="Source\ChunkHandler.cpp" />
     <ClCompile Include="Source\ChunkObject.cpp" />
+    <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
+    <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GreedyVoxelMeshGeneration.cpp" />
     <ClCompile Include="Source\IGameObject.cpp" />
+    <ClCompile Include="Source\InputState.cpp" />
     <ClCompile Include="Source\JSONLoader.cpp" />
+    <ClCompile Include="Source\ISOCamera.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

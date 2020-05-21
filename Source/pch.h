@@ -34,6 +34,8 @@
 #include <DirectXColors.h>
 
 // DirectXTK
+#include <Mouse.h>
+#include <Keyboard.h>
 #include <SimpleMath.h>
 #include <VertexTypes.h>
 #include <CommonStates.h>
@@ -52,6 +54,9 @@
 // Common Structs
 #include "Commons.h"
 #include "JSONLoader.h"
+
+// Input Handling
+#include "InputState.h"
 
 namespace DX
 {
