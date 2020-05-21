@@ -108,9 +108,12 @@ void Game::CreateDevice()
 	DX::ThrowIfFailed(device.As(&m_d3dDevice));
 	DX::ThrowIfFailed(context.As(&m_d3dContext));
 
+	// Create Common States Instance
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 
-	CreateShaders();
+	// Create Shader Manager Instance
+	m_shaderManager = std::make_unique<ShaderManager>(m_d3dDevice.Get());
+
 	CreateConstantBuffer();
 }
 
@@ -214,7 +217,6 @@ void Game::CreateResources()
 														  &depthStencilViewDesc,
 														  m_depthStencilView.ReleaseAndGetAddressOf()));
 
-
 	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -224,47 +226,6 @@ void Game::CreateResources()
 										0.1f,
 										100.0f,
 										Vector3(0.0f, 0.0f, 4.0f));
-}
-
-// Compile and Assign Shaders to buffers & Create Input Layout.
-void Game::CreateShaders()
-{
-	// Compile vertex shader byte code
-	ID3DBlob* vsBlob = nullptr;
-	DX::ThrowIfFailed(CompileShader(L"Resources/Shaders/BasicVertexShader.hlsl",
-									"VSMain",
-									"vs_4_0_level_9_3",
-									&vsBlob));
-
-	// Attach compiled vertex Shader
-	DX::ThrowIfFailed(m_d3dDevice->CreateVertexShader(vsBlob->GetBufferPointer(),
-													  vsBlob->GetBufferSize(),
-													  nullptr,
-													  m_basicVertexShader.ReleaseAndGetAddressOf()));
-
-	// Compile pixel shader byte code
-	ID3DBlob* psBlob = nullptr;
-	DX::ThrowIfFailed(CompileShader(L"Resources/Shaders/BasicPixelShader.hlsl",
-									"PSMain",
-									"ps_4_0_level_9_3",
-									&psBlob));
-
-	// Attach compiled pixel Shader
-	DX::ThrowIfFailed(m_d3dDevice->CreatePixelShader(psBlob->GetBufferPointer(),
-													 psBlob->GetBufferSize(),
-													 nullptr,
-													 m_basicPixelShader.ReleaseAndGetAddressOf()));
-
-	// Create Position & Colour Input Layout
-	m_d3dDevice->CreateInputLayout(VertexPositionNormalTexture::InputElements,
-								   VertexPositionNormalTexture::InputElementCount,
-								   vsBlob->GetBufferPointer(),
-								   vsBlob->GetBufferSize(),
-								   m_posNorTextInputLayout.GetAddressOf());
-
-	// Clear blobs
-	vsBlob->Release();
-	psBlob->Release();
 }
 
 // Create constant buffer to be used as a resource by shader.
@@ -292,12 +253,11 @@ void Game::OnDeviceLost()
 	m_d3dDevice.Reset();
 
 	m_camera.reset();
+	m_inputState.reset();
 
 	m_states.reset();
 	m_constantBuffer.Reset();
-	m_posNorTextInputLayout.Reset();
-	m_basicPixelShader.Reset();
-	m_basicVertexShader.Reset();
+	m_shaderManager.reset();
 
 	CreateDevice();
 	CreateResources();
@@ -358,6 +318,9 @@ void Game::Render()
 	// Render all objects
 	for (const auto& object : m_gameObjects)
 	{
+		// Assign Shader to be used to render upcoming object
+		m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
+
 		// Assign Object World Mat data to ConstantBuffer
 		cb.world = object->GetWorldMatrix();
 
@@ -460,13 +423,6 @@ void Game::Prepare()
 	// Set Texture Sampler
 	auto sampler = m_states->LinearClamp();
 	m_d3dContext->PSSetSamplers(0, 1, &sampler);
-
-	// Set Input Layout 
-	m_d3dContext->IASetInputLayout(m_posNorTextInputLayout.Get());
-
-	// Set VS and PS Shaders
-	m_d3dContext->VSSetShader(m_basicVertexShader.Get(), nullptr, 0);
-	m_d3dContext->PSSetShader(m_basicPixelShader.Get(), nullptr, 0);
 
 	// Set Constant Buffer for VS and PS Shaders
 	m_d3dContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());

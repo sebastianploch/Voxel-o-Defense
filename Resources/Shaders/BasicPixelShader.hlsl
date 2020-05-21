@@ -1,3 +1,4 @@
+
 Texture2D diffuseTexture : register( t0 );
 SamplerState samplerLinear : register( s0 );
 
