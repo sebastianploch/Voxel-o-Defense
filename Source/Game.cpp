@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "DebugSimpleCube.h"
+#include "AiManager.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -44,7 +45,10 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Create one debug cube
-	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
+	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
+
+	// Creation of Ai Manager
+	m_AiManager = std::make_unique<AiManager>(100, Vector3(60,30,10)); 
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -317,6 +321,9 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
+	//AI
+	m_AiManager->Update(deltaTime);
+
 	// Update all objects
 	for (auto object : m_gameObjects)
 	{
@@ -356,6 +363,9 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
+
+	//Ai
+	m_AiManager->Render(m_d3dContext.Get(), cb, m_constantBuffer.Get());
 
 	// Swap backbuffer
     Present();

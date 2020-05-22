@@ -182,24 +182,32 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AiAgent.h" />
+    <ClInclude Include="Source\AiManager.h" />
     <ClInclude Include="Source\Commons.h" />
     <ClInclude Include="Source\DebugSimpleCube.h" />
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\IGameObject.h" />
+    <ClInclude Include="Source\Node.h" />
     <ClInclude Include="Source\pch.h" />
+    <ClInclude Include="Source\RouteConstructor.h" />
     <ClInclude Include="Source\StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AiAgent.cpp" />
+    <ClCompile Include="Source\AiManager.cpp" />
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\IGameObject.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Node.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\RouteConstructor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\resource.rc" />

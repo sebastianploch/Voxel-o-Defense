@@ -1,5 +1,6 @@
 #pragma once
 #include "StepTimer.h"
+#include "AiManager.h"
 
 class IGameObject;
 
@@ -64,6 +65,9 @@ private:
 
     // Game Objects
     std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
+
+	// AI
+	std::unique_ptr<AiManager>						m_AiManager;
 
     // Rendering
     std::unique_ptr<DirectX::CommonStates>          m_states;

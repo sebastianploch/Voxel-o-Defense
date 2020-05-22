@@ -26,6 +26,21 @@
     <Filter Include="Resources\Shaders">
       <UniqueIdentifier>{f7f06c61-7f30-4328-919d-8dfaec6b482e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\AI">
+      <UniqueIdentifier>{6b3d7534-319e-4255-84e3-57520be1f1e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\AI\AI Manager">
+      <UniqueIdentifier>{536eb59a-1141-4ba5-96f6-18e59073fda6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\AI\AI Agent">
+      <UniqueIdentifier>{b81159cb-8b22-489d-b7f4-5ca889045c9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\AI\Pathing">
+      <UniqueIdentifier>{4fdedf5a-77b3-457e-bf14-920032b6b7af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\AI\Pathing\Nodes">
+      <UniqueIdentifier>{faceb046-65e7-4377-87c5-91fd73058168}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -46,6 +61,18 @@
     <ClInclude Include="Source\Commons.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AiManager.h">
+      <Filter>Source\AI\AI Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RouteConstructor.h">
+      <Filter>Source\AI\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AiAgent.h">
+      <Filter>Source\AI\AI Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Node.h">
+      <Filter>Source\AI\Pathing\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -62,6 +89,18 @@
     </ClCompile>
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiManager.cpp">
+      <Filter>Source\AI\AI Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RouteConstructor.cpp">
+      <Filter>Source\AI\Pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiAgent.cpp">
+      <Filter>Source\AI\AI Agent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node.cpp">
+      <Filter>Source\AI\Pathing\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
