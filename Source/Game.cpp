@@ -365,7 +365,7 @@ void Game::Render()
 	cb.view = m_camera->GetView();
 
 	// Render chunks
-	ChunkHandler::DrawChunks(m_d3dContext.Get());
+	ChunkHandler::DrawChunks(m_d3dContext.Get(), &cb, m_constantBuffer.Get());
 
 	// Render all objects
 	for (const auto& object : m_gameObjects)

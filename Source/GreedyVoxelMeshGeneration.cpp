@@ -26,7 +26,7 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
 
         int x[] = { 0, 0, 0 };
         int q[] = { 0, 0, 0 };
-        std::vector<int> mask((dims[u] + 1) * (dims[v] + 1), 0);
+        int* mask = new int[(dims[u] + 1) * (dims[v] + 1)]();
 
         q[dir] = 1;
 
@@ -93,7 +93,7 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
                             dv[u] = width;
                         }
 
-                        Vector3 chunkPos = Vector3(chunk->GetXIndex() *chunk->GetWidth(), 0, chunk->GetZIndex() * chunk->GetDepth());
+                        Vector3 chunkPos = Vector3(chunk->GetXIndex() * chunk->GetWidth(), 0, chunk->GetZIndex() * chunk->GetDepth());
                         Vector3 v1 = Vector3(x[0] + chunkPos.x, 
                                              x[1] + chunkPos.y, 
                                              x[2] + chunkPos.z);
@@ -129,13 +129,14 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
                 }
             }
         }
+
+        delete[] mask;
     }
 
     //TODO: Change this to new vertex type with 2 TexCoords
     VoxelMesh mesh;
-    unsigned int numMeshVertices = m_vertices.size();
-    DirectX::VertexPositionNormalTexture* verticesArray = new DirectX::VertexPositionNormalTexture[numMeshVertices];
-    for (unsigned int i = 0; i < numMeshVertices; i++) {
+    DirectX::VertexPositionNormalTexture* verticesArray = new DirectX::VertexPositionNormalTexture[m_vertices.size()];
+    for (unsigned int i = 0; i < m_vertices.size(); i++) {
         verticesArray[i].position = m_vertices[i];
         verticesArray[i].normal = m_normals[i];
         verticesArray[i].textureCoordinate = m_uvs[i];
@@ -146,7 +147,7 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(DirectX::VertexPositionNormalTexture) * numMeshVertices;
+    bd.ByteWidth = sizeof(DirectX::VertexPositionNormalTexture) * m_vertices.size();
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
 
@@ -159,27 +160,28 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
     mesh.m_VertexBuffer = vertexBuffer;
     mesh.m_VBOffset = 0;
     mesh.m_VBStride = sizeof(DirectX::VertexPositionNormalTexture);
+    
 
     //Create index buffer
-    unsigned int numMeshIndices = m_indices.size();
-    unsigned int* indicesArray = new unsigned int[numMeshIndices];
-    for (unsigned int i = 0; i < numMeshIndices; i++) {
+    unsigned int* indicesArray = new unsigned int[m_indices.size()];
+    for (unsigned int i = 0; i < m_indices.size(); i++) {
         indicesArray[i] = m_indices[i];
     }
 
     ID3D11Buffer* indexBuffer;
 
-    ZeroMemory(&bd, sizeof(bd));
-    bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * numMeshIndices;
-    bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    bd.CPUAccessFlags = 0;
+    D3D11_BUFFER_DESC bd1;
+    ZeroMemory(&bd1, sizeof(bd1));
+    bd1.Usage = D3D11_USAGE_DEFAULT;
+    bd1.ByteWidth = sizeof(WORD) * m_indices.size();
+    bd1.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    bd1.CPUAccessFlags = 0;
 
     ZeroMemory(&InitData, sizeof(InitData));
     InitData.pSysMem = indicesArray;
-    device->CreateBuffer(&bd, &InitData, &indexBuffer);
+    device->CreateBuffer(&bd1, &InitData, &indexBuffer);
 
-    mesh.m_IndexCount = numMeshIndices;
+    mesh.m_IndexCount = m_indices.size();
     mesh.m_IndexBuffer = indexBuffer;
 
     delete[] indicesArray;

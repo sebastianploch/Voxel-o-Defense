@@ -27,9 +27,17 @@ void ChunkHandler::UpdateChunkMeshes(ID3D11Device* device) {
 	}
 }
 
-void ChunkHandler::DrawChunks(ID3D11DeviceContext* context) {
+void ChunkHandler::DrawChunks(ID3D11DeviceContext* context, ConstantBuffer* cb, ID3D11Buffer* constantBuffer) {
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int z = 0; z < MAP_SIZE; z++) {
+			/*
+			cb->world = s_chunks[x][z].GetChunkGameObject()->GetWorldMatrix();
+			context->UpdateSubresource(constantBuffer,
+										0,
+										nullptr,
+										&cb,
+										0, 0);*/
+
 			s_chunks[x][z].Draw(context);
 		}
 	}
