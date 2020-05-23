@@ -51,6 +51,8 @@ void Game::Initialize(HWND window,
 
 	// Initialise Voxel Chunk Objects
 	ChunkObject::InitTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
+
+	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 
 	// Create one debug cube

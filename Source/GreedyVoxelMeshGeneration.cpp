@@ -163,7 +163,7 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
     
 
     //Create index buffer
-    unsigned int* indicesArray = new unsigned int[m_indices.size()];
+    unsigned short* indicesArray = new unsigned short[m_indices.size()];
     for (unsigned int i = 0; i < m_indices.size(); i++) {
         indicesArray[i] = m_indices[i];
     }
@@ -177,9 +177,10 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
     bd1.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd1.CPUAccessFlags = 0;
 
-    ZeroMemory(&InitData, sizeof(InitData));
-    InitData.pSysMem = indicesArray;
-    device->CreateBuffer(&bd1, &InitData, &indexBuffer);
+    D3D11_SUBRESOURCE_DATA InitData1;
+    ZeroMemory(&InitData1, sizeof(InitData1));
+    InitData1.pSysMem = indicesArray;
+    device->CreateBuffer(&bd1, &InitData1, &indexBuffer);
 
     mesh.m_IndexCount = m_indices.size();
     mesh.m_IndexBuffer = indexBuffer;
