@@ -8,8 +8,6 @@ using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector4;
 using DirectX::SimpleMath::Matrix;
 
-using Vertex = VertexPositionNormalTexture;
-
 ChunkObject::ChunkObject() :
 	m_position(Vector3(0, 0, 0)),
 	m_rotation(Vector3(0, 0, 0)),
@@ -18,6 +16,8 @@ ChunkObject::ChunkObject() :
 	m_worldMat *= Matrix::CreateScale(m_scaling);
 	m_worldMat *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
 	m_worldMat *= Matrix::CreateTranslation(m_position);
+
+	m_shaderType = Shaders::VOXEL_SHADER;
 }
 
 ChunkObject::ChunkObject(const DirectX::SimpleMath::Vector3& position,

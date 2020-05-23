@@ -50,7 +50,13 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Initialise Voxel Chunk Objects
-	ChunkObject::InitTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
+	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
+
+	for (int i = 0; i < 17; i++) {
+		WorldManipulation::SetVoxel(i, Vector3(i, 5, 0));
+	}
+	WorldManipulation::SetVoxel(14, Vector3(14, 6, 0));
+
 
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
@@ -232,7 +238,7 @@ void Game::CreateResources()
 	m_camera = std::make_unique<FPSCamera>((float)backBufferWidth,
 										(float)backBufferHeight,
 										0.1f,
-										100.0f,
+										300.0f,
 										Vector3(0.0f, 0.0f, 4.0f));
 }
 
@@ -327,7 +333,7 @@ void Game::Render()
 	cb.view = m_camera->GetView();
 
 	// Render chunks
-	ChunkHandler::DrawChunks(m_d3dContext.Get(), &cb, m_constantBuffer.Get());
+	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
 
 	// Render all objects
 	for (const auto& object : m_gameObjects)
@@ -435,7 +441,17 @@ void Game::Clear()
 void Game::Prepare()
 {
 	// Set Texture Sampler
-	auto sampler = m_states->LinearClamp();
+	ID3D11SamplerState* sampler = nullptr;
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = 0;
+	m_d3dDevice->CreateSamplerState(&sampDesc, &sampler);
+	
 	m_d3dContext->PSSetSamplers(0, 1, &sampler);
 
 	// Set Constant Buffer for VS and PS Shaders

@@ -24,7 +24,7 @@ void Chunk::UpdateMesh(ID3D11Device* device) {
 	}
 }
 
-void Chunk::Draw(ID3D11DeviceContext* context) {
+void Chunk::Draw(ID3D11DeviceContext1* context) {
 	m_chunkGameObject->Draw(context);
 }
 

@@ -11,7 +11,14 @@ struct PS_INPUT
 
 float4 PSMain(PS_INPUT Input) : SV_TARGET
 {
-    float4 pixelColour = diffuseTexture.Sample(samplerLinear, Input.texCoord0);
+    //                 Tile size   Whole texture atlas size
+    float tileSize = float(32.0f / 512.0f);
+    //                    Wrap UV to one texture                                                                      Add offset for current voxel texture
+    float2 newUv = float2(fmod(Input.texCoord0.x * tileSize, tileSize), fmod(Input.texCoord0.y * tileSize, tileSize)) + Input.texCoord1;
     
-    return pixelColour;
+    //Temporary lighting solution to help differentiate blocks
+    float lightingVal = Input.normal.y * 1 + Input.normal.x * 2 + Input.normal.z * 3;
+
+    float4 pixelColour = diffuseTexture.Sample(samplerLinear, newUv);
+    return pixelColour / abs(lightingVal);
 }

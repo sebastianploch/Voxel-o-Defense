@@ -133,21 +133,22 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
         delete[] mask;
     }
 
-    //TODO: Change this to new vertex type with 2 TexCoords
     VoxelMesh mesh;
-    DirectX::VertexPositionNormalTexture* verticesArray = new DirectX::VertexPositionNormalTexture[m_vertices.size()];
+
+    //Create vertex buffer
+    DirectX::VertexPositionNormalDualTexture* verticesArray = new DirectX::VertexPositionNormalDualTexture[m_vertices.size()];
     for (unsigned int i = 0; i < m_vertices.size(); i++) {
         verticesArray[i].position = m_vertices[i];
         verticesArray[i].normal = m_normals[i];
-        verticesArray[i].textureCoordinate = m_uvs[i];
+        verticesArray[i].textureCoordinate0 = m_uvs[i];
+        verticesArray[i].textureCoordinate1 = m_uvs1[i];
     }
 
-    //Create vertex buffer
     ID3D11Buffer* vertexBuffer;
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(DirectX::VertexPositionNormalTexture) * m_vertices.size();
+    bd.ByteWidth = sizeof(DirectX::VertexPositionNormalDualTexture) * m_vertices.size();
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
 
@@ -159,7 +160,7 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
 
     mesh.m_VertexBuffer = vertexBuffer;
     mesh.m_VBOffset = 0;
-    mesh.m_VBStride = sizeof(DirectX::VertexPositionNormalTexture);
+    mesh.m_VBStride = sizeof(DirectX::VertexPositionNormalDualTexture);
     
 
     //Create index buffer
@@ -250,16 +251,17 @@ std::vector<Vector2> GreedyVoxelMeshGeneration::GenerateCorrectUVs(Vector3 norma
     if (normal.y == 1 ||
         normal.z == -1 ||
         normal.x == 1) {
-
-        resultList.push_back(Vector2(w, 0));
-        resultList.push_back(Vector2(w, h));
         resultList.push_back(Vector2(0, h));
         resultList.push_back(Vector2(0, 0));
+        resultList.push_back(Vector2(w, 0));
+        resultList.push_back(Vector2(w, h));
+        
     } else {
-        resultList.push_back(Vector2(0, 0));
-        resultList.push_back(Vector2(h, 0));
         resultList.push_back(Vector2(h, w));
         resultList.push_back(Vector2(0, w));
+        resultList.push_back(Vector2(0, 0));
+        resultList.push_back(Vector2(h, 0));
+        
     }
 
     return resultList;
