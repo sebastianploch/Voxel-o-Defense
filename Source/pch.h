@@ -51,6 +51,7 @@
 
 // JSON nlohmann library
 #include <nlohmann/json.hpp>
+
 // Common Structs
 #include "Commons.h"
 #include "JSONLoader.h"
