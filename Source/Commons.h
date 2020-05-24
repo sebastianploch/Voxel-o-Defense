@@ -57,14 +57,6 @@ enum VOXEL_TYPE {
     REDWOOD_PLANKS,
 };
 
-//TEMPORARY
-struct VoxelVertex {
-    std::vector<DirectX::SimpleMath::Vector3> m_position;
-    std::vector<DirectX::SimpleMath::Vector3> m_normal;
-    std::vector<DirectX::SimpleMath::Vector2> m_texCoord;
-    std::vector<DirectX::SimpleMath::Vector2> m_texCoord1;
-};
-
 struct VoxelMesh {
     ID3D11Buffer* m_VertexBuffer;
     ID3D11Buffer* m_IndexBuffer;
