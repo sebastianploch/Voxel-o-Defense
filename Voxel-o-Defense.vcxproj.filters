@@ -37,7 +37,7 @@
     </Filter>
     <Filter Include="Source\Voxel Terrain">
       <UniqueIdentifier>{ca92a1e2-6cc7-44b7-b17e-7e4f00bdb6ba}</UniqueIdentifier>
-  	</Filter>
+    </Filter>
     <Filter Include="Headers\Camera">
       <UniqueIdentifier>{f20cf6fc-d128-49fc-8623-cc6ac36d11c4}</UniqueIdentifier>
     </Filter>
@@ -103,6 +103,12 @@
     <ClInclude Include="Source\ShaderManager.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\VoxelModel.h">
+      <Filter>Headers\Voxel Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VoxelModelManager.h">
+      <Filter>Headers\Voxel Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -158,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="Source\ShaderManager.cpp">
       <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VoxelModel.cpp">
+      <Filter>Source\Voxel Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VoxelModelManager.cpp">
+      <Filter>Source\Voxel Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

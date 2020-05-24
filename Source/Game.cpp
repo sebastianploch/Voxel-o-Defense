@@ -2,8 +2,11 @@
 #include "Game.h"
 
 #include "DebugSimpleCube.h"
+
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
+#include "VoxelModel.h"
+#include "VoxelModelManager.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -49,20 +52,17 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
+	// Create one debug cube
+	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+
 	// Initialise Voxel Chunk Objects
 	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
 
-	for (int i = 0; i < 17; i++) {
-		WorldManipulation::SetVoxel(i, Vector3(i, 5, 0));
-	}
-	WorldManipulation::SetVoxel(14, Vector3(14, 6, 0));
-
+	// Load example voxel model
+	WorldManipulation::ImportVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), SimpleMath::Vector3Int(13, 4, 20));
 
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
-
-	// Create one debug cube
-	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.

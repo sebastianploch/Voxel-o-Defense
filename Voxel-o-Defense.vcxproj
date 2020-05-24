@@ -200,6 +200,8 @@
     <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\ShaderManager.h" />
     <ClInclude Include="Source\StepTimer.h" />
+    <ClInclude Include="Source\VoxelModel.h" />
+    <ClInclude Include="Source\VoxelModelManager.h" />
     <ClInclude Include="Source\WorldManipulation.h" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +225,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\PerlinNoise.cpp" />
+    <ClCompile Include="Source\VoxelModel.cpp" />
+    <ClCompile Include="Source\VoxelModelManager.cpp" />
     <ClCompile Include="Source\WorldManipulation.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />

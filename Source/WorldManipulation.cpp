@@ -101,6 +101,22 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 	}
 }
 
+void WorldManipulation::ImportVoxelModel(VoxelModel* model, Vector3Int position) {
+	std::vector<std::vector<std::vector<char>>> data = model->GetVoxelData();
+	Vector3Int size = model->GetSize();
+
+	for (int x = 0; x <= size.x; x++) {
+		for (int y = 0; y <= size.y; y++) {
+			for (int z = 0; z <= size.z; z++) {
+				Vector3Int pos = Vector3Int(position.x - model->GetOrigin().x + x, 
+											position.y - model->GetOrigin().y + y, 
+											position.z - model->GetOrigin().z + z);
+				SetVoxel(data[x][y][z], pos);
+			}
+		}
+	}
+}
+
 char WorldManipulation::GetVoxelType(Vector3Int pos, int terrainHeight) {
 	if (terrainHeight < 15)					//Sand around edges of island
 		return VOXEL_TYPE::SAND;
