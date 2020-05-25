@@ -101,7 +101,7 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 	}
 }
 
-void WorldManipulation::ImportVoxelModel(VoxelModel* model, Vector3Int position) {
+void WorldManipulation::PlaceVoxelModel(VoxelModel* model, Vector3Int position) {
 	std::vector<std::vector<std::vector<char>>> data = model->GetVoxelData();
 	Vector3Int size = model->GetSize();
 

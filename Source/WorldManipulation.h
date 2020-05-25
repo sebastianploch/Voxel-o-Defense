@@ -15,7 +15,7 @@ public:
 	static void SetVoxelSphere(char v, DirectX::SimpleMath::Vector3Int worldPos, int r);
 
 	static void GenerateTerrainData(Chunk* c);
-	static void ImportVoxelModel(VoxelModel* model, DirectX::SimpleMath::Vector3Int position);
+	static void PlaceVoxelModel(VoxelModel* model, DirectX::SimpleMath::Vector3Int position);
 	
 private:
 	static char GetVoxelType(DirectX::SimpleMath::Vector3Int pos, int terrainHeight);

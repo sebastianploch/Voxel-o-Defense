@@ -58,8 +58,8 @@ enum VOXEL_TYPE {
 };
 
 struct VoxelMesh {
-    ID3D11Buffer* m_VertexBuffer;
-    ID3D11Buffer* m_IndexBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_VertexBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_IndexBuffer;
     UINT m_VBStride;
     UINT m_VBOffset;
     UINT m_IndexCount;
