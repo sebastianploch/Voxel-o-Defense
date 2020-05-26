@@ -7,6 +7,7 @@
 #include "ChunkHandler.h"
 #include "VoxelModel.h"
 #include "VoxelModelManager.h"
+#include "VoxelRay.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -59,10 +60,10 @@ void Game::Initialize(HWND window,
 	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
 
 	// Load example voxel model
-	WorldManipulation::ImportVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), SimpleMath::Vector3Int(13, 4, 20));
+	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), SimpleMath::Vector3Int(13, 4, 20));
 
 	// Create Initial Chunk Meshes
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get(), m_d3dContext.Get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -293,9 +294,6 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
-
-	// Update chunks if they have been modified
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 	
 	m_camera->Update(deltaTime,
 					 *m_inputState);
@@ -308,6 +306,15 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		ExitGame();
 	}
+
+	// Example code for casting ray
+	if (m_inputState->GetKeyboardState().pressed.Space) {
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(Vector3(10, 19, 24), Vector3(1, 1, 1));
+		WorldManipulation::SetVoxel(VOXEL_TYPE::RED_BRICK, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	}
+
+	// Update chunks if they have been modified
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get(), m_d3dContext.Get());
 
 	// Update all objects
 	for (auto object : m_gameObjects)

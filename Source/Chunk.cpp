@@ -17,9 +17,9 @@ Chunk::~Chunk() {
 	delete[] m_blocks;
 }
 
-void Chunk::UpdateMesh(ID3D11Device* device) {
+void Chunk::UpdateMesh(ID3D11Device* device, ID3D11DeviceContext* context) {
 	if (m_meshNeedsRegenerating) {
-		m_chunkGameObject->UpdateMesh(GreedyVoxelMeshGeneration::GenerateMesh(this, device));
+		GreedyVoxelMeshGeneration::GenerateMesh(this, device, context, m_chunkGameObject->GetMesh());
 		m_meshNeedsRegenerating = false;
 	}
 }

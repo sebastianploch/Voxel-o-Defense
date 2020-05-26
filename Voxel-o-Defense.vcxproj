@@ -202,6 +202,7 @@
     <ClInclude Include="Source\StepTimer.h" />
     <ClInclude Include="Source\VoxelModel.h" />
     <ClInclude Include="Source\VoxelModelManager.h" />
+    <ClInclude Include="Source\VoxelRay.h" />
     <ClInclude Include="Source\WorldManipulation.h" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +228,7 @@
     <ClCompile Include="Source\PerlinNoise.cpp" />
     <ClCompile Include="Source\VoxelModel.cpp" />
     <ClCompile Include="Source\VoxelModelManager.cpp" />
+    <ClCompile Include="Source\VoxelRay.cpp" />
     <ClCompile Include="Source\WorldManipulation.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />

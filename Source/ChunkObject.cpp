@@ -65,10 +65,3 @@ void ChunkObject::InitTexture(const wchar_t* texturePath, ID3D11Device* device) 
 							nullptr,
 							s_texture.ReleaseAndGetAddressOf());
 }
-
-void ChunkObject::UpdateMesh(VoxelMesh newMesh) {
-	if (m_mesh.m_IndexBuffer) m_mesh.m_IndexBuffer->Release();
-	if (m_mesh.m_VertexBuffer) m_mesh.m_VertexBuffer->Release();
-
-	m_mesh = newMesh;
-}

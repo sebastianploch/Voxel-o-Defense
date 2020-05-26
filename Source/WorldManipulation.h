@@ -1,9 +1,11 @@
 #pragma once
 #include "Chunk.h"
 #include "VoxelModel.h"
+#include "Camera.h"
 
 class WorldManipulation {
 public:
+
 	static const char GetVoxel(int x, int y, int z);
 	static const char GetVoxel(DirectX::SimpleMath::Vector3Int worldPos);
 

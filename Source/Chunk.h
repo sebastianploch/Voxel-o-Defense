@@ -13,7 +13,7 @@ public:
 	Chunk();
 	~Chunk(); 
 
-	void UpdateMesh(ID3D11Device* device);
+	void UpdateMesh(ID3D11Device* device, ID3D11DeviceContext* context);
 	void Draw(ID3D11DeviceContext1* context);
 
 	const char GetVoxel(int x, int y, int z);

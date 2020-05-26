@@ -19,10 +19,10 @@ Chunk* ChunkHandler::GetChunk(DirectX::SimpleMath::Vector3Int worldPos) {
 	return GetChunk(cx, cz);
 }
 
-void ChunkHandler::UpdateChunkMeshes(ID3D11Device* device) {
+void ChunkHandler::UpdateChunkMeshes(ID3D11Device* device, ID3D11DeviceContext* context) {
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int z = 0; z < MAP_SIZE; z++) {
-			s_chunks[x][z].UpdateMesh(device);
+			s_chunks[x][z].UpdateMesh(device, context);
 		}
 	}
 }
