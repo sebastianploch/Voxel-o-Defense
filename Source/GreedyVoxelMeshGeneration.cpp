@@ -4,7 +4,7 @@
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-void GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device, ID3D11DeviceContext* context, VoxelMesh* mesh) {
+void GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device, VoxelMesh* mesh) {
     std::vector<Vector3> m_vertices;
     std::vector<int> m_indices;
     std::vector<Vector3> m_normals;
@@ -134,91 +134,73 @@ void GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device,
         delete[] mask;
     }
 
-    CreateBuffers(device, context, mesh, &m_vertices, &m_indices, &m_normals, &m_uvs, &m_uvs1);
+    CreateBuffers(device, mesh, &m_vertices, &m_indices, &m_normals, &m_uvs, &m_uvs1);
 }
 
-void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, ID3D11DeviceContext* context, VoxelMesh* mesh,
+void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, VoxelMesh* mesh,
                                               std::vector<Vector3>* vertices, std::vector<int>* indices, std::vector<Vector3>* normals, std::vector<Vector2>* uvs, std::vector<Vector2>* uvs1) {
    
-    if (mesh->m_VertexBuffer == nullptr) {      //Initial Mesh Generation. Buffers have to be created.
-        //Create vertex buffer
-        auto verticesArray = std::make_unique<VertexPositionNormalDualTexture[]>(vertices->size());
-        for (unsigned int i = 0; i < vertices->size(); i++) {
-            verticesArray[i].position = vertices->at(i);
-            verticesArray[i].normal = normals->at(i);
-            verticesArray[i].textureCoordinate0 = uvs->at(i);
-            verticesArray[i].textureCoordinate1 = uvs1->at(i);
-        }
-
-        Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
-        D3D11_BUFFER_DESC bd;
-        ZeroMemory(&bd, sizeof(bd));
-        bd.Usage = D3D11_USAGE_DYNAMIC;
-        bd.ByteWidth = sizeof(VertexPositionNormalDualTexture) * vertices->size();
-        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-        D3D11_SUBRESOURCE_DATA InitData;
-        ZeroMemory(&InitData, sizeof(InitData));
-        InitData.pSysMem = verticesArray.get();
-
-        device->CreateBuffer(&bd, &InitData, &vertexBuffer);
-
-        mesh->m_VertexBuffer = vertexBuffer;
-        mesh->m_VBOffset = 0;
-        mesh->m_VBStride = sizeof(VertexPositionNormalDualTexture);
-
-
-        //Create index buffer
-        auto indicesArray = std::make_unique<unsigned short[]>(indices->size());
-        for (unsigned int i = 0; i < indices->size(); i++) {
-            indicesArray[i] = indices->at(i);
-        }
-
-        Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
-        D3D11_BUFFER_DESC bd1;
-        ZeroMemory(&bd1, sizeof(bd1));
-        bd1.Usage = D3D11_USAGE_DYNAMIC;
-        bd1.ByteWidth = sizeof(WORD) * indices->size();
-        bd1.BindFlags = D3D11_BIND_INDEX_BUFFER;
-        bd1.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-        D3D11_SUBRESOURCE_DATA InitData1;
-        ZeroMemory(&InitData1, sizeof(InitData1));
-        InitData1.pSysMem = indicesArray.get();
-        device->CreateBuffer(&bd1, &InitData1, &indexBuffer);
-
-        mesh->m_IndexCount = indices->size();
-        mesh->m_IndexBuffer = indexBuffer;
-    } else {        //Buffers already exist, just need to be updated.
-        auto verticesArray = std::make_unique<VertexPositionNormalDualTexture[]>(vertices->size());
-        for (unsigned int i = 0; i < vertices->size(); i++) {
-            verticesArray[i].position = vertices->at(i);
-            verticesArray[i].normal = normals->at(i);
-            verticesArray[i].textureCoordinate0 = uvs->at(i);
-            verticesArray[i].textureCoordinate1 = uvs1->at(i);
-        }
-
-        auto indicesArray = std::make_unique<unsigned short[]>(indices->size());
-        for (unsigned int i = 0; i < indices->size(); i++) {
-            indicesArray[i] = indices->at(i);
-        }
-
-        //Update vertex buffer
-        D3D11_MAPPED_SUBRESOURCE mappedResource;
-        ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-        context->Map(mesh->m_VertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-        memcpy(mappedResource.pData, verticesArray.get(), sizeof(VertexPositionNormalDualTexture) * vertices->size());
-        context->Unmap(mesh->m_VertexBuffer.Get(), 0);
-
-        //Update index buffer
-        ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-        context->Map(mesh->m_IndexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-        memcpy(mappedResource.pData, indicesArray.get(), sizeof(int) * indices->size());
-        context->Unmap(mesh->m_IndexBuffer.Get(), 0);
-
-        mesh->m_IndexCount = indices->size();
+    
+    if (mesh->m_VertexBuffer != nullptr){
+        mesh->m_VertexBuffer.Get()->Release();
+        mesh->m_VertexBuffer = nullptr;
     }
+
+    if (mesh->m_IndexBuffer != nullptr) {
+        mesh->m_IndexBuffer.Get()->Release();
+        mesh->m_IndexBuffer = nullptr;
+    }
+
+    //Create vertex and index array
+    auto verticesArray = std::make_unique<VertexPositionNormalDualTexture[]>(vertices->size());
+    for (unsigned int i = 0; i < vertices->size(); i++) {
+        verticesArray[i].position = vertices->at(i);
+        verticesArray[i].normal = normals->at(i);
+        verticesArray[i].textureCoordinate0 = uvs->at(i);
+        verticesArray[i].textureCoordinate1 = uvs1->at(i);
+    }
+
+    auto indicesArray = std::make_unique<unsigned short[]>(indices->size());
+    for (unsigned int i = 0; i < indices->size(); i++) {
+        indicesArray[i] = indices->at(i);
+    }
+
+    //Create Vertex Buffer
+    Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    D3D11_BUFFER_DESC bd;
+    ZeroMemory(&bd, sizeof(bd));
+    bd.Usage = D3D11_USAGE_DEFAULT;
+    bd.ByteWidth = sizeof(VertexPositionNormalDualTexture) * vertices->size();
+    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    bd.CPUAccessFlags = 0;
+
+    D3D11_SUBRESOURCE_DATA InitData;
+    ZeroMemory(&InitData, sizeof(InitData));
+    InitData.pSysMem = verticesArray.get();
+
+    device->CreateBuffer(&bd, &InitData, &vertexBuffer);
+
+
+    //Create index buffer
+    Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+    D3D11_BUFFER_DESC bd1;
+    ZeroMemory(&bd1, sizeof(bd1));
+    bd1.Usage = D3D11_USAGE_DEFAULT;
+    bd1.ByteWidth = sizeof(WORD) * indices->size();
+    bd1.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    bd1.CPUAccessFlags = 0;
+
+    D3D11_SUBRESOURCE_DATA InitData1;
+    ZeroMemory(&InitData1, sizeof(InitData1));
+    InitData1.pSysMem = indicesArray.get();
+    device->CreateBuffer(&bd1, &InitData1, &indexBuffer);
+
+    //Assign buffers to mesh object
+    mesh->m_VertexBuffer = vertexBuffer;
+    mesh->m_VBOffset = 0;
+    mesh->m_VBStride = sizeof(VertexPositionNormalDualTexture);
+    mesh->m_IndexCount = indices->size();
+    mesh->m_IndexBuffer = indexBuffer;
 }
 
 void GreedyVoxelMeshGeneration::GenerateQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector3 normal,

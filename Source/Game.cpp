@@ -63,7 +63,7 @@ void Game::Initialize(HWND window,
 	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), SimpleMath::Vector3Int(13, 4, 20));
 
 	// Create Initial Chunk Meshes
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get(), m_d3dContext.Get());
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -310,11 +310,11 @@ void Game::Update(DX::StepTimer const& timer)
 	// Example code for casting ray
 	if (m_inputState->GetKeyboardState().pressed.Space) {
 		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(Vector3(10, 19, 24), Vector3(1, 1, 1));
-		WorldManipulation::SetVoxel(VOXEL_TYPE::RED_BRICK, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
 	}
 
 	// Update chunks if they have been modified
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get(), m_d3dContext.Get());
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 
 	// Update all objects
 	for (auto object : m_gameObjects)

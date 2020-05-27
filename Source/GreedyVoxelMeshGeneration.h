@@ -2,11 +2,11 @@
 #include "Chunk.h"
 class GreedyVoxelMeshGeneration {
 public:
-	static void GenerateMesh(Chunk* chunk, ID3D11Device* device, ID3D11DeviceContext* context, VoxelMesh* mesh);
+	static void GenerateMesh(Chunk* chunk, ID3D11Device* device, VoxelMesh* mesh);
 
 
 private:
-	static void CreateBuffers(ID3D11Device* device, ID3D11DeviceContext* context, VoxelMesh* mesh,
+	static void CreateBuffers(ID3D11Device* device, VoxelMesh* mesh,
 								std::vector<DirectX::SimpleMath::Vector3>* vertices, 
 								std::vector<int>* indices, 
 								std::vector<DirectX::SimpleMath::Vector3>* normals, 
