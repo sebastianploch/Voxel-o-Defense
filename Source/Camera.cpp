@@ -11,6 +11,7 @@ Camera::Camera(float width,
                float height, 
                float nearPlane,
                float farPlane,
+               const float fov,
                const Vector3& position,
                const Vector3& target,
                const Vector3& up) :
@@ -23,7 +24,7 @@ Camera::Camera(float width,
                                   m_target,
                                   m_up);
 
-    m_projection = Matrix::CreatePerspectiveFieldOfView(XM_PIDIV4,
+    m_projection = Matrix::CreatePerspectiveFieldOfView(fov,
                                                         width / height,
                                                         nearPlane,
                                                         farPlane);
@@ -31,4 +32,18 @@ Camera::Camera(float width,
 
 Camera::~Camera()
 {
+}
+
+void Camera::Resize(float width,
+                    float height,
+                    float nearPlane,
+                    float farPlane,
+                    const float fov)
+{
+    m_projection = Matrix::Identity;
+
+	m_projection = Matrix::CreatePerspectiveFieldOfView(fov,
+														width / height,
+														nearPlane,
+														farPlane);
 }

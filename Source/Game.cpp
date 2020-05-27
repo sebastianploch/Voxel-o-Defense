@@ -36,6 +36,15 @@ void Game::Initialize(HWND window,
     m_windowHeight = std::max(height, 1);
 
     CreateDevice();
+
+	// Create Camera
+	m_camera = std::make_unique<FPSCamera>((float)m_windowWidth,
+										   (float)m_windowHeight,
+										   0.1f,
+										   300.0f,
+										   XM_PIDIV4,
+										   Vector3(0.0f, 0.0f, 4.0f));
+
     CreateResources();
 
     // Set locked framerate (60fps)
@@ -224,12 +233,11 @@ void Game::CreateResources()
 	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Initialise camera
-	m_camera = std::make_unique<FPSCamera>((float)backBufferWidth,
-										(float)backBufferHeight,
-										0.1f,
-										300.0f,
-										Vector3(0.0f, 0.0f, 4.0f));
+	// Resize camera to current window size
+	m_camera->Resize((float)backBufferWidth,
+					 (float)backBufferHeight,
+					 0.1f,
+					 300.0f);
 }
 
 // Create constant buffer to be used as a resource by shader.
