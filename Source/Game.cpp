@@ -14,6 +14,7 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 using DirectX::SimpleMath::Vector3;
+using DirectX::SimpleMath::Vector3Int;
 using DirectX::SimpleMath::Matrix;
 
 
@@ -254,9 +255,9 @@ void Game::InitialiseVoxelWorld()
 
 	for (int i = 0; i < 17; i++)
 	{
-		WorldManipulation::SetVoxel(i, Vector3(i, 5, 0));
+		WorldManipulation::SetVoxel((char)i, Vector3Int(i, 5, 0));
 	}
-	WorldManipulation::SetVoxel(14, Vector3(14, 6, 0));
+	WorldManipulation::SetVoxel((char)14, Vector3Int(14, 6, 0));
 
 
 	// Create Initial Chunk Meshes
