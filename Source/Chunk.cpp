@@ -9,12 +9,12 @@ using namespace DirectX;
 #define CHUNK_H	150
 #define	CHUNK_D	32
 
-Chunk::Chunk() : m_blocks(new char[CHUNK_W * CHUNK_H * CHUNK_D]()) {
+Chunk::Chunk() : m_voxels(new char[CHUNK_W * CHUNK_H * CHUNK_D]()) {
 	//Default constructor should always be followed up with Set_Index() functions.
 }
 
 Chunk::~Chunk() {
-	delete[] m_blocks;
+	delete[] m_voxels;
 }
 
 void Chunk::UpdateMesh(ID3D11Device* device) {
@@ -28,7 +28,7 @@ void Chunk::Draw(ID3D11DeviceContext1* context) {
 	m_chunkGameObject->Draw(context);
 }
 
-#pragma region Block Getters/Setters
+#pragma region Voxel Getters/Setters
 const char Chunk::GetVoxel(int x, int y, int z) { 
 	if (x < 0) {
 		return GetNeighbourVoxel(3, x + GetWidth(), y, z);
@@ -47,7 +47,7 @@ const char Chunk::GetVoxel(int x, int y, int z) {
 	}
 
 	int index = x + CHUNK_W * (y + CHUNK_H * z);
-	return m_blocks[index]; 
+	return m_voxels[index]; 
 }
 
 const char Chunk::GetVoxel(DirectX::SimpleMath::Vector3Int pos) { 
@@ -102,7 +102,7 @@ void Chunk::SetVoxel(char c, int x, int y, int z) {
 	if (index < 0)
 		return;
 
-	m_blocks[index] = c;
+	m_voxels[index] = c;
 	m_meshNeedsRegenerating = true;
 }
 

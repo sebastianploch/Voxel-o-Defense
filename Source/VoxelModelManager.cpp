@@ -25,7 +25,7 @@ VoxelModel* VoxelModelManager::GetOrLoadModel(std::string fileDir) {
 	if (fin.is_open()) {
 		//Declare variables to be loaded
 		int				  versionNumber;
-		bool			  airRemovesBlocks;
+		bool			  airRemovesVoxels;
 		Vector3Int		  size;
 		Vector3Int		  min;
 		Vector3Int		  origin;
@@ -33,7 +33,7 @@ VoxelModel* VoxelModelManager::GetOrLoadModel(std::string fileDir) {
 
 		//Load data from file
 		fin.read((char*)&versionNumber, 4);
-		fin.read((char*)&airRemovesBlocks, 1);
+		fin.read((char*)&airRemovesVoxels, 1);
 		fin.read((char*)&size.x, 4);	fin.read((char*)&size.y, 4);	fin.read((char*)&size.z, 4);
 		fin.read((char*)&min.x, 4);		fin.read((char*)&min.y, 4);		fin.read((char*)&min.z, 4);
 		fin.read((char*)&origin.x, 4);	fin.read((char*)&origin.y, 4);	fin.read((char*)&origin.z, 4);
@@ -51,7 +51,7 @@ VoxelModel* VoxelModelManager::GetOrLoadModel(std::string fileDir) {
 			
 		fin.close();
 
-		s_modelList.push_back(VoxelModel(fileDir, airRemovesBlocks, size, Vector3Int(origin.x - min.x, origin.y - min.y, origin.z - min.z), data));
+		s_modelList.push_back(VoxelModel(fileDir, airRemovesVoxels, size, Vector3Int(origin.x - min.x, origin.y - min.y, origin.z - min.z), data));
 		return &s_modelList.back();
 	}
 

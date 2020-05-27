@@ -77,7 +77,7 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 			//Convert from -1 -> 1 range, to 0 -> 1 range
 			noiseSample = noiseSample / 2 + 0.5f;
 
-			//Amount of blocks always at bottom of terrain
+			//Amount of voxels always at bottom of terrain
 			const int baseHeight = 4;
 			const int remainderHeight = c->GetHeight() - baseHeight;
 

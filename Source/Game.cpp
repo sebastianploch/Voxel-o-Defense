@@ -309,7 +309,11 @@ void Game::Update(DX::StepTimer const& timer)
 
 	// Example code for casting ray
 	if (m_inputState->GetKeyboardState().pressed.Space) {
-		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(Vector3(10, 19, 24), Vector3(1, 1, 1));
+		/*	This doesn't work yet. Going to wait for the isometric camera before doing more to it
+		Vector3 diff = m_camera.get()->GetTarget() - m_camera.get()->GetPosition();
+		diff *= 10;
+		diff += m_camera.get()->GetPosition();*/
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), Vector3::Zero);
 		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
 	}
 

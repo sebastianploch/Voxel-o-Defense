@@ -140,17 +140,6 @@ void GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device,
 void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, VoxelMesh* mesh,
                                               std::vector<Vector3>* vertices, std::vector<int>* indices, std::vector<Vector3>* normals, std::vector<Vector2>* uvs, std::vector<Vector2>* uvs1) {
    
-    
-    if (mesh->m_VertexBuffer != nullptr){
-        mesh->m_VertexBuffer.Get()->Release();
-        mesh->m_VertexBuffer = nullptr;
-    }
-
-    if (mesh->m_IndexBuffer != nullptr) {
-        mesh->m_IndexBuffer.Get()->Release();
-        mesh->m_IndexBuffer = nullptr;
-    }
-
     //Create vertex and index array
     auto verticesArray = std::make_unique<VertexPositionNormalDualTexture[]>(vertices->size());
     for (unsigned int i = 0; i < vertices->size(); i++) {

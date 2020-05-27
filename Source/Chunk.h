@@ -3,7 +3,7 @@
 
 class Chunk {
 private:
-	char* m_blocks;
+	char* m_voxels;
 	int m_cx = 0, m_cz = 0;	//Chunk X and Z index
 
 	std::shared_ptr<ChunkObject> m_chunkGameObject = std::make_shared<ChunkObject>();
