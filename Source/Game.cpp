@@ -49,20 +49,10 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
-	// Initialise Voxel Chunk Objects
-	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
-
-	for (int i = 0; i < 17; i++) {
-		WorldManipulation::SetVoxel(i, Vector3(i, 5, 0));
-	}
-	WorldManipulation::SetVoxel(14, Vector3(14, 6, 0));
-
-
-	// Create Initial Chunk Meshes
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
-
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+
+	InitialiseVoxelWorld();
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -257,6 +247,22 @@ void Game::CreateConstantBuffer()
 												m_constantBuffer.ReleaseAndGetAddressOf()));
 }
 
+void Game::InitialiseVoxelWorld()
+{
+	// Initialise Voxel Chunk Objects
+	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
+
+	for (int i = 0; i < 17; i++)
+	{
+		WorldManipulation::SetVoxel(i, Vector3(i, 5, 0));
+	}
+	WorldManipulation::SetVoxel(14, Vector3(14, 6, 0));
+
+
+	// Create Initial Chunk Meshes
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+}
+
 // Reset and re-initialise component upon "Device Lost" flag
 void Game::OnDeviceLost()
 {
@@ -448,6 +454,7 @@ void Game::Prepare()
 	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.MaxAnisotropy = D3D11_MAX_MAXANISOTROPY;
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = 0;
 	m_d3dDevice->CreateSamplerState(&sampDesc, &sampler);

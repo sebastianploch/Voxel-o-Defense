@@ -41,6 +41,8 @@ private:
 
     void OnDeviceLost();
 
+    void InitialiseVoxelWorld();
+
 	void Clear();
 	void Present();
 	void Prepare();
