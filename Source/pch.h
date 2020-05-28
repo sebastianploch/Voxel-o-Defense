@@ -1,7 +1,7 @@
 #pragma once
 
 #include <winsdkver.h>
-#define _WIN32_WINNT 0x0601
+#define _WIN32_WINNT 0x0602
 #include <sdkddkver.h>
 
 // Use the C++ standard templated min/max
@@ -34,6 +34,7 @@
 #include <DirectXColors.h>
 
 // DirectXTK
+#include <Audio.h>
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <SimpleMath.h>
