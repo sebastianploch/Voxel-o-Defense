@@ -15,6 +15,7 @@ DebugSimpleCube::DebugSimpleCube()
 {
 }
 
+
 DebugSimpleCube::DebugSimpleCube(const DirectX::SimpleMath::Vector3& position,
 								 const DirectX::SimpleMath::Vector3& rotation,
 								 const DirectX::SimpleMath::Vector3& scale) :
@@ -27,8 +28,22 @@ DebugSimpleCube::DebugSimpleCube(const DirectX::SimpleMath::Vector3& position,
 	m_worldMat *= Matrix::CreateTranslation(m_position);
 }
 
+DebugSimpleCube::DebugSimpleCube(std::string filePath, std::string name)
+{
+	JSONLoader::LoadFile(filePath, this->m_config, JSONLoader::CONFIG_TYPE::GAMEOBJECT, "cube");
+
+	m_position = this->m_config.position;
+	m_rotation = this->m_config.rotation;
+	m_scaling = this->m_config.scale;
+
+	m_worldMat *= Matrix::CreateScale(m_scaling);
+	m_worldMat *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
+	m_worldMat *= Matrix::CreateTranslation(m_position);
+}
+
 DebugSimpleCube::~DebugSimpleCube()
 {
+	
 }
 
 void DebugSimpleCube::Update(float deltaTime)

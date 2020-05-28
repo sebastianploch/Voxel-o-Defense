@@ -12,6 +12,8 @@ public:
 					const DirectX::SimpleMath::Vector3& rotation = DirectX::SimpleMath::Vector3::Zero,
 					const DirectX::SimpleMath::Vector3& scale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
 
+	DebugSimpleCube(std::string filePath, std::string name);
+
 	~DebugSimpleCube();
 
 	void Update(float deltaTime) override;
@@ -32,8 +34,9 @@ private:
 	static DirectX::VertexPositionNormalTexture				s_cubeVertices[24];
 	static WORD												s_cubeIndices[36];
 
-	// Transformation
+	GameObjectCfg m_config;
 
+	//Transformation
 	DirectX::SimpleMath::Vector3 m_position;
 	DirectX::SimpleMath::Vector3 m_rotation;
 	DirectX::SimpleMath::Vector3 m_scaling;

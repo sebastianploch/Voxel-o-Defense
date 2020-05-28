@@ -26,6 +26,11 @@ namespace DirectX
         const Vector2 Vector2::UnitX = { 1.f, 0.f };
         const Vector2 Vector2::UnitY = { 0.f, 1.f };
 
+        const Vector2Int Vector2Int::Zero = { 0, 0 };
+        const Vector2Int Vector2Int::One = { 1, 1 };
+        const Vector2Int Vector2Int::UnitX = { 1, 0 };
+        const Vector2Int Vector2Int::UnitY = { 0, 1 };
+
         const Vector3 Vector3::Zero = { 0.f, 0.f, 0.f };
         const Vector3 Vector3::One = { 1.f, 1.f, 1.f };
         const Vector3 Vector3::UnitX = { 1.f, 0.f, 0.f };
@@ -37,6 +42,18 @@ namespace DirectX
         const Vector3 Vector3::Left = { -1.f, 0.f, 0.f };
         const Vector3 Vector3::Forward = { 0.f, 0.f, -1.f };
         const Vector3 Vector3::Backward = { 0.f, 0.f, 1.f };
+
+        const Vector3Int Vector3Int::Zero = { 0, 0, 0 };
+        const Vector3Int Vector3Int::One = { 1, 1, 1 };
+        const Vector3Int Vector3Int::UnitX = { 1, 0, 0 };
+        const Vector3Int Vector3Int::UnitY = { 0, 1, 0 };
+        const Vector3Int Vector3Int::UnitZ = { 0, 0, 1 };
+        const Vector3Int Vector3Int::Up = { 0, 1, 0 };
+        const Vector3Int Vector3Int::Down = { 0, -1, 0 };
+        const Vector3Int Vector3Int::Right = { 1, 0, 0 };
+        const Vector3Int Vector3Int::Left = { -1, 0, 0 };
+        const Vector3Int Vector3Int::Forward = { 0, 0, -1 };
+        const Vector3Int Vector3Int::Backward = { 0, 0, 1 };
 
         const Vector4 Vector4::Zero = { 0.f, 0.f, 0.f, 0.f };
         const Vector4 Vector4::One = { 1.f, 1.f, 1.f, 1.f };

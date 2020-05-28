@@ -1,8 +1,9 @@
 #pragma once
-#include "StepTimer.h"
-#include "AiManager.h"
 
-class IGameObject;
+#include "StepTimer.h"
+#include "FPSCamera.h"
+#include "IGameObject.h"
+#include "ShaderManager.h"
 
 
 class Game
@@ -36,10 +37,11 @@ private:
 
     void CreateDevice();
     void CreateResources();
-    void CreateShaders();
     void CreateConstantBuffer();
 
     void OnDeviceLost();
+
+    void InitialiseVoxelWorld();
 
 	void Clear();
 	void Present();
@@ -63,22 +65,19 @@ private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_renderTargetView;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
 
+    // Input Handler
+    std::unique_ptr<InputState>                     m_inputState;
+
     // Game Objects
     std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
 
-	// AI
-	std::unique_ptr<AiManager>						m_AiManager;
-
     // Rendering
-    std::unique_ptr<DirectX::CommonStates>          m_states;
+    std::unique_ptr<ShaderManager>                  m_shaderManager;
     Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout>       m_posNorTextInputLayout;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader>       m_basicPixelShader;
-    Microsoft::WRL::ComPtr<ID3D11VertexShader>      m_basicVertexShader;
+    std::unique_ptr<DirectX::CommonStates>          m_states;
 
     // Basic Camera
-	DirectX::SimpleMath::Matrix                     m_viewMat;
-	DirectX::SimpleMath::Matrix                     m_projMat;
+    std::unique_ptr<Camera>                         m_camera;
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;

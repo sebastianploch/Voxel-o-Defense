@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Game.h"
+
 #include "DebugSimpleCube.h"
-#include "AiManager.h"
+#include "ChunkObject.h"
+#include "ChunkHandler.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -12,6 +14,7 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 using DirectX::SimpleMath::Vector3;
+using DirectX::SimpleMath::Vector3Int;
 using DirectX::SimpleMath::Matrix;
 
 
@@ -40,15 +43,17 @@ void Game::Initialize(HWND window,
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60.0);
 
+	// Initialise Input Handler
+	m_inputState = std::make_unique<InputState>(m_window);
+
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Create one debug cube
-	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
+	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
-	// Creation of Ai Manager
-	m_AiManager = std::make_unique<AiManager>(100, Vector3(60,30,10)); 
+	InitialiseVoxelWorld();
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -108,9 +113,12 @@ void Game::CreateDevice()
 	DX::ThrowIfFailed(device.As(&m_d3dDevice));
 	DX::ThrowIfFailed(context.As(&m_d3dContext));
 
+	// Create Common States Instance
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 
-	CreateShaders();
+	// Create Shader Manager Instance
+	m_shaderManager = std::make_unique<ShaderManager>(m_d3dDevice.Get());
+
 	CreateConstantBuffer();
 }
 
@@ -214,60 +222,15 @@ void Game::CreateResources()
 														  &depthStencilViewDesc,
 														  m_depthStencilView.ReleaseAndGetAddressOf()));
 
-
 	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Matrices #Camera
-	m_viewMat = Matrix::CreateLookAt(Vector3(2.0f, 2.0f, 2.0f),
-									 Vector3::Zero,
-									 Vector3::UnitY);
-
-	m_projMat = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.0f,
-													 static_cast<float>(backBufferWidth) / static_cast<float>(backBufferHeight),
-													 0.1f,
-													 100.0f);
-}
-
-// Compile and Assign Shaders to buffers & Create Input Layout.
-void Game::CreateShaders()
-{
-	// Compile vertex shader byte code
-	ID3DBlob* vsBlob = nullptr;
-	DX::ThrowIfFailed(CompileShader(L"Resources/Shaders/BasicVertexShader.hlsl",
-									"VSMain",
-									"vs_4_0_level_9_3",
-									&vsBlob));
-
-	// Attach compiled vertex Shader
-	DX::ThrowIfFailed(m_d3dDevice->CreateVertexShader(vsBlob->GetBufferPointer(),
-													  vsBlob->GetBufferSize(),
-													  nullptr,
-													  m_basicVertexShader.ReleaseAndGetAddressOf()));
-
-	// Compile pixel shader byte code
-	ID3DBlob* psBlob = nullptr;
-	DX::ThrowIfFailed(CompileShader(L"Resources/Shaders/BasicPixelShader.hlsl",
-									"PSMain",
-									"ps_4_0_level_9_3",
-									&psBlob));
-
-	// Attach compiled pixel Shader
-	DX::ThrowIfFailed(m_d3dDevice->CreatePixelShader(psBlob->GetBufferPointer(),
-													 psBlob->GetBufferSize(),
-													 nullptr,
-													 m_basicPixelShader.ReleaseAndGetAddressOf()));
-
-	// Create Position & Colour Input Layout
-	m_d3dDevice->CreateInputLayout(VertexPositionNormalTexture::InputElements,
-								   VertexPositionNormalTexture::InputElementCount,
-								   vsBlob->GetBufferPointer(),
-								   vsBlob->GetBufferSize(),
-								   m_posNorTextInputLayout.GetAddressOf());
-
-	// Clear blobs
-	vsBlob->Release();
-	psBlob->Release();
+	// Initialise camera
+	m_camera = std::make_unique<FPSCamera>((float)backBufferWidth,
+										(float)backBufferHeight,
+										0.1f,
+										300.0f,
+										Vector3(0.0f, 0.0f, 4.0f));
 }
 
 // Create constant buffer to be used as a resource by shader.
@@ -285,6 +248,22 @@ void Game::CreateConstantBuffer()
 												m_constantBuffer.ReleaseAndGetAddressOf()));
 }
 
+void Game::InitialiseVoxelWorld()
+{
+	// Initialise Voxel Chunk Objects
+	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
+
+	for (int i = 0; i < 17; i++)
+	{
+		WorldManipulation::SetVoxel((char)i, Vector3Int(i, 5, 0));
+	}
+	WorldManipulation::SetVoxel((char)14, Vector3Int(14, 6, 0));
+
+
+	// Create Initial Chunk Meshes
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+}
+
 // Reset and re-initialise component upon "Device Lost" flag
 void Game::OnDeviceLost()
 {
@@ -294,11 +273,12 @@ void Game::OnDeviceLost()
 	m_d3dContext.Reset();
 	m_d3dDevice.Reset();
 
+	m_camera.reset();
+	m_inputState.reset();
+
 	m_states.reset();
 	m_constantBuffer.Reset();
-	m_posNorTextInputLayout.Reset();
-	m_basicPixelShader.Reset();
-	m_basicVertexShader.Reset();
+	m_shaderManager.reset();
 
 	CreateDevice();
 	CreateResources();
@@ -321,8 +301,20 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
-	//AI
-	m_AiManager->Update(deltaTime);
+	// Update chunks if they have been modified
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+	
+	m_camera->Update(deltaTime,
+					 *m_inputState);
+
+	// Update Input Handler
+	m_inputState->Update();
+
+	// Exit game on 'Escape' key press
+	if (m_inputState->GetKeyboardState().pressed.Escape)
+	{
+		ExitGame();
+	}
 
 	// Update all objects
 	for (auto object : m_gameObjects)
@@ -344,12 +336,18 @@ void Game::Render()
 
 	// Create ConstantBuffer and assign camera mat's
 	ConstantBuffer cb;
-	cb.projection = m_projMat;
-	cb.view = m_viewMat;
+	cb.projection = m_camera->GetProjection();
+	cb.view = m_camera->GetView();
+
+	// Render chunks
+	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
 
 	// Render all objects
 	for (const auto& object : m_gameObjects)
 	{
+		// Assign Shader to be used to render upcoming object
+		m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
+
 		// Assign Object World Mat data to ConstantBuffer
 		cb.world = object->GetWorldMatrix();
 
@@ -363,9 +361,6 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
-
-	//Ai
-	m_AiManager->Render(m_d3dContext.Get(), cb, m_constantBuffer.Get());
 
 	// Swap backbuffer
     Present();
@@ -453,15 +448,19 @@ void Game::Clear()
 void Game::Prepare()
 {
 	// Set Texture Sampler
-	auto sampler = m_states->LinearClamp();
+	ID3D11SamplerState* sampler = nullptr;
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.MaxAnisotropy = D3D11_MAX_MAXANISOTROPY;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = 0;
+	m_d3dDevice->CreateSamplerState(&sampDesc, &sampler);
+	
 	m_d3dContext->PSSetSamplers(0, 1, &sampler);
-
-	// Set Input Layout 
-	m_d3dContext->IASetInputLayout(m_posNorTextInputLayout.Get());
-
-	// Set VS and PS Shaders
-	m_d3dContext->VSSetShader(m_basicVertexShader.Get(), nullptr, 0);
-	m_d3dContext->PSSetShader(m_basicPixelShader.Get(), nullptr, 0);
 
 	// Set Constant Buffer for VS and PS Shaders
 	m_d3dContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
@@ -493,16 +492,19 @@ void Game::Present()
 void Game::OnActivated()
 {
     // TODO: Game is becoming active window.
+	m_inputState->Reset();
 }
 
 void Game::OnDeactivated()
 {
     // TODO: Game is becoming background window.
+	m_inputState->Reset();
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
+	m_inputState->Reset();
 }
 
 void Game::OnResuming()
@@ -510,6 +512,7 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
+	m_inputState->Reset();
 }
 
 void Game::OnWindowSizeChanged(int width, int height)
