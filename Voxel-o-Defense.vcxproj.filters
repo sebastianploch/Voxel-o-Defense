@@ -37,12 +37,18 @@
     </Filter>
     <Filter Include="Source\Voxel Terrain">
       <UniqueIdentifier>{ca92a1e2-6cc7-44b7-b17e-7e4f00bdb6ba}</UniqueIdentifier>
-  	</Filter>
+    </Filter>
     <Filter Include="Headers\Camera">
       <UniqueIdentifier>{f20cf6fc-d128-49fc-8623-cc6ac36d11c4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Camera">
       <UniqueIdentifier>{d28cdef6-e4e0-46df-a678-9bf5b6a56db0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Ai">
+      <UniqueIdentifier>{4d2141c1-1c85-4d0a-b1da-5c2e3e1d1dde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Ai">
+      <UniqueIdentifier>{1fdd4076-fba0-4ab3-957b-b8d4618f2d2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +109,18 @@
     <ClInclude Include="Source\ShaderManager.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AiAgent.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AiManager.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Node.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RouteConstructor.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -158,6 +176,18 @@
     </ClCompile>
     <ClCompile Include="Source\ShaderManager.cpp">
       <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiAgent.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiManager.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RouteConstructor.cpp">
+      <Filter>Source\Ai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

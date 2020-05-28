@@ -4,6 +4,7 @@
 #include "DebugSimpleCube.h"
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
+#include "AiManager.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -52,6 +53,9 @@ void Game::Initialize(HWND window,
 
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+
+	// Create Ai Manager
+	m_AiManager = std::make_unique<AiManager>(10, DirectX::XMFLOAT3(50,30,20));
 
 	InitialiseVoxelWorld();
 }
@@ -321,6 +325,8 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		object->Update(deltaTime);
 	}
+
+	m_AiManager->Update(deltaTime);
 }
 
 void Game::Render()
@@ -361,6 +367,8 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
+
+	m_AiManager->Render(m_d3dContext.Get(),cb,m_constantBuffer.Get());
 
 	// Swap backbuffer
     Present();

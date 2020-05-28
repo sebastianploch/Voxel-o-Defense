@@ -4,6 +4,7 @@
 #include "FPSCamera.h"
 #include "IGameObject.h"
 #include "ShaderManager.h"
+#include "AiManager.h"
 
 
 class Game
@@ -70,6 +71,10 @@ private:
 
     // Game Objects
     std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
+
+	// Ai Manager
+
+	std::unique_ptr<AiManager>						m_AiManager;
 
     // Rendering
     std::unique_ptr<ShaderManager>                  m_shaderManager;

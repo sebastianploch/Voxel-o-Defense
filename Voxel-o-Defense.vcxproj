@@ -182,6 +182,8 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AiAgent.h" />
+    <ClInclude Include="Source\AiManager.h" />
     <ClInclude Include="Source\Chunk.h" />
     <ClInclude Include="Source\ChunkHandler.h" />
     <ClInclude Include="Source\ChunkObject.h" />
@@ -195,14 +197,18 @@
     <ClInclude Include="Source\InputState.h" />
     <ClInclude Include="Source\JSONLoader.h" />
     <ClInclude Include="Source\ISOCamera.h" />
+    <ClInclude Include="Source\Node.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\PerlinNoise.h" />
+    <ClInclude Include="Source\RouteConstructor.h" />
     <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\ShaderManager.h" />
     <ClInclude Include="Source\StepTimer.h" />
     <ClInclude Include="Source\WorldManipulation.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AiAgent.cpp" />
+    <ClCompile Include="Source\AiManager.cpp" />
     <ClCompile Include="Source\Chunk.cpp" />
     <ClCompile Include="Source\ChunkHandler.cpp" />
     <ClCompile Include="Source\ChunkObject.cpp" />
@@ -216,6 +222,7 @@
     <ClCompile Include="Source\JSONLoader.cpp" />
     <ClCompile Include="Source\ISOCamera.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Node.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -223,6 +230,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\PerlinNoise.cpp" />
+    <ClCompile Include="Source\RouteConstructor.cpp" />
     <ClCompile Include="Source\WorldManipulation.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />
