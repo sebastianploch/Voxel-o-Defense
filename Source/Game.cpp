@@ -61,7 +61,17 @@ void Game::Initialize(HWND window,
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
-	InitialiseVoxelWorld();
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+		{
+			m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(-2.0f + (j * 2), 0.0f, -4.0f + (i * 2.0f)),
+																	  Vector3(),
+																	  Vector3(0.5f, 0.5f, 0.5f)));
+		}
+	}
+
+	//InitialiseVoxelWorld();
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -309,7 +319,7 @@ void Game::Update(DX::StepTimer const& timer)
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
 	// Update chunks if they have been modified
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+	//ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 	
 	m_camera->Update(deltaTime,
 					 *m_inputState);
