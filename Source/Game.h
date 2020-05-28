@@ -33,10 +33,13 @@ public:
 
 private:
     void Update(DX::StepTimer const& timer);
+    void UpdateAudio();
+
     void Render();
 
     void CreateDevice();
     void CreateResources();
+    void CreateAudioEngine();
     void CreateConstantBuffer();
 
     void OnDeviceLost();
@@ -73,11 +76,14 @@ private:
 
     // Rendering
     std::unique_ptr<ShaderManager>                  m_shaderManager;
-    Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
     std::unique_ptr<DirectX::CommonStates>          m_states;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
 
     // Basic Camera
     std::unique_ptr<Camera>                         m_camera;
+
+    // Audio
+    std::unique_ptr<DirectX::AudioEngine>           m_audioEngine;
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;

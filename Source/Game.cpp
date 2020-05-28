@@ -38,6 +38,7 @@ void Game::Initialize(HWND window,
 
     CreateDevice();
     CreateResources();
+	CreateAudioEngine();
 
     // Set locked framerate (60fps)
     m_timer.SetFixedTimeStep(true);
@@ -233,6 +234,18 @@ void Game::CreateResources()
 										Vector3(0.0f, 0.0f, 4.0f));
 }
 
+void Game::CreateAudioEngine()
+{
+	DX::ThrowIfFailed(CoInitializeEx(nullptr, COINIT_MULTITHREADED));
+
+	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
+#ifdef _DEBUG
+	eflags = eflags | AudioEngine_Debug;
+#endif
+
+	m_audioEngine = std::make_unique<AudioEngine>(eflags);
+}
+
 // Create constant buffer to be used as a resource by shader.
 void Game::CreateConstantBuffer()
 {
@@ -320,6 +333,20 @@ void Game::Update(DX::StepTimer const& timer)
 	for (auto object : m_gameObjects)
 	{
 		object->Update(deltaTime);
+	}
+
+	UpdateAudio();
+}
+
+void Game::UpdateAudio()
+{
+	if (!m_audioEngine->Update())
+	{
+		// No audio device
+		if (m_audioEngine->IsCriticalError())
+		{
+			OutputDebugStringA("[ERROR] : No Audio Device Active! \n");
+		}
 	}
 }
 
