@@ -16,6 +16,11 @@ public:
 	static void SetVoxelSphere(char v, int x, int y, int z, int r);
 	static void SetVoxelSphere(char v, DirectX::SimpleMath::Vector3Int worldPos, int r);
 
+	static const int GetHeightmap(int x, int z);
+	static const int GetHeightmap(DirectX::SimpleMath::Vector2Int pos);
+	static void SetHeightmap(int val, int x, int z);
+	static void SetHeightmap(int val, DirectX::SimpleMath::Vector2Int pos);
+
 	static void GenerateTerrainData(Chunk* c);
 	static void PlaceVoxelModel(VoxelModel* model, DirectX::SimpleMath::Vector3Int position);
 	

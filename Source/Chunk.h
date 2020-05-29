@@ -4,6 +4,7 @@
 class Chunk {
 private:
 	char* m_voxels;
+	int* m_heightmap;
 	int m_cx = 0, m_cz = 0;	//Chunk X and Z index
 
 	std::shared_ptr<ChunkObject> m_chunkGameObject = std::make_shared<ChunkObject>();
@@ -23,6 +24,11 @@ public:
 	Chunk* GetNeighbour(int dir);
 	void SetVoxel(char v, int x, int y, int z);
 	void SetVoxel(char v, DirectX::SimpleMath::Vector3Int pos);
+
+	const int GetHeightmap(int x, int z);
+	const int GetHeightmap(DirectX::SimpleMath::Vector2Int pos);
+	void SetHeightmap(int val, int x, int z);
+	void SetHeightmap(int val, DirectX::SimpleMath::Vector2Int pos);
 
 	const int GetWidth();
 	const int GetHeight();

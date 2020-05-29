@@ -306,7 +306,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 	// Example code for casting ray from camera
 	if (m_inputState->GetKeyboardState().pressed.Space) {
-		
+		//Place random voxel at ray hit point
 		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
 		diff *= 50;	//Multiply by scalar length
 		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position
@@ -314,7 +314,7 @@ void Game::Update(DX::StepTimer const& timer)
 		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
 	}
 	if (m_inputState->GetKeyboardState().pressed.Enter) {
-
+		//Place Structure at ray hit point
 		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
 		diff *= 50;	//Multiply by scalar length
 		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position

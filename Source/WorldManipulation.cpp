@@ -53,6 +53,26 @@ void WorldManipulation::SetVoxelSphere(char v, Vector3Int worldPos, int r) {
 	}
 }
 
+const int WorldManipulation::GetHeightmap(int x, int z) {
+	Chunk* c = ChunkHandler::GetChunk(Vector3Int(x, 0, z));
+	Vector3Int pos = GetRelativePos(c, Vector3Int(x, 0, z));
+	return c->GetHeightmap(pos.x, pos.z);
+}
+
+const int WorldManipulation::GetHeightmap(DirectX::SimpleMath::Vector2Int pos) {
+	return GetHeightmap(pos.x, pos.y);
+}
+
+void WorldManipulation::SetHeightmap(int val, int x, int z) {
+	Chunk* c = ChunkHandler::GetChunk(Vector3Int(x, 0, z));
+	Vector3Int pos = GetRelativePos(c, Vector3Int(x, 0, z));
+	c->SetHeightmap(val, pos.x, pos.z);
+}
+
+void WorldManipulation::SetHeightmap(int val, DirectX::SimpleMath::Vector2Int pos) {
+	SetHeightmap(val, pos.x, pos.y);
+}
+
 void WorldManipulation::GenerateTerrainData(Chunk* c) {
 	for (int x = 0; x < c->GetWidth(); x++) {
 		for (int z = 0; z < c->GetWidth(); z++) {
@@ -97,6 +117,8 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 				Vector3Int pos = Vector3Int(voxPos.x, y, voxPos.z);
 				SetVoxel(GetVoxelType(pos, terrainHeight), pos);
 			}
+
+			c->SetHeightmap(terrainHeight, x, z);
 		}
 	}
 }
