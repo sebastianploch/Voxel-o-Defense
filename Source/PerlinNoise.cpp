@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "PerlinNoise.h"
-#include <time.h>
+#include <chrono>
+#include <functional>
+#include <random>
 
-int PerlinNoise::seed = 0;
+float PerlinNoise::seed = 0;
 int PerlinNoise::perm[] = {
         151,160,137,91,90,15,
         131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
@@ -23,8 +25,9 @@ int PerlinNoise::perm[] = {
 #pragma region Noise Functions
 
 void PerlinNoise::RandomiseSeed() {
-    srand(time(NULL));
-    seed = rand() % 100001 - 50000;
+    auto s = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    auto r = std::bind(std::uniform_real_distribution<float>(0, 1000), std::mt19937(s));
+    seed = r();
 }
 
 float PerlinNoise::Noise(float x) {

@@ -47,11 +47,11 @@ void ChunkObject::Draw(ID3D11DeviceContext* context) {
 
 	context->IASetVertexBuffers(0,
 		1,
-		&m_mesh.m_VertexBuffer,
+		m_mesh.m_VertexBuffer.GetAddressOf(),
 		&m_mesh.m_VBStride,
 		&m_mesh.m_VBOffset);
 
-	context->IASetIndexBuffer(m_mesh.m_IndexBuffer,
+	context->IASetIndexBuffer(m_mesh.m_IndexBuffer.Get(),
 		DXGI_FORMAT_R16_UINT,
 		m_mesh.m_VBOffset);
 
@@ -64,11 +64,4 @@ void ChunkObject::InitTexture(const wchar_t* texturePath, ID3D11Device* device) 
 							texturePath,
 							nullptr,
 							s_texture.ReleaseAndGetAddressOf());
-}
-
-void ChunkObject::UpdateMesh(VoxelMesh newMesh) {
-	if (m_mesh.m_IndexBuffer) m_mesh.m_IndexBuffer->Release();
-	if (m_mesh.m_VertexBuffer) m_mesh.m_VertexBuffer->Release();
-
-	m_mesh = newMesh;
 }

@@ -383,16 +383,14 @@ namespace DirectX
         };
 
         // Binary operators
-        /*  Wouldn't build with these. Other operators don't appear to be defined in this class?
-
-        Vector3Int operator+ (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x + V2.x, V1.y + V2.y, V1.z + V2.z); }
-        Vector3Int operator- (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z); }
-        Vector3Int operator* (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x * V2.x, V1.y * V2.y, V1.z * V2.z); }
-        Vector3Int operator* (const Vector3Int& V, float S) noexcept { return Vector3Int(V.x * S, V.y * S, V.z * S); }
-        Vector3Int operator/ (const Vector3Int& V1, const Vector3Int& V2) noexcept { return Vector3Int(V1.x / V2.x, V1.y / V2.y, V1.z / V2.z); }
-        Vector3Int operator/ (const Vector3Int& V, float S) noexcept { return Vector3Int(V.x / S, V.y / S, V.z / S); }
-        Vector3Int operator* (float S, const Vector3Int& V) noexcept { return Vector3Int(V.x * S, V.y * S, V.z * S); }
-        */
+        /*
+        Vector3Int operator+ (const Vector3Int& V1, const Vector3Int& V2) noexcept;
+        Vector3Int operator- (const Vector3Int& V1, const Vector3Int& V2) noexcept;
+        Vector3Int operator* (const Vector3Int& V1, const Vector3Int& V2) noexcept;
+        Vector3Int operator* (const Vector3Int& V, float S) noexcept;
+        Vector3Int operator/ (const Vector3Int& V1, const Vector3Int& V2) noexcept;
+        Vector3Int operator/ (const Vector3Int& V, float S) noexcept;
+        Vector3Int operator* (float S, const Vector3Int& V) noexcept;*/
 
         //------------------------------------------------------------------------------
         // 4D vector

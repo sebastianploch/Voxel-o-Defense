@@ -53,6 +53,26 @@ void WorldManipulation::SetVoxelSphere(char v, Vector3Int worldPos, int r) {
 	}
 }
 
+const int WorldManipulation::GetHeightmap(int x, int z) {
+	Chunk* c = ChunkHandler::GetChunk(Vector3Int(x, 0, z));
+	Vector3Int pos = GetRelativePos(c, Vector3Int(x, 0, z));
+	return c->GetHeightmap(pos.x, pos.z);
+}
+
+const int WorldManipulation::GetHeightmap(DirectX::SimpleMath::Vector2Int pos) {
+	return GetHeightmap(pos.x, pos.y);
+}
+
+void WorldManipulation::SetHeightmap(int val, int x, int z) {
+	Chunk* c = ChunkHandler::GetChunk(Vector3Int(x, 0, z));
+	Vector3Int pos = GetRelativePos(c, Vector3Int(x, 0, z));
+	c->SetHeightmap(val, pos.x, pos.z);
+}
+
+void WorldManipulation::SetHeightmap(int val, DirectX::SimpleMath::Vector2Int pos) {
+	SetHeightmap(val, pos.x, pos.y);
+}
+
 void WorldManipulation::GenerateTerrainData(Chunk* c) {
 	for (int x = 0; x < c->GetWidth(); x++) {
 		for (int z = 0; z < c->GetWidth(); z++) {
@@ -77,7 +97,7 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 			//Convert from -1 -> 1 range, to 0 -> 1 range
 			noiseSample = noiseSample / 2 + 0.5f;
 
-			//Amount of blocks always at bottom of terrain
+			//Amount of voxels always at bottom of terrain
 			const int baseHeight = 4;
 			const int remainderHeight = c->GetHeight() - baseHeight;
 
@@ -96,6 +116,24 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 			for (int y = 0; y < terrainHeight; y++) {
 				Vector3Int pos = Vector3Int(voxPos.x, y, voxPos.z);
 				SetVoxel(GetVoxelType(pos, terrainHeight), pos);
+			}
+
+			c->SetHeightmap(terrainHeight, x, z);
+		}
+	}
+}
+
+void WorldManipulation::PlaceVoxelModel(VoxelModel* model, Vector3Int position) {
+	std::vector<std::vector<std::vector<char>>> data = model->GetVoxelData();
+	Vector3Int size = model->GetSize();
+
+	for (int x = 0; x <= size.x; x++) {
+		for (int y = 0; y <= size.y; y++) {
+			for (int z = 0; z <= size.z; z++) {
+				Vector3Int pos = Vector3Int(position.x - model->GetOrigin().x + x, 
+											position.y - model->GetOrigin().y + y, 
+											position.z - model->GetOrigin().z + z);
+				SetVoxel(data[x][y][z], pos);
 			}
 		}
 	}

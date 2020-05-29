@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "GreedyVoxelMeshGeneration.h"
 
+using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device) {
+void GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device, VoxelMesh* mesh) {
     std::vector<Vector3> m_vertices;
     std::vector<int> m_indices;
     std::vector<Vector3> m_normals;
@@ -26,7 +27,7 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
 
         int x[] = { 0, 0, 0 };
         int q[] = { 0, 0, 0 };
-        int* mask = new int[(dims[u] + 1) * (dims[v] + 1)]();
+        int* mask = new int[(dims[u] + 1.0) * (dims[v] + 1.0)]();
 
         q[dir] = 1;
 
@@ -133,66 +134,65 @@ VoxelMesh GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* de
         delete[] mask;
     }
 
-    VoxelMesh mesh;
+    CreateBuffers(device, mesh, &m_vertices, &m_indices, &m_normals, &m_uvs, &m_uvs1);
+}
 
-    //Create vertex buffer
-    DirectX::VertexPositionNormalDualTexture* verticesArray = new DirectX::VertexPositionNormalDualTexture[m_vertices.size()];
-    for (unsigned int i = 0; i < m_vertices.size(); i++) {
-        verticesArray[i].position = m_vertices[i];
-        verticesArray[i].normal = m_normals[i];
-        verticesArray[i].textureCoordinate0 = m_uvs[i];
-        verticesArray[i].textureCoordinate1 = m_uvs1[i];
+void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, VoxelMesh* mesh,
+                                              std::vector<Vector3>* vertices, std::vector<int>* indices, std::vector<Vector3>* normals, std::vector<Vector2>* uvs, std::vector<Vector2>* uvs1) {
+   
+    //Create vertex and index array
+    auto verticesArray = std::make_unique<VertexPositionNormalDualTexture[]>(vertices->size());
+    for (unsigned int i = 0; i < vertices->size(); i++) {
+        verticesArray[i].position = vertices->at(i);
+        verticesArray[i].normal = normals->at(i);
+        verticesArray[i].textureCoordinate0 = uvs->at(i);
+        verticesArray[i].textureCoordinate1 = uvs1->at(i);
     }
 
-    ID3D11Buffer* vertexBuffer;
+    auto indicesArray = std::make_unique<unsigned short[]>(indices->size());
+    for (unsigned int i = 0; i < indices->size(); i++) {
+        indicesArray[i] = indices->at(i);
+    }
+
+    //Create Vertex Buffer
+    Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(DirectX::VertexPositionNormalDualTexture) * m_vertices.size();
+    bd.ByteWidth = sizeof(VertexPositionNormalDualTexture) * vertices->size();
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
 
     D3D11_SUBRESOURCE_DATA InitData;
     ZeroMemory(&InitData, sizeof(InitData));
-    InitData.pSysMem = verticesArray;
+    InitData.pSysMem = verticesArray.get();
 
     device->CreateBuffer(&bd, &InitData, &vertexBuffer);
 
-    mesh.m_VertexBuffer = vertexBuffer;
-    mesh.m_VBOffset = 0;
-    mesh.m_VBStride = sizeof(DirectX::VertexPositionNormalDualTexture);
-    
 
     //Create index buffer
-    unsigned short* indicesArray = new unsigned short[m_indices.size()];
-    for (unsigned int i = 0; i < m_indices.size(); i++) {
-        indicesArray[i] = m_indices[i];
-    }
-
-    ID3D11Buffer* indexBuffer;
-
+    Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
     D3D11_BUFFER_DESC bd1;
     ZeroMemory(&bd1, sizeof(bd1));
     bd1.Usage = D3D11_USAGE_DEFAULT;
-    bd1.ByteWidth = sizeof(WORD) * m_indices.size();
+    bd1.ByteWidth = sizeof(WORD) * indices->size();
     bd1.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd1.CPUAccessFlags = 0;
 
     D3D11_SUBRESOURCE_DATA InitData1;
     ZeroMemory(&InitData1, sizeof(InitData1));
-    InitData1.pSysMem = indicesArray;
+    InitData1.pSysMem = indicesArray.get();
     device->CreateBuffer(&bd1, &InitData1, &indexBuffer);
 
-    mesh.m_IndexCount = m_indices.size();
-    mesh.m_IndexBuffer = indexBuffer;
-
-    delete[] indicesArray;
-    delete[] verticesArray;
-
-	return mesh;
+    //Assign buffers to mesh object
+    mesh->m_VertexBuffer = vertexBuffer;
+    mesh->m_VBOffset = 0;
+    mesh->m_VBStride = sizeof(VertexPositionNormalDualTexture);
+    mesh->m_IndexCount = indices->size();
+    mesh->m_IndexBuffer = indexBuffer;
 }
 
-void GreedyVoxelMeshGeneration::GenerateQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector3 normal, 
+void GreedyVoxelMeshGeneration::GenerateQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector3 normal,
                                             std::vector<Vector3>* vertices, std::vector<int>* indices, std::vector<Vector3>* normals, std::vector<Vector2>* uvs, std::vector<Vector2>* uvs1, 
                                             int w, int h, int vox) {
 
