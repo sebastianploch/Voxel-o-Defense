@@ -21,6 +21,13 @@ struct JSONINFO
 
 };
 
+struct SoundsCfg : public JSONINFO
+{
+    std::string* type = new std::string();
+    int amount;
+    std::vector<std::string> paths;
+};
+
 struct GameObjectCfg : public JSONINFO
 {
 	std::string* type = new std::string();
