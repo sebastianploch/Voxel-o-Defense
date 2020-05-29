@@ -59,9 +59,6 @@ void Game::Initialize(HWND window,
 	// Initialise Voxel Chunk Objects
 	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
 
-	// Load example voxel model
-	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), SimpleMath::Vector3Int(13, 4, 20));
-
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 }
@@ -307,14 +304,22 @@ void Game::Update(DX::StepTimer const& timer)
 		ExitGame();
 	}
 
-	// Example code for casting ray
+	// Example code for casting ray from camera
 	if (m_inputState->GetKeyboardState().pressed.Space) {
-		/*	This doesn't work yet. Going to wait for the isometric camera before doing more to it
-		Vector3 diff = m_camera.get()->GetTarget() - m_camera.get()->GetPosition();
-		diff *= 10;
-		diff += m_camera.get()->GetPosition();*/
-		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), Vector3::Zero);
+		
+		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
+		diff *= 50;	//Multiply by scalar length
+		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition() * 2, diff);
 		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	}
+	if (m_inputState->GetKeyboardState().pressed.Enter) {
+
+		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
+		diff *= 50;	//Multiply by scalar length
+		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition() * 2, diff);
+		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
 	}
 
 	// Update chunks if they have been modified
