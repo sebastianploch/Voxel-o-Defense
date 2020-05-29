@@ -64,3 +64,21 @@ struct VoxelMesh {
     UINT m_VBOffset;
     UINT m_IndexCount;
 };
+
+#pragma region STRING_CONVERSION
+static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> s_converter;
+
+// Helper function to convert string into wstring
+static std::wstring TO_WSTRING(const std::string& string)
+{
+    std::wstring str = s_converter.from_bytes(string);
+    return str;
+}
+
+// Helper function to convert string into wstring
+static std::string TO_STRING(const std::wstring& string)
+{
+    std::string str = s_converter.to_bytes(string);
+    return str;
+}
+#pragma endregion STRING_CONVERSION

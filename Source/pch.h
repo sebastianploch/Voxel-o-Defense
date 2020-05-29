@@ -43,12 +43,16 @@
 #include <DDSTextureLoader.h>
 
 // STD
+#include <map>
+#include <string>
 #include <vector>
 #include <memory>
+#include <locale>
+#include <codecvt>
+#include <fstream>
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
-#include <fstream>
 
 // JSON nlohmann library
 #include <nlohmann/json.hpp>
