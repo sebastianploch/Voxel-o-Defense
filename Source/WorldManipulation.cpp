@@ -133,7 +133,11 @@ void WorldManipulation::PlaceVoxelModel(VoxelModel* model, Vector3Int position) 
 				Vector3Int pos = Vector3Int(position.x - model->GetOrigin().x + x, 
 											position.y - model->GetOrigin().y + y, 
 											position.z - model->GetOrigin().z + z);
-				SetVoxel(data[x][y][z], pos);
+
+				if (!model->GetAirRemoveVoxels() && data[size.x - x][y][z] == VOXEL_TYPE::AIR)
+					continue;
+
+				SetVoxel(data[size.x - x][y][z], pos);	//For some reason X loads mirrored, so it's fixed here.
 			}
 		}
 	}

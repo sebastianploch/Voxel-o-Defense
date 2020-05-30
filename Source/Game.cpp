@@ -257,12 +257,11 @@ void Game::InitialiseVoxelWorld()
 	// Initialise Voxel Chunk Objects
 	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
 
-	for (int i = 0; i < 17; i++)
-	{
-		WorldManipulation::SetVoxel((char)i, Vector3Int(i, 5, 0));
-	}
-	WorldManipulation::SetVoxel((char)14, Vector3Int(14, 6, 0));
-
+	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_1.vxml"), Vector3Int(10, 4, 10));
+	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_2.vxml"), Vector3Int(21, 4, 10));
+	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_3.vxml"), Vector3Int(32, 4, 10));
+	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_4.vxml"), Vector3Int(43, 4, 10));
+	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_4.vxml"), Vector3Int(53, 4, 10));
 
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
