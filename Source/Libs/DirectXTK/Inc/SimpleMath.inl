@@ -1304,6 +1304,46 @@ inline void Vector3::TransformNormal(const Vector3* varray, size_t count, const 
     XMVector3TransformNormalStream(resultArray, sizeof(XMFLOAT3), varray, sizeof(XMFLOAT3), count, M);
 }
 
+/****************************************************************************
+ *
+ * Vector3Int
+ *
+ ****************************************************************************/
+
+inline Vector3Int operator+ (const Vector3Int& V1, const Vector3Int& V2) noexcept {
+    using namespace DirectX;
+    return Vector3Int(V1.x + V2.x, V1.y + V2.y, V1.z + V2.z);
+}
+
+inline Vector3Int operator- (const Vector3Int& V1, const Vector3Int& V2) noexcept {
+    using namespace DirectX;
+    return Vector3Int(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z);
+}
+
+inline Vector3Int operator* (const Vector3Int& V1, const Vector3Int& V2) noexcept {
+    using namespace DirectX;
+    return Vector3Int(V1.x * V2.x, V1.y * V2.y, V1.z * V2.z);
+}
+
+inline Vector3Int operator* (const Vector3Int& V, float S) noexcept {
+    using namespace DirectX;
+    return Vector3Int(V.x * S, V.y * S, V.z * S);
+}
+
+inline Vector3Int operator/ (const Vector3Int& V1, const Vector3Int& V2) noexcept {
+    using namespace DirectX;
+    return Vector3Int(V1.x / V2.x, V1.y / V2.y, V1.z / V2.z);
+}
+
+inline Vector3Int operator/ (const Vector3Int& V, float S) noexcept {
+    using namespace DirectX;
+    return Vector3Int(V.x / S, V.y / S, V.z / S);
+}
+
+inline Vector3Int operator* (float S, const Vector3Int& V) noexcept {
+    using namespace DirectX;
+    return Vector3Int(V.x * S, V.y * S, V.z * S);
+}
 
 /****************************************************************************
  *

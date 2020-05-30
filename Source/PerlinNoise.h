@@ -6,7 +6,7 @@
 
 class PerlinNoise {
 private:
-	static int seed;
+	static float seed;
 	static int perm[];
 
 public:

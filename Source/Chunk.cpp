@@ -9,17 +9,18 @@ using namespace DirectX;
 #define CHUNK_H	150
 #define	CHUNK_D	32
 
-Chunk::Chunk() : m_blocks(new char[CHUNK_W * CHUNK_H * CHUNK_D]()) {
+Chunk::Chunk() : m_voxels(new char[CHUNK_W * CHUNK_H * CHUNK_D]()), m_heightmap(new int[CHUNK_W * CHUNK_D]()) {
 	//Default constructor should always be followed up with Set_Index() functions.
 }
 
 Chunk::~Chunk() {
-	delete[] m_blocks;
+	delete[] m_voxels;
+	delete[] m_heightmap;
 }
 
 void Chunk::UpdateMesh(ID3D11Device* device) {
 	if (m_meshNeedsRegenerating) {
-		m_chunkGameObject->UpdateMesh(GreedyVoxelMeshGeneration::GenerateMesh(this, device));
+		GreedyVoxelMeshGeneration::GenerateMesh(this, device, m_chunkGameObject->GetMesh());
 		m_meshNeedsRegenerating = false;
 	}
 }
@@ -28,7 +29,7 @@ void Chunk::Draw(ID3D11DeviceContext1* context) {
 	m_chunkGameObject->Draw(context);
 }
 
-#pragma region Block Getters/Setters
+#pragma region Voxel Getters/Setters
 const char Chunk::GetVoxel(int x, int y, int z) { 
 	if (x < 0) {
 		return GetNeighbourVoxel(3, x + GetWidth(), y, z);
@@ -47,7 +48,7 @@ const char Chunk::GetVoxel(int x, int y, int z) {
 	}
 
 	int index = x + CHUNK_W * (y + CHUNK_H * z);
-	return m_blocks[index]; 
+	return m_voxels[index]; 
 }
 
 const char Chunk::GetVoxel(DirectX::SimpleMath::Vector3Int pos) { 
@@ -102,13 +103,50 @@ void Chunk::SetVoxel(char c, int x, int y, int z) {
 	if (index < 0)
 		return;
 
-	m_blocks[index] = c;
+	m_voxels[index] = c;
+
 	m_meshNeedsRegenerating = true;
+
+	for (int i = 0; i < CHUNK_H - 1; i++) {
+		//Check for two blocks of air to determine walkable space
+		if (GetVoxel(x, i, z)	  == VOXEL_TYPE::AIR && 
+			GetVoxel(x, i + 1, z) == VOXEL_TYPE::AIR) {
+			SetHeightmap(i, x, z);
+			break;
+		}
+	}
 }
 
 void Chunk::SetVoxel(char c, SimpleMath::Vector3Int pos) {
 	SetVoxel(c, pos.x, pos.y, pos.z);
 }
+
+const int Chunk::GetHeightmap(int x, int z) {
+	int index = (z * CHUNK_W) + x;
+	if (index >= (CHUNK_W * CHUNK_D))
+		return 0;
+	if (index < 0)
+		return 0;
+
+	return m_heightmap[index];
+}
+const int Chunk::GetHeightmap(DirectX::SimpleMath::Vector2Int pos) {
+	return GetHeightmap(pos.x, pos.y);
+}
+
+void Chunk::SetHeightmap(int val, int x, int z) {
+	int index = (z * CHUNK_W) + x;
+	if (index >= (CHUNK_W * CHUNK_D))
+		return;
+	if (index < 0)
+		return;
+
+	m_heightmap[index] = val;
+}
+void Chunk::SetHeightmap(int val, DirectX::SimpleMath::Vector2Int pos) {
+	SetHeightmap(val, pos.x, pos.y);
+}
+
 const int Chunk::GetWidth() {
 	return CHUNK_W;
 }

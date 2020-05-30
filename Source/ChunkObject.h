@@ -16,7 +16,7 @@ public:
 
 	static void InitTexture(const wchar_t* texturePath, ID3D11Device* device);
 
-	void UpdateMesh(VoxelMesh newMesh);
+	VoxelMesh* GetMesh() { return &m_mesh; }
 
 private:
 

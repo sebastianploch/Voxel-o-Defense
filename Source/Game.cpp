@@ -2,9 +2,12 @@
 #include "Game.h"
 
 #include "DebugSimpleCube.h"
+
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
-#include "AiManager.h"
+#include "VoxelModel.h"
+#include "VoxelModelManager.h"
+#include "VoxelRay.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -305,9 +308,6 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
-	// Update chunks if they have been modified
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
-	
 	m_camera->Update(deltaTime,
 					 *m_inputState);
 
@@ -319,6 +319,27 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		ExitGame();
 	}
+
+	// Example code for casting ray from camera
+	if (m_inputState->GetKeyboardState().pressed.Space) {
+		//Place random voxel at ray hit point
+		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
+		diff *= 50;	//Multiply by scalar length
+		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition() * 2, diff);
+		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	}
+	if (m_inputState->GetKeyboardState().pressed.Enter) {
+		//Place Structure at ray hit point
+		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
+		diff *= 50;	//Multiply by scalar length
+		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition() * 2, diff);
+		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	}
+
+	// Update chunks if they have been modified
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 
 	// Update all objects
 	for (auto object : m_gameObjects)
@@ -467,7 +488,7 @@ void Game::Prepare()
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = 0;
 	m_d3dDevice->CreateSamplerState(&sampDesc, &sampler);
-	
+
 	m_d3dContext->PSSetSamplers(0, 1, &sampler);
 
 	// Set Constant Buffer for VS and PS Shaders
