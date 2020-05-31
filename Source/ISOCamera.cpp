@@ -7,8 +7,8 @@ using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Quaternion;
 
-static constexpr float s_scrollInLimit = 2.0f;
-static constexpr float s_scrollOutLimit = 10.0f;
+static constexpr float s_scrollInLimit = 10.0f;
+static constexpr float s_scrollOutLimit = 150.0f;
 
 
 ISOCamera::ISOCamera(float width,
@@ -27,7 +27,9 @@ ISOCamera::ISOCamera(float width,
            position,
            target,
            up),
-	m_scrollSpeed(20.0f)
+	m_scrollSpeed(100.0f),
+	m_width(width),
+	m_height(height)
 {
 }
 
@@ -97,15 +99,25 @@ void ISOCamera::ProcessMouse(float deltaTime, const InputState& input)
 	// Scroll up - get closer
 	if (state.scrollWheelValue > 0.0f)
 	{
-		m_position.y -= m_scrollSpeed * deltaTime;
-		m_position.y = std::max(s_scrollInLimit, m_position.y);
+		m_width -= m_scrollSpeed * deltaTime;
+		m_width = std::max(s_scrollInLimit, m_width);
+
+		m_height -= m_scrollSpeed * deltaTime;
+		m_height = std::max(s_scrollInLimit, m_height);
+
+		Resize(m_width, m_height * 0.5f, 0.01f, 300.0f);
 	}
 
 	// Scroll down - get further
 	if (state.scrollWheelValue < 0.0f)
 	{
-		m_position.y += m_scrollSpeed * deltaTime;
-		m_position.y = std::min(s_scrollOutLimit, m_position.y);
+		m_width += m_scrollSpeed * deltaTime;
+		m_width = std::min(s_scrollOutLimit, m_width);
+
+		m_height += m_scrollSpeed * deltaTime;
+		m_height = std::min(s_scrollOutLimit, m_height);
+
+		Resize(m_width, m_height * 0.5f, 0.01f, 300.0f);
 	}
 
 	// Reset scroll value
@@ -133,5 +145,5 @@ void ISOCamera::UpdateTargetPosition()
 	float z = cosf(m_yaw);
 	float x = sinf(m_yaw);
 
-	m_target = Vector3(m_position.x, 0.0f, m_position.z) + Vector3(-x, 0.0f, -z);
+	m_target = Vector3(m_position.x, 0.0f, m_position.z) + Vector3(-x * 100.0f, 0.0f, -z * 100.0f);
 }

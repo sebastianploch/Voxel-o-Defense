@@ -42,9 +42,9 @@ void Game::Initialize(HWND window,
 	// Create Camera
 	m_camera = std::make_unique<ISOCamera>((float)m_windowWidth,
 										   (float)m_windowHeight,
-										   0.1f,
-										   100.0f,
-										   Vector3(0.0f, 5.0f, 0.0f));
+										   0.001f,
+										   300.0f,
+										   Vector3(0.0f, 25.0f, 0.0f));
 
     CreateResources();
 
@@ -62,7 +62,7 @@ void Game::Initialize(HWND window,
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
-	for (int i = 0; i < 5; ++i)
+	/*for (int i = 0; i < 5; ++i)
 	{
 		for (int j = 0; j < 5; ++j)
 		{
@@ -70,9 +70,9 @@ void Game::Initialize(HWND window,
 																	  Vector3(),
 																	  Vector3(0.5f, 0.5f, 0.5f)));
 		}
-	}
+	}*/
 
-	//InitialiseVoxelWorld();
+	InitialiseVoxelWorld();
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -247,7 +247,7 @@ void Game::CreateResources()
 	// Resize camera to current window size
 	m_camera->Resize((float)backBufferWidth,
 					 (float)backBufferHeight,
-					 0.1f,
+					 0.001f,
 					 300.0f);
 }
 
@@ -320,7 +320,7 @@ void Game::Update(DX::StepTimer const& timer)
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
 	// Update chunks if they have been modified
-	//ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 	
 	m_camera->Update(deltaTime,
 					 *m_inputState);

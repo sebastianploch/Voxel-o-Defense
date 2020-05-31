@@ -29,4 +29,6 @@ private:
 
 private:
 	float m_scrollSpeed;
+	float m_width;
+	float m_height;
 };

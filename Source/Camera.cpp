@@ -22,7 +22,7 @@ Camera::Camera(float width,
     m_yaw(0.0f),
     m_pitch(0.0f),
     m_roll(0.0f),
-    m_movementSpeed(5.0f),
+    m_movementSpeed(50.0f),
     m_rotationSpeed(2.0f)
 {
     m_view = Matrix::CreateLookAt(m_position,
@@ -39,8 +39,8 @@ Camera::Camera(float width,
 
     else if (m_type == CAMERA_TYPE::ORTHOGRAPHIC)
     {
-		m_projection = Matrix::CreateOrthographic(width * 0.01f,
-                                                  height * 0.01f,
+		m_projection = Matrix::CreateOrthographic(width * 0.1f,
+                                                  height * 0.1f,
 												  nearPlane,
 												  farPlane);
     }
@@ -68,8 +68,8 @@ void Camera::Resize(float width,
 
 	else if (m_type == CAMERA_TYPE::ORTHOGRAPHIC)
 	{
-		m_projection = Matrix::CreateOrthographic(width * 0.01f,
-												  height * 0.01f,
+		m_projection = Matrix::CreateOrthographic(width,
+												  height,
 												  nearPlane,
 												  farPlane);
 	}
