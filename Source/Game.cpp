@@ -38,12 +38,11 @@ void Game::Initialize(HWND window,
     CreateDevice();
 
 	// Create Camera
-	m_camera = std::make_unique<FPSCamera>((float)m_windowWidth,
+	m_camera = std::make_unique<ISOCamera>((float)m_windowWidth,
 										   (float)m_windowHeight,
 										   0.1f,
-										   300.0f,
-										   XM_PIDIV4,
-										   Vector3(0.0f, 0.0f, 4.0f));
+										   100.0f,
+										   Vector3(0.0f, 5.0f, 0.0f));
 
     CreateResources();
 

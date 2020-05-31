@@ -2,6 +2,7 @@
 
 #include "StepTimer.h"
 #include "FPSCamera.h"
+#include "ISOCamera.h"
 #include "IGameObject.h"
 #include "ShaderManager.h"
 
