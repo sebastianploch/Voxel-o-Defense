@@ -1,13 +1,19 @@
 #pragma once
 
 
+enum class CAMERA_TYPE
+{
+	PERSPECTIVE = 0,
+	ORTHOGRAPHIC
+};
+
 class Camera
 {
 public:
 	virtual ~Camera();
 
 	virtual void Update(float deltaTime,
-						const InputState& state) = 0;
+						const InputState& input) = 0;
 
 	void Resize(float width,
 				float height,
@@ -42,9 +48,10 @@ protected:
 		   float height,
 		   float nearPlane,
 		   float farPlane,
-		   const float fov = DirectX::XM_PIDIV4,
-		   const DirectX::SimpleMath::Vector3& position = DirectX::SimpleMath::Vector3::UnitZ,
-		   const DirectX::SimpleMath::Vector3& target = DirectX::SimpleMath::Vector3::Zero,
+		   const CAMERA_TYPE& type,
+		   float fov = DirectX::XM_PIDIV4,
+		   const DirectX::SimpleMath::Vector3& position = DirectX::SimpleMath::Vector3::Zero,
+		   const DirectX::SimpleMath::Vector3& target = -DirectX::SimpleMath::Vector3::UnitZ,
 		   const DirectX::SimpleMath::Vector3& up = DirectX::SimpleMath::Vector3::Up);
 
 protected:
@@ -59,6 +66,7 @@ protected:
 
 	// Camera Moving Speed
 	float						 m_movementSpeed;
+	CAMERA_TYPE                  m_type;
 
 	DirectX::SimpleMath::Matrix	 m_projection;
 	DirectX::SimpleMath::Matrix	 m_view;
