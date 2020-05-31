@@ -59,6 +59,9 @@
 // Input Handling
 #include "InputState.h"
 
+// Camera
+#include "Camera.h"
+
 namespace DX
 {
     inline void ThrowIfFailed(HRESULT hr)

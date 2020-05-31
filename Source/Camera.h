@@ -15,6 +15,7 @@ public:
 	virtual void Update(float deltaTime,
 						const InputState& input) = 0;
 
+	// Resize Camera to match new window size
 	void Resize(float width,
 				float height,
 				float nearPlane,
@@ -43,6 +44,9 @@ public:
 	// Get Projection Matrix
 	inline DirectX::SimpleMath::Matrix GetProjection() const { return m_projection; }
 
+	// Get Camera Type
+	inline CAMERA_TYPE GetType() const { return m_type; }
+
 protected:
 	Camera(float width,
 		   float height,
@@ -66,6 +70,7 @@ protected:
 
 	// Camera Moving Speed
 	float						 m_movementSpeed;
+
 	CAMERA_TYPE                  m_type;
 
 	DirectX::SimpleMath::Matrix	 m_projection;

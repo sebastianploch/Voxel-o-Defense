@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Game.h"
 
-#include "DebugSimpleCube.h"
+#include "FPSCamera.h"
+#include "ISOCamera.h"
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
+#include "DebugSimpleCube.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
