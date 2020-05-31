@@ -112,6 +112,9 @@
     <ClInclude Include="Source\VoxelRay.h">
       <Filter>Headers\Voxels</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PlaneGameObject.h">
+      <Filter>Headers\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -177,6 +180,9 @@
     <ClCompile Include="Source\VoxelRay.cpp">
       <Filter>Source\Voxels</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlaneGameObject.cpp">
+      <Filter>Source\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -204,6 +210,12 @@
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\BasicVoxelPixelShader.hlsl">
+      <Filter>Headers\Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\WaterPixelShader.hlsl">
+      <Filter>Headers\Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\WaterVertexShader.hlsl">
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

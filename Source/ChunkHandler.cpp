@@ -31,6 +31,7 @@ void ChunkHandler::DrawChunks(ID3D11DeviceContext1* context, ShaderManager* shad
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int z = 0; z < MAP_SIZE; z++) {
 			shaderManager->SetShader(s_chunks[x][z].GetChunkGameObject()->GetShaderType(), context);
+			
 			s_chunks[x][z].Draw(context);
 		}
 	}

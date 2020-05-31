@@ -4,6 +4,7 @@ cbuffer constantBuffer : register(b0)
     matrix projection;
     matrix view;
     matrix world;
+    float time;
 };  
 
 struct VS_INPUT

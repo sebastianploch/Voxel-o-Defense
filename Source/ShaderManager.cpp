@@ -50,5 +50,12 @@ void ShaderManager::InitialiseShaders(ID3D11Device1* device)
 												 *DirectX::VertexPositionNormalDualTexture::InputElements,
 												 DirectX::VertexPositionNormalDualTexture::InputElementCount));
 
+	// Water Shader
+	m_shaders.push_back(std::make_unique<Shader>(device,
+		L"Resources/Shaders/WaterVertexShader.hlsl",
+		L"Resources/Shaders/WaterPixelShader.hlsl",
+		*DirectX::VertexPositionNormalDualTexture::InputElements,
+		DirectX::VertexPositionNormalDualTexture::InputElementCount));
+
 	// #TODO Toon Shader 
 }

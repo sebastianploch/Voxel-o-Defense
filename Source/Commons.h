@@ -5,6 +5,7 @@ enum class Shaders
 {
 	BASIC_SHADER = 0,
 	VOXEL_SHADER,
+    WATER_SHADER,
 	//TOON_SHADER,
 	NONE
 };
@@ -14,6 +15,10 @@ struct ConstantBuffer
 	DirectX::SimpleMath::Matrix projection;
 	DirectX::SimpleMath::Matrix view;
 	DirectX::SimpleMath::Matrix world;
+    float time;
+    float padding1;
+    float padding2;
+    float padding3;
 };
 
 struct JSONINFO

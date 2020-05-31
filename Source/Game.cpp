@@ -2,6 +2,7 @@
 #include "Game.h"
 
 #include "DebugSimpleCube.h"
+#include "PlaneGameObject.h"
 
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
@@ -54,8 +55,17 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
+	// Initialise Water
+	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() * 0.25f,
+																			ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() * 0.25f), 
+											m_d3dDevice.Get());
+	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
+
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+
+	// Create Water
+	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
 
 	InitialiseVoxelWorld();
 }
@@ -357,8 +367,16 @@ void Game::Render()
 
 	// Create ConstantBuffer and assign camera mat's
 	ConstantBuffer cb;
+	cb.time = m_timer.GetTotalSeconds();
 	cb.projection = m_camera->GetProjection();
 	cb.view = m_camera->GetView();
+
+	//Update Constant Buffer
+	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+									0,
+									nullptr,
+									&cb,
+									0, 0);
 
 	// Render chunks
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
@@ -473,9 +491,9 @@ void Game::Prepare()
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(sampDesc));
 	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampDesc.MaxAnisotropy = D3D11_MAX_MAXANISOTROPY;
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = 0;
