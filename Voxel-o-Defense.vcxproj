@@ -190,6 +190,7 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Commons.h" />
     <ClInclude Include="Source\DebugSimpleCube.h" />
+    <ClInclude Include="Source\DumbObject.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\GreedyVoxelMeshGeneration.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="Source\ChunkObject.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
+    <ClCompile Include="Source\DumbObject.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GreedyVoxelMeshGeneration.cpp" />
@@ -233,6 +235,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\PerlinNoise.cpp" />
+    <ClCompile Include="Source\RouteConstructor.cpp" />
     <ClCompile Include="Source\VoxelModel.cpp" />
     <ClCompile Include="Source\VoxelModelManager.cpp" />
     <ClCompile Include="Source\VoxelRay.cpp" />

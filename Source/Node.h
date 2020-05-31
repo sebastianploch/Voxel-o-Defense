@@ -22,6 +22,9 @@ class Nodes {
 public:
 	Nodes();
 	Nodes(Nodes* itSelf, Nodes* parent);
+	//- Node Constructor when first creating -//
+	Nodes(int ID, DirectX::XMFLOAT3 position);
+	void SecondaryNodeCreation(std::vector<int> connections, DirectX::XMFLOAT3 position);
 	~Nodes();
 
 	//- Core -//

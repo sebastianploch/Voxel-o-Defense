@@ -2,6 +2,7 @@
 #include "Game.h"
 
 #include "DebugSimpleCube.h"
+#include "DumbObject.h"
 
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
@@ -51,14 +52,17 @@ void Game::Initialize(HWND window,
 	m_inputState = std::make_unique<InputState>(m_window);
 
 	// Initialise Vertex & Index buffers (static) for debug cubes
-	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
-	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
+	DumbObject::InitBuffers(m_d3dDevice.Get());
+	DumbObject::InitDebugTexture(L"Resources/Textures/AI.dds", m_d3dDevice.Get());
 
 	// Create one debug cube
-	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
 	// Create Ai Manager
-	m_AiManager = std::make_unique<AiManager>(10, DirectX::XMFLOAT3(50,30,20));
+	m_AiManager = std::make_unique<AiManager>(1, DirectX::XMFLOAT3(50,30,20));
+	m_AiManager->SetStartLocation(DirectX::XMFLOAT3(0,4,0));
+	m_AiManager->SetEndLocation(DirectX::XMFLOAT3(480, 4, 480));
+
 
 	InitialiseVoxelWorld();
 }
@@ -366,30 +370,48 @@ void Game::Render()
 	cb.projection = m_camera->GetProjection();
 	cb.view = m_camera->GetView();
 
+	Vector3 scale = Vector3(0.5, 0.5, 0.5);
+	Vector3 rotation = Vector3();
+	Vector3 position = Vector3();
+	Matrix m_worldMatrix = Matrix::Identity;
+
+	m_worldMatrix *= Matrix::CreateScale(scale);
+	m_worldMatrix *= Matrix::CreateRotationX(rotation.x) * Matrix::CreateRotationY(rotation.y) * Matrix::CreateRotationZ(rotation.z);
+	m_worldMatrix *= Matrix::CreateTranslation(position);
+
+	cb.world = m_worldMatrix;
+
 	// Render chunks
+
+	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+											0,
+											nullptr,
+											&cb,
+											0, 0);
+
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
 
-	// Render all objects
-	for (const auto& object : m_gameObjects)
-	{
-		// Assign Shader to be used to render upcoming object
-		m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
+	/* Render all objects*/
+	//for (const auto& object : m_gameObjects)
+	//{
+	//	// Assign Shader to be used to render upcoming object
+	//	m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
 
-		// Assign Object World Mat data to ConstantBuffer
-		cb.world = object->GetWorldMatrix();
+	//	// Assign Object World Mat data to ConstantBuffer
+	//	cb.world = object->GetWorldMatrix();
 
-		// Update Constant Buffer
-		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
-										0,
-										nullptr,
-										&cb,
-										0, 0);
+	//	// Update Constant Buffer
+	//	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+	//									0,
+	//									nullptr,
+	//									&cb,
+	//									0, 0);
 
-		// Draw Object
-		object->Draw(m_d3dContext.Get());
-	}
+	//	// Draw Object
+		//object->Draw(m_d3dContext.Get());
+	//}
 
-	m_AiManager->Render(m_d3dContext.Get(),cb,m_constantBuffer.Get());
+	m_AiManager->Render(m_d3dContext.Get(), m_d3dContext.Get(), cb,m_constantBuffer.Get(), m_shaderManager.get());
 
 	// Swap backbuffer
     Present();

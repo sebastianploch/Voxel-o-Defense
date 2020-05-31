@@ -12,7 +12,7 @@
 //- Includes -//
 //------------//
 
-#include "IGameObject.h"
+#include "DumbObject.h"
 #include "Node.h"
 
 //-----------//
@@ -57,7 +57,7 @@ public:
 	TypeOfMonster GetType();
 	void SetType(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp);
 
-	std::shared_ptr<IGameObject> GetGameObject();
+	std::shared_ptr<DumbObject> GetGameObject();
 
 	std::vector<Nodes*> GetRoute();
 
@@ -67,14 +67,11 @@ public:
 
 	DirectX::XMFLOAT3 GetPosition();
 	bool IsAgentCompleatlyStopped();
-	void CompleatlyStopAgent(bool passIn);
-
 	bool HasFinalDestinationChanged();
-	void endingDestinationChanged(bool passIn);
 
 private:
 	//- In Game Object -//
-	std::shared_ptr<IGameObject> m_gameObject;
+	std::shared_ptr<DumbObject> m_gameObject;
 	
 	DirectX::XMFLOAT3* m_positionRef;
 	bool m_compleateStop;

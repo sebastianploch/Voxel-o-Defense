@@ -1,5 +1,11 @@
 #include "pch.h"
 #include "RouteConstructor.h"
+#include "Chunk.h"
+#include "ChunkHandler.h"
+
+#define SizeOfVoxel 1
+#define MAX 480
+#define MIN 0
 
 RouteConstructor::RouteConstructor()
 {
@@ -19,10 +25,34 @@ void RouteConstructor::Update()
 
 void RouteConstructor::CreatePathfindingMap()
 {
+	int IdCounter = 0;
+
+	for (int i = 0; i < 32 * 15; i += SizeOfVoxel)
+	{
+		for (int j = 0; j < 32 * 15; j += SizeOfVoxel)
+		{
+			Nodes* tempNode = new Nodes(IdCounter, DirectX::XMFLOAT3(i, WorldManipulation::GetHeightmap(i,j), j));
+			IdCounter++;
+
+			std::vector<int> connectedIds;
+
+			if (i != MAX && j != MIN)	connectedIds.push_back((IdCounter + (32 * 15)) - 1);	//Top Left
+			if (i != MAX)				connectedIds.push_back((IdCounter + (32 * 15)));		//Top Mid
+			if (i != MAX && j != MAX)	connectedIds.push_back((IdCounter + (32 * 15)) + 1);	//TopRIght
+			if (j != MAX)				connectedIds.push_back(IdCounter + 1);					//Mid right
+			if (j != MIN)				connectedIds.push_back(IdCounter - 1);					//Mid Left
+			if (i != MIN && j != MIN)	connectedIds.push_back((IdCounter - (32 * 15)) - 1);	//Bottom Left
+			if (i != MIN)				connectedIds.push_back((IdCounter - (32 * 15)));		//Botom Mid
+			if (i != MIN && j != MAX)	connectedIds.push_back((IdCounter - (32 * 15)) + 1);	//Botom Right
+
+			m_createdPathingMap.push_back(tempNode);
+		}
+	}
+
 }
 
 //- CORE FUNCTIONS -//
-void RouteConstructor::A_star(AiAgent* agent, DirectX::XMFLOAT3 Destination)
+void RouteConstructor::A_star()
 {
 	std::vector<Nodes*> _waypoints = GetCreatedPathingMap();
 	std::vector<Nodes*> _nodes;
@@ -37,20 +67,20 @@ void RouteConstructor::A_star(AiAgent* agent, DirectX::XMFLOAT3 Destination)
 	//- loops though all the waypoints -//
 	for (int i = 0; i < _waypoints.size(); i++)
 	{
-		tempish = ReturnDistance(agent->GetPosition(), _waypoints[i]->GetPosition());
+		tempish = ReturnDistance(m_StartingPos, _waypoints[i]->GetPosition());
 		//- checking if the waypoint is the closes to current position -//
 		if (distanceToTank > tempish)
 		{
 			//- seting it as the lowest target -//
-			distanceToTank = ReturnDistance(agent->GetPosition(), _waypoints[i]->GetPosition());
+			distanceToTank = ReturnDistance(m_StartingPos, _waypoints[i]->GetPosition());
 			_closesToTank = _waypoints[i];
 		}
-		temp2ish = ReturnDistance(Destination, _waypoints[i]->GetPosition());
+		temp2ish = ReturnDistance(m_targetPos, _waypoints[i]->GetPosition());
 		//- checking if the waypoint is the closes to the target desinations -//
 		if (distanceToDestination > temp2ish)
 		{
 			//- seting to lowest value -//
-			distanceToDestination = ReturnDistance(Destination, _waypoints[i]->GetPosition());
+			distanceToDestination = ReturnDistance(m_targetPos, _waypoints[i]->GetPosition());
 			_closesToDestination = _waypoints[i];
 		}
 		//- turning waypoints into custom struct to easy use -//
@@ -58,18 +88,18 @@ void RouteConstructor::A_star(AiAgent* agent, DirectX::XMFLOAT3 Destination)
 
 	}
 
-	if (m_route.size() == 0 && agent->HasFinalDestinationChanged() == true)
+	if (m_route.size() == 0 && FinalDestinationChanged == true)
 	{
-		GetPath(agent, _closesToTank, _closesToDestination, _nodes);
-		agent->endingDestinationChanged(false);
+		GetPath(_closesToTank, _closesToDestination, _nodes);
+		FinalDestinationChanged = false;
 	}
 
 	if (m_route.size() >= 1)
 	{
 		m_nodeToTravelTo = m_route[m_route.size() - 1];
-		if (agent->GetPosition().x > m_nodeToTravelTo->GetPosition().x && agent->GetPosition().x < m_nodeToTravelTo->GetPosition().x &&
-			agent->GetPosition().y > m_nodeToTravelTo->GetPosition().y && agent->GetPosition().y < m_nodeToTravelTo->GetPosition().y &&
-			agent->GetPosition().z > m_nodeToTravelTo->GetPosition().z && agent->GetPosition().z < m_nodeToTravelTo->GetPosition().z)
+		if (m_StartingPos.x > m_nodeToTravelTo->GetPosition().x && m_StartingPos.x < m_nodeToTravelTo->GetPosition().x &&
+			m_StartingPos.y > m_nodeToTravelTo->GetPosition().y && m_StartingPos.y < m_nodeToTravelTo->GetPosition().y &&
+			m_StartingPos.z > m_nodeToTravelTo->GetPosition().z && m_StartingPos.z < m_nodeToTravelTo->GetPosition().z)
 		{
 			m_route.erase(m_route.begin() + (m_route.size() - 1));
 		}
@@ -81,7 +111,7 @@ void RouteConstructor::A_star(AiAgent* agent, DirectX::XMFLOAT3 Destination)
 
 }
 
-std::vector<Nodes*> RouteConstructor::GetPath(AiAgent* agent, Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes)
+std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes)
 {
 	//- Decliration of vectors -//
 	Nodes* CurrentLowestNode;
@@ -105,7 +135,7 @@ std::vector<Nodes*> RouteConstructor::GetPath(AiAgent* agent, Nodes* starting, N
 			if (IsNodeOpen(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], m_openNodes) == false)
 			{
 				Nodes* temp = new Nodes(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], CurrentLowestNode);
-				CalculateWeighting(agent, temp, starting->GetPosition(), ending->GetPosition());
+				CalculateWeighting(temp, starting->GetPosition(), ending->GetPosition());
 				m_openNodes.push_back(temp);
 			}
 		}
@@ -143,7 +173,6 @@ void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode)
 	}
 }
 
-
 //- Resused Code -//
 Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 {
@@ -165,10 +194,10 @@ Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 	return currentLowest;
 }
 
-void RouteConstructor::CalculateWeighting(AiAgent* agent,Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos)
+void RouteConstructor::CalculateWeighting(Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos)
 {
 	node->SetGCost(node->GetParentWayPoint()->GetGCost() + 10);
-	node->SetHCost(ReturnDistance(agent->GetPosition(), endPos));
+	node->SetHCost(ReturnDistance(m_StartingPos, endPos));
 	node->SetFCost(node->GetGCost() + node->GetHCost());
 }
 
@@ -176,7 +205,6 @@ float RouteConstructor::ReturnDistance(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v
 {
 	return ((abs(v1.x - v2.x) + abs(v1.y - v2.y)) / 2);
 }
-
 
 //- Checks For Status Of Code-//
 bool RouteConstructor::IsNodeOpen(Nodes* NodeToCheck, std::vector<Nodes*> open)
@@ -229,19 +257,23 @@ void RouteConstructor::CloseNode(Nodes* NodeToMove)
 	}
 }
 
-void RouteConstructor::NewTarget(AiAgent* agent, DirectX::XMFLOAT3 target)
+void RouteConstructor::NewTarget(DirectX::XMFLOAT3 target)
 {
 	m_targetPos = target;
-	agent->endingDestinationChanged(true);
+	FinalDestinationChanged = true;
 	m_route.clear();
 	m_closedNodes.clear();
 	m_openNodes.clear();
 }
 
-void RouteConstructor::StopMoving(AiAgent* agent)
+void RouteConstructor::SetStarting(DirectX::XMFLOAT3 pos)
 {
-	NewTarget(agent, agent->GetPosition());
-	agent->CompleatlyStopAgent(true);
+	m_StartingPos = pos;
+}
+
+void RouteConstructor::SetEnding(DirectX::XMFLOAT3 pos)
+{
+	m_targetPos = pos;
 }
 
 //-----------------------------------------//

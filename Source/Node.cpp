@@ -10,6 +10,18 @@ Nodes::Nodes(Nodes* itSelf, Nodes* parent)
 
 }
 
+Nodes::Nodes(int ID, DirectX::XMFLOAT3 position)
+{
+	m_ID = ID;
+	m_position = position;
+}
+
+void Nodes::SecondaryNodeCreation(std::vector<int> connections, DirectX::XMFLOAT3 position)
+{
+	m_connectedWaypointIDs = connections;
+	m_position = position;
+}
+
 Nodes::~Nodes()
 {
 }

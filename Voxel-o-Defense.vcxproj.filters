@@ -44,6 +44,12 @@
     <Filter Include="Source\Voxels">
       <UniqueIdentifier>{ca92a1e2-6cc7-44b7-b17e-7e4f00bdb6ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\AI">
+      <UniqueIdentifier>{e3968b7c-d156-45bd-a139-eb6e3dbeb48e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\AI">
+      <UniqueIdentifier>{b6a005de-f4eb-4df8-8530-d94f97d3e90b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -112,6 +118,21 @@
     <ClInclude Include="Source\VoxelRay.h">
       <Filter>Headers\Voxels</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AiManager.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Node.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RouteConstructor.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AiAgent.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DumbObject.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -176,6 +197,21 @@
     </ClCompile>
     <ClCompile Include="Source\VoxelRay.cpp">
       <Filter>Source\Voxels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiManager.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RouteConstructor.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiAgent.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DumbObject.cpp">
+      <Filter>Source\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

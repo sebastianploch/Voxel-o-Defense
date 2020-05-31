@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "AiAgent.h"
-#include "DebugSimpleCube.h"
 #include <DirectXMath.h>
 
 AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp)
@@ -11,7 +10,7 @@ AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float dama
 	_damage = damage;
 	_active = active;
 
-	m_gameObject = std::make_unique<DebugSimpleCube>(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(), DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f));
+	m_gameObject = std::make_unique<DumbObject>(DirectX::SimpleMath::Vector3(0.25f, 2.25f, 0.25f), DirectX::SimpleMath::Vector3(), DirectX::SimpleMath::Vector3(0.25f, 0.25f, 0.25f), "Resources/config/cube.json", "cube");
 
 }
 
@@ -78,7 +77,7 @@ void AiAgent::SetType(TypeOfMonster type, int health, float movementSpeed, float
 	_active = active;
 }
 
-std::shared_ptr<IGameObject> AiAgent::GetGameObject()
+std::shared_ptr<DumbObject> AiAgent::GetGameObject()
 {
 	return m_gameObject;
 }
@@ -113,17 +112,7 @@ bool AiAgent::IsAgentCompleatlyStopped()
 	return m_compleateStop;
 }
 
-void AiAgent::CompleatlyStopAgent(bool passIn)
-{
-	m_compleateStop = passIn;
-}
-
 bool AiAgent::HasFinalDestinationChanged()
 {
 	return m_endingDestinationChanged; 
-}
-
-void AiAgent::endingDestinationChanged(bool passIn)
-{
-	m_endingDestinationChanged = passIn;
 }
