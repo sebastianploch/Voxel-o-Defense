@@ -329,18 +329,18 @@ void Game::Update(DX::StepTimer const& timer)
 	// Example code for casting ray from camera
 	if (m_inputState->GetKeyboardState().pressed.Space) {
 		//Place random voxel at ray hit point
-		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
+		Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
 		diff *= 50;	//Multiply by scalar length
-		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position
-		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition() * 2, diff);
+		diff += m_camera.get()->GetPosition();	//Reapply the camera position
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
 		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
 	}
 	if (m_inputState->GetKeyboardState().pressed.Enter) {
 		//Place Structure at ray hit point
-		Vector3 diff = (m_camera.get()->GetTarget() * 2) - (m_camera.get()->GetPosition() * 2);	//Get normalised direction
+		Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
 		diff *= 50;	//Multiply by scalar length
-		diff += m_camera.get()->GetPosition() * 2;	//Reapply the camera position
-		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition() * 2, diff);
+		diff += m_camera.get()->GetPosition();	//Reapply the camera position
+		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
 		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
 	}
 
