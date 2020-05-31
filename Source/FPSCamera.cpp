@@ -30,9 +30,6 @@ FPSCamera::FPSCamera(float width,
            position,
            target,
            up),
-    m_yaw(0.0f),
-    m_pitch(0.0f),
-    m_rotationSpeed(0.4f),
 	m_cameraBoost(2.0f)
 {
 }
@@ -46,7 +43,7 @@ void FPSCamera::Update(float deltaTime, const InputState& state)
     ProcessMouseInput(deltaTime, state);
 
 	// Create orientation from Pitch & Yaw
-    Quaternion orientation = Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, 0.0f);
+    Quaternion orientation = Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 
 	// Update position transformed by the orientation
     m_position += Vector3::Transform(ProcessKeyboardInput(deltaTime, state),
@@ -126,11 +123,12 @@ Vector3 FPSCamera::ProcessKeyboardInput(float deltaTime,
 
 void FPSCamera::ResetCamera()
 {
-	m_position = Vector3(0.0f, 0.0f, 3.0f);
-	m_target = Vector3::Zero;
+	m_position = Vector3::Zero;
+	m_target = -Vector3::UnitZ;
 	m_up = Vector3::Up;
 	m_yaw = 0.0f;
 	m_pitch = 0.0f;
+	m_roll = 0.0f;
 }
 
 void FPSCamera::WrapRotation()

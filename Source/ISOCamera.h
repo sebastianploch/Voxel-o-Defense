@@ -28,7 +28,5 @@ private:
 	void UpdateTargetPosition();
 
 private:
-	float m_yaw;
 	float m_scrollSpeed;
-	float m_rotationSpeed;
 };

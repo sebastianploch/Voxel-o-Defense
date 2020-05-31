@@ -18,10 +18,6 @@ public:
 	void Update(float deltaTime,
 				const InputState& state) override;
 
-	// Camera Rotation Speed
-	inline float GetRotationSpeed() const { return m_rotationSpeed; }
-	inline void SetRotationSpeed(float speed) { m_rotationSpeed = speed; }
-
 private:
 	void ProcessMouseInput(float deltaTime,
 						   const InputState& input);
@@ -34,8 +30,5 @@ private:
 	void UpdateTargetPosition();
 
 private:
-	float m_yaw;
-	float m_pitch;
-	float m_rotationSpeed;
 	float m_cameraBoost;
 };

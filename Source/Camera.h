@@ -22,6 +22,8 @@ public:
 				float farPlane,
 				const float fov = DirectX::XM_PIDIV4);
 
+#pragma region Getters/Setters
+	#pragma region Camera_Properties
 	// Camera Position (Eye)
 	inline DirectX::SimpleMath::Vector3 GetPosition() const { return m_position; }
 	inline void SetPosition(const DirectX::SimpleMath::Vector3& position) { m_position = position; }
@@ -33,19 +35,36 @@ public:
 	// Camera Up Vector
 	inline DirectX::SimpleMath::Vector3 GetUp() const { return m_up; }
 	inline void SetUp(const DirectX::SimpleMath::Vector3& upPosition) { m_up = upPosition; }
+	#pragma endregion Camera_Properties
 
-	// Camera Moving Speed
+	#pragma region Movement
 	inline float GetMovementSpeed() const { return m_movementSpeed; }
 	inline void SetMovementSpeed(float speed) { m_movementSpeed = speed; }
+
+	inline float GetRotationSpeed() const { return m_rotationSpeed; }
+	inline void SetRotationSpeed(float speed) { m_rotationSpeed = speed; }
+	#pragma endregion Movement
+
+	#pragma region Rotation
+	inline float GetYaw() const { return m_yaw; }
+	inline void SetYaw(float yaw) { m_yaw = yaw; }
+
+	inline float GetPitch() const { return m_pitch; }
+	inline void SetPitch(float pitch) { m_pitch = pitch; }
+
+	inline float GetRoll() const { return m_roll; }
+	inline void SetRoll(float roll) { m_roll = roll; }
+	#pragma endregion Rotation
+
+	// Get Camera Type
+	inline CAMERA_TYPE GetType() const { return m_type; }
 
 	// Get View Matrix
 	inline DirectX::SimpleMath::Matrix GetView() const { return m_view; }
 
 	// Get Projection Matrix
 	inline DirectX::SimpleMath::Matrix GetProjection() const { return m_projection; }
-
-	// Get Camera Type
-	inline CAMERA_TYPE GetType() const { return m_type; }
+#pragma endregion Getters/Setters
 
 protected:
 	Camera(float width,
@@ -68,8 +87,14 @@ protected:
 	// Camera Up
 	DirectX::SimpleMath::Vector3 m_up;
 
-	// Camera Moving Speed
+	// Rotation
+	float						 m_yaw;
+	float						 m_pitch;
+	float						 m_roll;
+
+	// Movement
 	float						 m_movementSpeed;
+	float						 m_rotationSpeed;
 
 	CAMERA_TYPE                  m_type;
 

@@ -15,11 +15,15 @@ Camera::Camera(float width,
                const Vector3& position,
                const Vector3& target,
                const Vector3& up) :
+    m_type(type),
     m_position(position),
     m_target(target),
     m_up(up),
+    m_yaw(0.0f),
+    m_pitch(0.0f),
+    m_roll(0.0f),
     m_movementSpeed(5.0f),
-    m_type(type)
+    m_rotationSpeed(2.0f)
 {
     m_view = Matrix::CreateLookAt(m_position,
                                   m_target,

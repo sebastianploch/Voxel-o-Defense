@@ -27,9 +27,7 @@ ISOCamera::ISOCamera(float width,
            position,
            target,
            up),
-	m_yaw(0.0f),
-	m_scrollSpeed(20.0f),
-	m_rotationSpeed(2.0f)
+	m_scrollSpeed(20.0f)
 {
 }
 
@@ -41,7 +39,7 @@ void ISOCamera::Update(float deltaTime, const InputState& input)
 {
 	ProcessMouse(deltaTime, input);
 
-	Quaternion orientation = Quaternion::CreateFromYawPitchRoll(m_yaw, 0.0f, 0.0f);
+	Quaternion orientation = Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 
 	m_position += Vector3::Transform(ProcessKeyboard(deltaTime, input),
 									 orientation);
