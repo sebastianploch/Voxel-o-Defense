@@ -127,6 +127,15 @@ void DumbObject::InitDebugTexture(const wchar_t* texturePath, ID3D11Device* devi
 		s_debugTexture.ReleaseAndGetAddressOf());
 }
 
+void DumbObject::SetPosition(DirectX::SimpleMath::Vector3 pos)
+{
+	m_position = pos;
+	m_worldMatrix = Matrix();
+	m_worldMatrix *= Matrix::CreateScale(m_scaling);
+	m_worldMatrix *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
+	m_worldMatrix *= Matrix::CreateTranslation(m_position);
+}
+
 // Init Static Variables
 Microsoft::WRL::ComPtr<ID3D11Buffer> DumbObject::s_cubeVertexBuffer;
 

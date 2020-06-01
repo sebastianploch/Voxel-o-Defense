@@ -7,10 +7,10 @@
 //-----------//
 
 // type health movementSPeed damage active stepup
-#define NullType NULLTYPE, 100, 1, 1, false, 1
-#define Zombie ZOMBIE, 100, 1, 2, false, 1
-#define Spider SPIDER, 125, 3, 1, false, 50
-#define Skeleton SKELETON, 150, 2, 2, false, 1
+#define NullType NULLTYPE, 0.1, 1, 1, false, 1
+#define Zombie ZOMBIE, 1, 1, 2, false, 1
+#define Spider SPIDER, 0.1, 3, 1, false, 50
+#define Skeleton SKELETON, 0.1, 2, 2, false, 1
 
 //------------//
 //- Includes -//
@@ -44,14 +44,13 @@ public:
 	AiManager(int totalAgents, DirectX::XMFLOAT3 SpawnRate);
 	~AiManager();
 
-	void Update(float deltaTime);
+	void Update(float deltaTime, float time);
 	void Render(ID3D11DeviceContext* deviceContext, ID3D11DeviceContext1* dc1, ConstantBuffer cb, ID3D11Buffer* constBuffer, ShaderManager* m_shaderManager);
 
 	void ImportTerrainInfo();
 	void SetStartLocation(DirectX::XMFLOAT3 pos);
 	void SetEndLocation(DirectX::XMFLOAT3 pos);
 
-protected:
 	std::vector<std::shared_ptr<AiAgent>> GetAiAgents();
 	int GetTotalAgents();
 	void SetTotalAgents(int totalAgents);

@@ -22,11 +22,11 @@ AiManager::~AiManager()
 {
 }
 
-void AiManager::Update(float deltaTime)
+void AiManager::Update(float deltaTime, float time)
 {
 	for (int i = 0; i < m_aiAgents.size(); i++)
 	{
-		m_aiAgents[i]->Update(deltaTime);
+		m_aiAgents[i]->Update(deltaTime, time);
 	}
 }
 
@@ -68,6 +68,12 @@ void AiManager::SetEndLocation(DirectX::XMFLOAT3 pos)
 void AiManager::StartWave()
 {
 	m_routeConstructor->A_star();
+	for (int i = 0; i < m_aiAgents.size(); i++)
+	{
+		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute());
+		m_aiAgents[i]->SpawnAiAgent();
+	}
+
 }
 
 //---------------------------------------------------//

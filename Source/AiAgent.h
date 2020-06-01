@@ -42,8 +42,14 @@ public:
 	AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp);
 	~AiAgent();
 
-	void Update(float deltaTime);
+	void Update(float deltaTime, float time);
+	float ReturnDistance(DirectX::SimpleMath::Vector3 v1, DirectX::SimpleMath::Vector3 v2);
+
+	DirectX::SimpleMath::Vector3 Lerp(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end, float t);
+
 	void Render(ID3D11DeviceContext* deviceContex);
+
+	void SetRoute(std::vector<Nodes*> route);
 
 	int GetHealth();
 	void SetHealth(int passIn);
@@ -65,7 +71,7 @@ public:
 	void SpawnAiAgent();
 	void DieAiAgent();
 
-	DirectX::XMFLOAT3 GetPosition();
+	DirectX::SimpleMath::Vector3 GetPosition();
 	bool IsAgentCompleatlyStopped();
 	bool HasFinalDestinationChanged();
 
@@ -73,17 +79,22 @@ private:
 	//- In Game Object -//
 	std::shared_ptr<DumbObject> m_gameObject;
 	
-	DirectX::XMFLOAT3* m_positionRef;
+	DirectX::SimpleMath::Vector3 m_position;
 	bool m_compleateStop;
 	bool m_endingDestinationChanged;
 
 	//- Route The Ai Agent Will Travel Along -//
 	std::vector<Nodes*> m_route;
 
+	DirectX::SimpleMath::Vector3 CurrentNodePosition, NextNodePosition;
+
 	TypeOfMonster _type = NULLTYPE;
 	int _health = 0;
 	float _movementSpeed = 0.0f;
 	int _damage = 0;
 	bool _active = false;
+	float _startTime = 0.0f;
+
+	float _totalTimeCoverd = 0;
 };
 #endif // !AI_AGENT

@@ -55,37 +55,45 @@ int Nodes::GetID()
 
 DirectX::XMFLOAT3 Nodes::GetPosition()
 {
-	return DirectX::XMFLOAT3();
+	return m_position;
 }
 
 Nodes* Nodes::GetParentWayPoint()
 {
-	return nullptr;
+	return _parentWaypoint;
+}
+
+void Nodes::SetParentWaypoint(Nodes* parent)
+{
+	_parentWaypoint = parent;
 }
 
 float Nodes::GetGCost()
 {
-	return 0.0f;
+	return _gCost;
 }
 
 void Nodes::SetGCost(float passIn)
 {
+	_gCost = passIn;
 }
 
 float Nodes::GetHCost()
 {
-	return 0.0f;
+	return _hCost;
 }
 
 void Nodes::SetHCost(float passIn)
 {
+	_hCost = passIn;
 }
 
 float Nodes::GetFCost()
 {
-	return 0.0f;
+	return _fCost;
 }
 
 void Nodes::SetFCost(float passIn)
 {
+	_fCost = passIn;
 }

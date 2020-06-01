@@ -33,6 +33,7 @@ public:
 	int GetID();
 	DirectX::XMFLOAT3 GetPosition();
 	Nodes* GetParentWayPoint();
+	void SetParentWaypoint(Nodes* parent);
 
 	//- Get Set Costs -//
 	float GetGCost();
@@ -42,13 +43,14 @@ public:
 	float GetFCost();
 	void SetFCost(float passIn);
 
+	std::vector<int> m_connectedWaypointIDs;
+
 
 private:
 	//- Pointers to Given Waypoint struct and parentNode -//
 	Nodes* _parentWaypoint = nullptr; ////- parentNode -//
 
 	//- Critical Node Information -//
-	std::vector<int> m_connectedWaypointIDs;
 	int m_ID;
 	DirectX::XMFLOAT3 m_position;
 

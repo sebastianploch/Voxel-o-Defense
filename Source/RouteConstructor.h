@@ -46,6 +46,10 @@ public:
 	
 	void A_star();
 
+	std::vector<Nodes*> GetCreatedPathingMap();
+
+	std::vector<Nodes*> GetRoute();
+
 protected:
 
 	//- Core Pathfinding Functions -//
@@ -64,8 +68,6 @@ protected:
 	void CloseNode(Nodes* NodeToMove);
 	void NewTarget(DirectX::XMFLOAT3 target);
 	void StopMoving();
-
-	std::vector<Nodes*> GetCreatedPathingMap();
 
 private:
 

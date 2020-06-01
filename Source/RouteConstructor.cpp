@@ -36,14 +36,14 @@ void RouteConstructor::CreatePathfindingMap()
 
 			std::vector<int> connectedIds;
 
-			if (i != MAX && j != MIN)	connectedIds.push_back((IdCounter + (32 * 15)) - 1);	//Top Left
-			if (i != MAX)				connectedIds.push_back((IdCounter + (32 * 15)));		//Top Mid
-			if (i != MAX && j != MAX)	connectedIds.push_back((IdCounter + (32 * 15)) + 1);	//TopRIght
-			if (j != MAX)				connectedIds.push_back(IdCounter + 1);					//Mid right
-			if (j != MIN)				connectedIds.push_back(IdCounter - 1);					//Mid Left
-			if (i != MIN && j != MIN)	connectedIds.push_back((IdCounter - (32 * 15)) - 1);	//Bottom Left
-			if (i != MIN)				connectedIds.push_back((IdCounter - (32 * 15)));		//Botom Mid
-			if (i != MIN && j != MAX)	connectedIds.push_back((IdCounter - (32 * 15)) + 1);	//Botom Right
+			if (i != MAX && j != MIN)	tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) - 2);	//Top Left
+			if (i != MAX)				tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) - 1);		//Top Mid
+			if (i != MAX && j != MAX)	tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) + 0);	//TopRIght
+			if (j != MAX)				tempNode->m_connectedWaypointIDs.push_back(IdCounter + 1);					//Mid right
+			if (j != MIN)				tempNode->m_connectedWaypointIDs.push_back(IdCounter - 1);					//Mid Left
+			if (i != MIN && j != MIN)	tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) - 2);	//Bottom Left
+			if (i != MIN)				tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) - 1);		//Botom Mid
+			if (i != MIN && j != MAX)	tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) + 0);	//Botom Right
 
 			m_createdPathingMap.push_back(tempNode);
 		}
@@ -132,11 +132,11 @@ std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, st
 		for (int j = 0; j < CurrentLowestNode->GetConnectedWaypointIDs().size(); j++)
 		{
 			//- if the node is Open dont re-Open it -//
-			if (IsNodeOpen(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], m_openNodes) == false)
+			if (IsNodeOpen(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], m_openNodes) == false && IsNodeClosed(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], m_closedNodes) == false)
 			{
-				Nodes* temp = new Nodes(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], CurrentLowestNode);
-				CalculateWeighting(temp, starting->GetPosition(), ending->GetPosition());
-				m_openNodes.push_back(temp);
+				AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]]->SetParentWaypoint(CurrentLowestNode);
+				CalculateWeighting(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], CurrentLowestNode->GetPosition(), ending->GetPosition());
+				m_openNodes.push_back(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]]);
 			}
 		}
 
@@ -167,7 +167,7 @@ std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, st
 void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode)
 {
 	m_route.push_back(parentNode);
-	if (parentNode->GetParentWayPoint() != startingNode)
+	if (parentNode->GetParentWayPoint() != nullptr)
 	{
 		GetPathResults(parentNode->GetParentWayPoint(), startingNode);
 	}
@@ -194,16 +194,21 @@ Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 	return currentLowest;
 }
 
+//bool RouteConstructor::IsThereDuplicateFCosts()
+//{
+//
+//}
+
 void RouteConstructor::CalculateWeighting(Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos)
 {
 	node->SetGCost(node->GetParentWayPoint()->GetGCost() + 10);
-	node->SetHCost(ReturnDistance(m_StartingPos, endPos));
+	node->SetHCost(ReturnDistance(startPos, endPos));
 	node->SetFCost(node->GetGCost() + node->GetHCost());
 }
 
 float RouteConstructor::ReturnDistance(DirectX::XMFLOAT3 v1, DirectX::XMFLOAT3 v2)
 {
-	return ((abs(v1.x - v2.x) + abs(v1.y - v2.y)) / 2);
+	return ((abs(v1.x - v2.x) + abs(v1.z - v2.z)) / 2);
 }
 
 //- Checks For Status Of Code-//
@@ -283,4 +288,9 @@ void RouteConstructor::SetEnding(DirectX::XMFLOAT3 pos)
 std::vector<Nodes*> RouteConstructor::GetCreatedPathingMap()
 {
 	return m_createdPathingMap;
+}
+
+std::vector<Nodes*> RouteConstructor::GetRoute()
+{
+	return m_route;
 }

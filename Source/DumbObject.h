@@ -22,6 +22,7 @@ public:
 	// Static Data Init
 	static void InitBuffers(ID3D11Device* device);
 	static void InitDebugTexture(const wchar_t* texturePath, ID3D11Device* device);
+	void SetPosition(DirectX::SimpleMath::Vector3 pos);
 
 	inline DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_worldMatrix; }
 

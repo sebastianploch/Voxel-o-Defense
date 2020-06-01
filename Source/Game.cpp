@@ -60,8 +60,8 @@ void Game::Initialize(HWND window,
 
 	// Create Ai Manager
 	m_AiManager = std::make_unique<AiManager>(1, DirectX::XMFLOAT3(50,30,20));
-	m_AiManager->SetStartLocation(DirectX::XMFLOAT3(0,4,0));
-	m_AiManager->SetEndLocation(DirectX::XMFLOAT3(480, 4, 480));
+	m_AiManager->SetStartLocation(DirectX::XMFLOAT3(10,4,20));
+	m_AiManager->SetEndLocation(DirectX::XMFLOAT3(0, 4, 0));
 
 
 	InitialiseVoxelWorld();
@@ -311,6 +311,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
+	timer.GetTotalSeconds();
 
 	m_camera->Update(deltaTime,
 					 *m_inputState);
@@ -323,6 +324,12 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		ExitGame();
 	}
+
+	if (m_inputState->GetKeyboardState().pressed.M)
+	{
+		m_AiManager->StartWave();
+	}
+
 
 	// Example code for casting ray from camera
 	if (m_inputState->GetKeyboardState().pressed.Space) {
@@ -351,7 +358,7 @@ void Game::Update(DX::StepTimer const& timer)
 		object->Update(deltaTime);
 	}
 
-	m_AiManager->Update(deltaTime);
+	m_AiManager->Update(deltaTime, timer.GetTotalSeconds());
 }
 
 void Game::Render()
@@ -370,7 +377,7 @@ void Game::Render()
 	cb.projection = m_camera->GetProjection();
 	cb.view = m_camera->GetView();
 
-	Vector3 scale = Vector3(0.5, 0.5, 0.5);
+	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 	Vector3 rotation = Vector3();
 	Vector3 position = Vector3();
 	Matrix m_worldMatrix = Matrix::Identity;
