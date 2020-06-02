@@ -16,11 +16,11 @@ public:
 						const InputState& input) = 0;
 
 	// Resize Camera to match new window size
-	void Resize(float width,
-				float height,
-				float nearPlane,
-				float farPlane,
-				const float fov = DirectX::XM_PIDIV4);
+	virtual void Resize(float width,
+						float height,
+						float nearPlane,
+						float farPlane,
+						const float fov = DirectX::XM_PIDIV4) = 0;
 
 #pragma region Getters/Setters
 	#pragma region Camera_Properties
@@ -56,6 +56,28 @@ public:
 	inline void SetRoll(float roll) { m_roll = roll; }
 	#pragma endregion Rotation
 
+	#pragma region Window_Dimensions
+	/* Get Current Camera Window Dimensions
+	   @.x returns window width
+	   @.y returns window height
+	*/
+	inline DirectX::SimpleMath::Vector2 GetDimensions() const { return DirectX::SimpleMath::Vector2(m_windowWidth, m_windowHeight); }
+
+	// Get Current Camera Window Width
+	inline float GetWidth() const { return m_windowWidth; }
+
+	// Get Current Camera Window Height
+	inline float GetHeight() const { return m_windowHeight; }
+	#pragma endregion Window_Dimensions
+
+	#pragma region Camera_Frustum
+	inline float GetNearPlane() const { return m_nearPlane; }
+	inline void SetNearPlane(float nearPlane) { m_nearPlane = nearPlane; }
+
+	inline float GetFarPlane() const { return m_farPlane; }
+	inline void SetFarPlane(float farPlane) { m_farPlane = farPlane; }
+	#pragma endregion Camera_Frustum
+
 	// Get Camera Type
 	inline CAMERA_TYPE GetType() const { return m_type; }
 
@@ -86,6 +108,14 @@ protected:
 
 	// Camera Up
 	DirectX::SimpleMath::Vector3 m_up;
+
+	// Camera Frustum
+	float						 m_nearPlane;
+	float						 m_farPlane;
+
+	// Window Dimensions
+	float						 m_windowWidth;
+	float						 m_windowHeight;
 
 	// Rotation
 	float						 m_yaw;

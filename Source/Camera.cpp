@@ -4,6 +4,7 @@ using namespace DirectX;
 
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Vector3;
+using DirectX::SimpleMath::Vector2;
 
 
 Camera::Camera(float width,
@@ -19,11 +20,15 @@ Camera::Camera(float width,
     m_position(position),
     m_target(target),
     m_up(up),
+    m_nearPlane(nearPlane),
+    m_farPlane(farPlane),
+    m_windowWidth(width),
+    m_windowHeight(height),
     m_yaw(0.0f),
     m_pitch(0.0f),
     m_roll(0.0f),
-    m_movementSpeed(50.0f),
-    m_rotationSpeed(2.0f)
+    m_movementSpeed(80.0f),
+    m_rotationSpeed(0.5f)
 {
     m_view = Matrix::CreateLookAt(m_position,
                                   m_target,
@@ -39,8 +44,8 @@ Camera::Camera(float width,
 
     else if (m_type == CAMERA_TYPE::ORTHOGRAPHIC)
     {
-		m_projection = Matrix::CreateOrthographic(width * 0.1f,
-                                                  height * 0.1f,
+		m_projection = Matrix::CreateOrthographic(width,
+                                                  height,
 												  nearPlane,
 												  farPlane);
     }
@@ -48,29 +53,4 @@ Camera::Camera(float width,
 
 Camera::~Camera()
 {
-}
-
-void Camera::Resize(float width,
-                    float height,
-                    float nearPlane,
-                    float farPlane,
-                    const float fov)
-{
-    m_projection = Matrix::Identity;
-
-    if (m_type == CAMERA_TYPE::PERSPECTIVE)
-    {
-        m_projection = Matrix::CreatePerspectiveFieldOfView(fov,
-                                                            width / height,
-                                                            nearPlane,
-                                                            farPlane);
-    }
-
-	else if (m_type == CAMERA_TYPE::ORTHOGRAPHIC)
-	{
-		m_projection = Matrix::CreateOrthographic(width,
-												  height,
-												  nearPlane,
-												  farPlane);
-	}
 }

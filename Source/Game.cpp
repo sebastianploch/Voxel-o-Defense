@@ -42,9 +42,9 @@ void Game::Initialize(HWND window,
 	// Create Camera
 	m_camera = std::make_unique<ISOCamera>((float)m_windowWidth,
 										   (float)m_windowHeight,
-										   0.001f,
-										   300.0f,
-										   Vector3(0.0f, 25.0f, 0.0f));
+										   -500.0f,
+										   500.0f,
+										   Vector3(0.0f, 20.0f, 0.0f));
 
     CreateResources();
 
@@ -247,8 +247,8 @@ void Game::CreateResources()
 	// Resize camera to current window size
 	m_camera->Resize((float)backBufferWidth,
 					 (float)backBufferHeight,
-					 0.001f,
-					 300.0f);
+					 -500.0f,
+					 500.0f);
 }
 
 // Create constant buffer to be used as a resource by shader.

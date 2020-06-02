@@ -58,6 +58,20 @@ void FPSCamera::Update(float deltaTime, const InputState& state)
                                   m_up);
 }
 
+void FPSCamera::Resize(float width,
+					   float height,
+					   float nearPlane,
+					   float farPlane,
+					   const float fov)
+{
+	m_projection = Matrix::Identity;
+
+	m_projection = Matrix::CreatePerspectiveFieldOfView(fov,
+														width / height,
+														nearPlane,
+														farPlane);
+}
+
 void FPSCamera::ProcessMouseInput(float deltaTime,
 								  const InputState& input)
 {
