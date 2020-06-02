@@ -4,6 +4,7 @@
 #include "FPSCamera.h"
 #include "IGameObject.h"
 #include "ShaderManager.h"
+#include "Model.h"
 
 class Game
 {
@@ -80,4 +81,6 @@ private:
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;
+
+    Model                                           m_modelTest;
 };
