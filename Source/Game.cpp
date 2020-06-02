@@ -53,6 +53,8 @@ void Game::Initialize(HWND window,
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
+	m_modelTest.Initialise("Resources/Models/bigzombie1/bigzombie.obj", m_d3dDevice.Get());
+
 	InitialiseVoxelWorld();
 }
 
@@ -321,6 +323,8 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		object->Update(deltaTime);
 	}
+
+	m_modelTest.Update(deltaTime);
 }
 
 void Game::Render()
@@ -342,7 +346,7 @@ void Game::Render()
 	// Render chunks
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
 
-	// Render all objects
+	//Render all objects
 	for (const auto& object : m_gameObjects)
 	{
 		// Assign Shader to be used to render upcoming object
@@ -362,6 +366,8 @@ void Game::Render()
 		object->Draw(m_d3dContext.Get());
 	}
 
+	m_shaderManager->SetShader(m_modelTest.GetShaderType(), m_d3dContext.Get());
+	m_modelTest.Draw(m_constantBuffer.Get(), cb,*m_d3dContext.Get());
 	// Swap backbuffer
     Present();
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-
 enum class Shaders
 {
 	BASIC_SHADER = 0,
@@ -9,6 +8,7 @@ enum class Shaders
 	NONE
 };
 
+
 struct ConstantBuffer
 {
 	DirectX::SimpleMath::Matrix projection;
@@ -16,6 +16,10 @@ struct ConstantBuffer
 	DirectX::SimpleMath::Matrix world;
 };
 
+//Surface and light information which can define an objects surface and its light caluclation
+//can be extended in the future for more lighting calculations
+
+//-------------------------------------------------------------------------------------
 struct JSONINFO
 {
 
@@ -63,4 +67,13 @@ struct VoxelMesh {
     UINT m_VBStride;
     UINT m_VBOffset;
     UINT m_IndexCount;
+};
+
+struct Geometry
+{
+    ID3D11Buffer* vertexBuffer;
+    ID3D11Buffer* indexBuffer;
+    int numberOfIndices;
+    UINT vertexBufferStride;
+    UINT vertexBufferOffset;
 };

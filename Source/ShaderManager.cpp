@@ -49,6 +49,5 @@ void ShaderManager::InitialiseShaders(ID3D11Device1* device)
 												 L"Resources/Shaders/BasicVoxelPixelShader.hlsl",
 												 *DirectX::VertexPositionNormalDualTexture::InputElements,
 												 DirectX::VertexPositionNormalDualTexture::InputElementCount));
-
 	// #TODO Toon Shader 
 }
