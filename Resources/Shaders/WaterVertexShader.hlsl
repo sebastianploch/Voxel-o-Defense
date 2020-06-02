@@ -30,7 +30,7 @@ VS_OUTPUT VSMain(VS_INPUT Input)
     float frequency = 0.45f;
     float magnitude = 0.35f;
     float speed = 1.2f;
-    Output.position.y += sin(time * speed + (Input.position.x * frequency)) * magnitude;
+    Output.position.y += sin(time * speed + ((Input.position.x + Input.position.z) * frequency)) * magnitude;
 
     Output.position = mul(view, Output.position);
     Output.position = mul(projection, Output.position);
