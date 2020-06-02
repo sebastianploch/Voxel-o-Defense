@@ -3,7 +3,7 @@
 
 bool Model::Initialise(const std::string& filePath, Microsoft::WRL::ComPtr <ID3D11Device1> device)
 {
-	this->m_Translation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	this->m_Translation = DirectX::XMFLOAT3(0.0f, 2.0f, -4.0f);
 	this->m_Scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f); //set our initial scaling, rotation and translation values to 0,0,0
 	this->m_Rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	this->m_shaderType = Shaders::BASIC_SHADER;

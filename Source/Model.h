@@ -21,6 +21,7 @@ public:
 	void SetRotation(DirectX::XMFLOAT3 rotation) { this->m_Rotation = rotation; }
 	void SetTranslation(DirectX::XMFLOAT3 translation) { this->m_Translation = translation; m_Bounds.Center = this->m_Translation; }
 
+	float GetFeetPos() { return this->m_Translation.y - (m_Bounds.Extents.y / 2); }
 	DirectX::XMFLOAT3 GetScale() { return this->m_Scale; }
 	DirectX::XMFLOAT3 GetRotation() { return this->m_Rotation; }
 	DirectX::XMFLOAT3 GetTranslation() { return this->m_Translation; }
