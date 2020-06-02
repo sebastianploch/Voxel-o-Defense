@@ -64,3 +64,45 @@ struct VoxelMesh {
     UINT m_VBOffset;
     UINT m_IndexCount;
 };
+
+/* Prints provided compatible data structure to the Output Window during runtime
+   @Int's, Float's, Double's
+   @String's, Char's
+   @Vector3's, Vector2's
+*/
+template <class T>
+static void DEBUG_PRINT(T val)
+{
+    std::string str = std::to_string(val) + "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+static void DEBUG_PRINT(std::string str)
+{
+    str += "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+static void DEBUG_PRINT(const char* msg)
+{
+    std::string str = msg;
+    str += "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+static void DEBUG_PRINT(DirectX::SimpleMath::Vector3 vec)
+{
+    std::string str = "X: " + std::to_string(vec.x);
+    str += "  Y: " + std::to_string(vec.y);
+    str += "  Z: " + std::to_string(vec.z);
+    str += "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+static void DEBUG_PRINT(DirectX::SimpleMath::Vector2 vec)
+{
+	std::string str = "X: " + std::to_string(vec.x);
+	str += "  Y: " + std::to_string(vec.y);
+	str += "\n";
+	OutputDebugStringA(str.c_str());
+}
