@@ -64,6 +64,8 @@
     <ClInclude Include="Source\Commons.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ParticleEmitter.h" />
+    <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\InputState.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
@@ -132,6 +134,8 @@
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ParticleEmitter.cpp" />
+    <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\InputState.cpp">
       <Filter>Source\Utils</Filter>
     </ClCompile>

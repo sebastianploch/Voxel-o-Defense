@@ -3,6 +3,7 @@
 
 #include "DebugSimpleCube.h"
 #include "PlaneGameObject.h"
+#include "ParticleEmitter.h"
 
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
@@ -21,7 +22,6 @@ using Microsoft::WRL::ComPtr;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector3Int;
 using DirectX::SimpleMath::Matrix;
-
 
 Game::Game() noexcept :
     m_window(nullptr),
@@ -400,6 +400,22 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
+
+	/*std::vector<Particle*> particlesToRender = m_emitter->getParticles();
+	for (Particle* particle : particlesToRender)
+	{
+		cb.world = particle->GetWorldMatrix();
+
+		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+			0,
+			nullptr,
+			&cb,
+			0, 0);
+
+		particle->Draw(m_d3dContext.Get());
+	}*/
+
+
 
 	// Swap backbuffer
     Present();

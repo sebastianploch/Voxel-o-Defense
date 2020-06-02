@@ -5,7 +5,6 @@
 #include "IGameObject.h"
 #include "ShaderManager.h"
 
-
 class Game
 {
 public:

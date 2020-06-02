@@ -192,6 +192,8 @@
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\GreedyVoxelMeshGeneration.h" />
     <ClInclude Include="Source\IGameObject.h" />
+    <ClInclude Include="Source\Particle.h" />
+    <ClInclude Include="Source\ParticleEmitter.h" />
     <ClInclude Include="Source\InputState.h" />
     <ClInclude Include="Source\JSONLoader.h" />
     <ClInclude Include="Source\ISOCamera.h" />
@@ -220,6 +222,8 @@
     <ClCompile Include="Source\JSONLoader.cpp" />
     <ClCompile Include="Source\ISOCamera.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Particle.cpp" />
+    <ClCompile Include="Source\ParticleEmitter.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
