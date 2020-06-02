@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "DebugSimpleCube.h"
+#include "ParticleEmitter.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -12,7 +13,6 @@ using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Matrix;
-
 
 Game::Game() noexcept :
     m_window(nullptr),
@@ -44,7 +44,12 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Create one debug cube
-	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
+	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(0.0f, 0.0f, 0.0f), Vector3(), Vector3(0.5f, 0.5f, 0.5f)));
+	m_emitter = new ParticleEmitter(m_d3dDevice.Get(), L"Resources/Textures/DebugCubeTexture.dds");
+	m_emitter->setPosition(Vector3());
+	m_emitter->setForce(Vector3(0,0.1f,0));
+	m_emitter->setForceRange(Vector3::Zero);
+	m_emitter->setMaxParticles(1);
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -322,6 +327,7 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		object->Update(deltaTime);
 	}
+	m_emitter->updateParticles(deltaTime);
 }
 
 void Game::Render()
@@ -356,6 +362,22 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
+
+	std::vector<Particle*> particlesToRender = m_emitter->getParticles();
+	for (Particle* particle : particlesToRender)
+	{
+		cb.world = particle->GetWorldMatrix();
+
+		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+			0,
+			nullptr,
+			&cb,
+			0, 0);
+
+		particle->Draw(m_d3dContext.Get());
+	}
+
+
 
 	// Swap backbuffer
     Present();

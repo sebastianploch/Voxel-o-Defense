@@ -2,7 +2,7 @@
 #include "StepTimer.h"
 
 class IGameObject;
-
+class ParticleEmitter;
 
 class Game
 {
@@ -64,6 +64,8 @@ private:
 
     // Game Objects
     std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
+
+    ParticleEmitter*                                m_emitter;
 
     // Rendering
     std::unique_ptr<DirectX::CommonStates>          m_states;

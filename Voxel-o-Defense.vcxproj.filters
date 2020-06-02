@@ -46,6 +46,8 @@
     <ClInclude Include="Source\Commons.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ParticleEmitter.h" />
+    <ClInclude Include="Source\Particle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -63,6 +65,8 @@
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ParticleEmitter.cpp" />
+    <ClCompile Include="Source\Particle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
