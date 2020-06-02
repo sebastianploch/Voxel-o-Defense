@@ -4,7 +4,7 @@
 #include "ChunkHandler.h"
 
 #define SizeOfVoxel 1
-#define MAX 480
+#define MAX 479
 #define MIN 0
 
 RouteConstructor::RouteConstructor()
@@ -27,9 +27,9 @@ void RouteConstructor::CreatePathfindingMap()
 {
 	int IdCounter = 0;
 
-	for (int i = 0; i < 32 * 15; i += SizeOfVoxel)
+	for (int i = 0; i < 32 * 15; i++)
 	{
-		for (int j = 0; j < 32 * 15; j += SizeOfVoxel)
+		for (int j = 0; j < 32 * 15; j++)
 		{
 			Nodes* tempNode = new Nodes(IdCounter, DirectX::XMFLOAT3(i, WorldManipulation::GetHeightmap(i,j), j));
 			IdCounter++;
@@ -37,12 +37,12 @@ void RouteConstructor::CreatePathfindingMap()
 			std::vector<int> connectedIds;
 
 			if (i != MAX && j != MIN)	tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) - 2);	//Top Left
-			if (i != MAX)				tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) - 1);		//Top Mid
+			if (i != MAX)				tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) - 1);	//Top Mid
 			if (i != MAX && j != MAX)	tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) + 0);	//TopRIght
 			if (j != MAX)				tempNode->m_connectedWaypointIDs.push_back(IdCounter + 1);					//Mid right
 			if (j != MIN)				tempNode->m_connectedWaypointIDs.push_back(IdCounter - 1);					//Mid Left
 			if (i != MIN && j != MIN)	tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) - 2);	//Bottom Left
-			if (i != MIN)				tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) - 1);		//Botom Mid
+			if (i != MIN)				tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) - 1);	//Botom Mid
 			if (i != MIN && j != MAX)	tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) + 0);	//Botom Right
 
 			m_createdPathingMap.push_back(tempNode);

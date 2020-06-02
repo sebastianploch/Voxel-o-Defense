@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 #include <cmath>
 
+#pragma region Constructor_Destructor
 AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp)
 {
 	_type = type;
@@ -10,16 +11,17 @@ AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float dama
 	_movementSpeed = movementSpeed;
 	_damage = damage;
 	_active = active;
-
-	m_gameObject = std::make_unique<DumbObject>(DirectX::SimpleMath::Vector3(0.5f, 4.5f, 0.5f), DirectX::SimpleMath::Vector3(), DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f), "Resources/config/cube.json", "cube");
 	m_position = DirectX::SimpleMath::Vector3(0.5f, 4.5f, 0.5f);
+	m_gameObject = std::make_unique<DumbObject>(m_position, DirectX::SimpleMath::Vector3(), DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f), "Resources/config/cube.json", "cube");
 }
 
 AiAgent::~AiAgent()
 {
 	
 }
+#pragma endregion Constructor_Destructor
 
+#pragma region Game_Loops
 void AiAgent::Update(float deltaTime, float time)
 {
 	if (_active == true)
@@ -47,6 +49,13 @@ void AiAgent::Update(float deltaTime, float time)
 	m_gameObject->Update(deltaTime);
 }
 
+void AiAgent::Render(ID3D11DeviceContext* deviceContex)
+{
+	m_gameObject->Draw(deviceContex);
+}
+#pragma endregion Game_Loop
+
+#pragma region Calculations
 float AiAgent::ReturnDistance(DirectX::SimpleMath::Vector3 v1, DirectX::SimpleMath::Vector3 v2)
 {
 	return ((abs(v1.x - v2.x) + abs(v1.y - v2.y) + abs(v1.z - v2.z)) / 2);
@@ -56,15 +65,9 @@ DirectX::SimpleMath::Vector3 AiAgent::Lerp(DirectX::SimpleMath::Vector3 start, D
 {
 	return (start + t * (end - start));
 }
+#pragma endregion Calculations
 
-void AiAgent::Render(ID3D11DeviceContext* deviceContex)
-{
-	m_gameObject->Draw(deviceContex);
-}
-
-//---------------------------------------------------//
-//------------ Access Variable Functions ------------//
-//---------------------------------------------------//
+#pragma region Setting_Getting_Functions
 
 void AiAgent::SetRoute(std::vector<Nodes*> route)
 {
@@ -154,3 +157,4 @@ bool AiAgent::HasFinalDestinationChanged()
 {
 	return m_endingDestinationChanged; 
 }
+#pragma endregion Setting_Getting_Functions

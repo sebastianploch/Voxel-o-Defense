@@ -60,9 +60,10 @@ void Game::Initialize(HWND window,
 
 	// Create Ai Manager
 	m_AiManager = std::make_unique<AiManager>(1, DirectX::XMFLOAT3(50,30,20));
-	m_AiManager->SetStartLocation(DirectX::XMFLOAT3(10,4,20));
-	m_AiManager->SetEndLocation(DirectX::XMFLOAT3(0, 4, 0));
 
+	//Setting the start and end position for all ai agents
+	m_AiManager->SetStartLocation(DirectX::XMFLOAT3(200,4,200));
+	m_AiManager->SetEndLocation(DirectX::XMFLOAT3(0, 4, 0));
 
 	InitialiseVoxelWorld();
 }

@@ -3,16 +3,12 @@
 class DumbObject : public IGameObject
 {
 public:
-	DumbObject();
-
 	DumbObject(DirectX::SimpleMath::Vector3& position ,
 		DirectX::SimpleMath::Vector3& rotation,
 		DirectX::SimpleMath::Vector3& scale,
 		std::string filePath, 
 		std::string name
 		);
-
-	DumbObject(std::string filePath, std::string name);
 
 	~DumbObject();
 

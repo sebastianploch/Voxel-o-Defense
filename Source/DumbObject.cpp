@@ -5,16 +5,11 @@ using namespace DirectX;
 
 using DirectX::SimpleMath::Vector2;
 using DirectX::SimpleMath::Vector3;
-using DirectX::SimpleMath::Vector4;
 using DirectX::SimpleMath::Matrix;
 
 using Vertex = VertexPositionNormalTexture;
 
-
-DumbObject::DumbObject()
-{
-}
-
+#pragma region Constructor_Descructor
 
 DumbObject::DumbObject(DirectX::SimpleMath::Vector3& position,
 	DirectX::SimpleMath::Vector3& rotation,
@@ -33,31 +28,19 @@ DumbObject::DumbObject(DirectX::SimpleMath::Vector3& position,
 	m_worldMatrix *= Matrix::CreateTranslation(m_position);
 }
 
-DumbObject::DumbObject(std::string filePath, std::string name)
-{
-	//JSONLoader::LoadFile(filePath, this->m_config, JSONLoader::CONFIG_TYPE::GAMEOBJECT, "cube");
-
-	//m_position = this->m_config.position;
-	//m_rotation = this->m_config.rotation;
-	//m_scaling = this->m_config.scale;
-
-	//m_worldMat *= Matrix::CreateScale(m_scaling);
-	//m_worldMat *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
-	//m_worldMat *= Matrix::CreateTranslation(m_position);
-}
-
 DumbObject::~DumbObject()
 {
 
 }
+#pragma endregion Constructor_Descructor
 
+#pragma region GameLoops
 void DumbObject::Update(float deltaTime)
 {
-	//m_worldMat *= Matrix::CreateScale(m_scaling);
-	//m_worldMat *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
-	//m_worldMat *= Matrix::CreateTranslation(m_position);
-
-	//m_worldMat;
+	m_worldMatrix = Matrix();
+	m_worldMatrix *= Matrix::CreateScale(m_scaling);
+	m_worldMatrix *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
+	m_worldMatrix *= Matrix::CreateTranslation(m_position);
 }
 
 void DumbObject::Draw(ID3D11DeviceContext* context)
@@ -81,6 +64,7 @@ void DumbObject::Draw(ID3D11DeviceContext* context)
 
 	context->DrawIndexed(36, 0, 0);
 }
+#pragma endregion GameLoops
 
 #pragma region STATICS
 // Init Static Buffers
@@ -130,10 +114,6 @@ void DumbObject::InitDebugTexture(const wchar_t* texturePath, ID3D11Device* devi
 void DumbObject::SetPosition(DirectX::SimpleMath::Vector3 pos)
 {
 	m_position = pos;
-	m_worldMatrix = Matrix();
-	m_worldMatrix *= Matrix::CreateScale(m_scaling);
-	m_worldMatrix *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
-	m_worldMatrix *= Matrix::CreateTranslation(m_position);
 }
 
 // Init Static Variables
