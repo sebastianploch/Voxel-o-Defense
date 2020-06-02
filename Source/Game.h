@@ -65,8 +65,6 @@ private:
     // Game Objects
     std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
 
-    ParticleEmitter*                                m_emitter;
-
     // Rendering
     std::unique_ptr<DirectX::CommonStates>          m_states;
     Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;

@@ -5,7 +5,6 @@ using DirectX::SimpleMath::Vector3;
 
 ParticleEmitter::ParticleEmitter(ID3D11Device* device, const wchar_t* particleTexturePath) :
 	m_position(Vector3()),
-	m_particleGeometry({}),
 	m_particleRotation(Vector3()),
 	m_particleRotationVariation(Vector3()),
 	m_particleScale(Vector3(1.0f, 1.0f, 1.0f)),
@@ -18,8 +17,16 @@ ParticleEmitter::ParticleEmitter(ID3D11Device* device, const wchar_t* particleTe
 	m_forceRange = Vector3();
 	m_spawnDelay = 1.0f;
 
-	Particle::InitBuffers(device);
-	Particle::InitDebugTexture(particleTexturePath, device);
+	m_device = device;
+	m_particleTexturePath = particleTexturePath;
+}
+
+ParticleEmitter::~ParticleEmitter()
+{
+	for (Particle* p : m_particles)
+	{
+		delete p;
+	}
 }
 
 void ParticleEmitter::setPosition(const DirectX::SimpleMath::Vector3& position)
@@ -155,6 +162,7 @@ void ParticleEmitter::updateParticles(float deltaTime)
 		float lifetime = randFloat(m_particleLifetime - m_particleLifetimeVariation, m_particleLifetime + m_particleLifetimeVariation);
 
 		Particle* newParticle = new Particle(m_particleGeometry, m_position, rotation, scale, lifetime);
+		newParticle->InitParticleData(m_device, m_particleTexturePath);
 		newParticle->setForce(force);
 		m_particles.push_back(newParticle);
 	}

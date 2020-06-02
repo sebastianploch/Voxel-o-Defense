@@ -4,10 +4,6 @@
 
 struct ParticleGeometry
 {
-	Microsoft::WRL::ComPtr<ID3D11Buffer>             particleVertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer>             particleIndexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> particleDebugTexture;
-
 	DirectX::VertexPositionNormalTexture				particleVertices[24];
 	WORD												particleIndices[36];
 };
@@ -37,16 +33,17 @@ public:
 	void Draw(ID3D11DeviceContext* context) override;
 
 	// Static Data Init
-
-	static void InitBuffers(ID3D11Device* device);
-	static void InitDebugTexture(const wchar_t* texturePath, ID3D11Device* device);
+	void InitParticleData(ID3D11Device* device, const wchar_t* texturePath);
+	
 
 private:
 	
 	ParticleGeometry m_geometry;
+	Microsoft::WRL::ComPtr<ID3D11Buffer>             particleVertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer>             particleIndexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> particleDebugTexture;
 
 	// Transformation
-
 	DirectX::SimpleMath::Vector3 m_position;
 	DirectX::SimpleMath::Vector3 m_rotation;
 	DirectX::SimpleMath::Vector3 m_scaling;
@@ -55,4 +52,7 @@ private:
 	float m_maxLifeTime;
 	float m_lifetime;
 	DirectX::SimpleMath::Vector3 m_force;
+
+	void InitBuffers(ID3D11Device* device);
+	void InitDebugTexture(const wchar_t* texturePath, ID3D11Device* device);
 };

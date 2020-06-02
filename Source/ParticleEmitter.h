@@ -6,9 +6,11 @@ class ParticleEmitter
 {
 public:
 
+	// Constructor and Destructor
 	ParticleEmitter(ID3D11Device* device, const wchar_t* particleTexturePath);
 	~ParticleEmitter();
 
+	// Setters and Getters
 	void setPosition(const DirectX::SimpleMath::Vector3& position);
 	DirectX::SimpleMath::Vector3 getPosition();
 
@@ -45,16 +47,18 @@ public:
 
 	void setSpawnDelay(float spawnDelay);
 	float getSpawnDelay();
-
+	
+	// Update and Draw
 	void updateParticles(float deltaTime);
 	void drawParticles(ID3D11DeviceContext* context);
 
 private:
 
+
 	DirectX::SimpleMath::Vector3 m_position;
 
+	// Particle Data
 	ParticleGeometry m_particleGeometry;
-
 	DirectX::SimpleMath::Vector3 m_particleRotation;
 	DirectX::SimpleMath::Vector3 m_particleRotationVariation;
 	DirectX::SimpleMath::Vector3 m_particleScale;
@@ -65,8 +69,15 @@ private:
 	unsigned int m_maxParticles;
 	DirectX::SimpleMath::Vector3 m_force;
 	DirectX::SimpleMath::Vector3 m_forceRange;
+
+	// Contains all present Particles
 	std::vector<Particle*> m_particles;
 
+	// Device and Texture
+	ID3D11Device* m_device;
+	const wchar_t* m_particleTexturePath;
+
+	// Generate a random float between low and high, used for variation
 	float randFloat(float low, float high);
 
 	float m_spawnDelay;

@@ -15,10 +15,12 @@ Particle::Particle()
 {
 }
 
-Particle::Particle(const DirectX::SimpleMath::Vector3& position,
+Particle::Particle(const ParticleGeometry& geometry,
+								const DirectX::SimpleMath::Vector3& position,
 								const DirectX::SimpleMath::Vector3& rotation,
 								const DirectX::SimpleMath::Vector3& scale,
 								float lifetime) :
+	m_geometry(geometry),
 	m_position(position),
 	m_rotation(rotation),
 	m_scaling(scale),
@@ -63,6 +65,7 @@ void Particle::Update(float deltaTime)
 {
 	m_position += m_force * deltaTime;
 
+	// Apply transformation
 	m_worldMat = Matrix::Identity;
 	m_worldMat *= Matrix::CreateScale(m_scaling);
 	m_worldMat *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);
@@ -78,23 +81,28 @@ void Particle::Draw(ID3D11DeviceContext* context)
 
 	context->PSSetShaderResources(0,
 								  1,
-								  s_particleDebugTexture.GetAddressOf());
+								  particleDebugTexture.GetAddressOf());
 
 	context->IASetVertexBuffers(0,
 								1,
-								s_particleVertexBuffer.GetAddressOf(),
+								particleVertexBuffer.GetAddressOf(),
 								&stride,
 								&offset);
 
-	context->IASetIndexBuffer(s_particleIndexBuffer.Get(),
+	context->IASetIndexBuffer(particleIndexBuffer.Get(),
 							  DXGI_FORMAT_R16_UINT,
 							  offset);
 
 	context->DrawIndexed(36, 0, 0);
 }
 
-#pragma region STATICS
-// Init Static Buffers
+void Particle::InitParticleData(ID3D11Device* device, const wchar_t* texturePath)
+{
+	InitBuffers(device);
+	InitDebugTexture(texturePath, device);
+}
+
+// Init Buffers
 void Particle::InitBuffers(ID3D11Device* device)
 {
 	// Vertex Buffer
@@ -107,11 +115,11 @@ void Particle::InitBuffers(ID3D11Device* device)
 
 	D3D11_SUBRESOURCE_DATA sBd;
 	ZeroMemory(&sBd, sizeof(sBd));
-	sBd.pSysMem = Particle::s_particleVertices;
+	sBd.pSysMem = m_geometry.particleVertices;
 
 	DX::ThrowIfFailed(device->CreateBuffer(&bd,
 										   &sBd,
-										   s_particleVertexBuffer.ReleaseAndGetAddressOf()));
+											particleVertexBuffer.ReleaseAndGetAddressOf()));
 
 	// Index Buffer
 	D3D11_BUFFER_DESC iBd;
@@ -123,11 +131,11 @@ void Particle::InitBuffers(ID3D11Device* device)
 
 	D3D11_SUBRESOURCE_DATA sIbd;
 	ZeroMemory(&sIbd, sizeof(sIbd));
-	sIbd.pSysMem = Particle::s_particleIndices;
+	sIbd.pSysMem = m_geometry.particleIndices;
 
 	DX::ThrowIfFailed(device->CreateBuffer(&iBd,
 										   &sIbd,
-										   s_particleIndexBuffer.ReleaseAndGetAddressOf()));
+											particleIndexBuffer.ReleaseAndGetAddressOf()));
 }
 
 void Particle::InitDebugTexture(const wchar_t* texturePath, ID3D11Device* device)
@@ -135,67 +143,5 @@ void Particle::InitDebugTexture(const wchar_t* texturePath, ID3D11Device* device
 	CreateDDSTextureFromFile(device,
 							 texturePath,
 							 nullptr,
-							 s_particleDebugTexture.ReleaseAndGetAddressOf());
+							 particleDebugTexture.ReleaseAndGetAddressOf());
 }
-
-// Init Static Variables
-Microsoft::WRL::ComPtr<ID3D11Buffer> Particle::s_particleVertexBuffer;
-
-Microsoft::WRL::ComPtr<ID3D11Buffer> Particle::s_particleIndexBuffer;
-
-Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> Particle::s_particleDebugTexture;
-
-Vertex Particle::s_particleVertices[24] =
-{
-	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
-	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(0.0f, 1.0f)),
-
-	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(1.0f, 0.0f)),
-	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
-
-	Vertex(Vector3(-1.0f, -1.0f, 1.0f), Vector3(-1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, -1.0f, -1.0f), Vector3(-1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f)),
-
-	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(1.0f, -1.0f, -1.0f),Vector3(1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
-	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f)),
-
-	Vertex(Vector3(-1.0f, -1.0f, -1.0f),Vector3(-1.0f, -1.0f, -1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(1.0f, -1.0f, -1.0f), Vector3(1.0f, -1.0f, -1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(1.0f, 1.0f, -1.0f), Vector3(1.0f, 1.0f, -1.0f), Vector2(0.0f, 0.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, -1.0f), Vector3(-1.0f, 1.0f, -1.0f), Vector2(1.0f, 0.0f)),
-
-	Vertex(Vector3(-1.0f, -1.0f, 1.0f),Vector3(-1.0f, -1.0f, 1.0f), Vector2(0.0f, 1.0f)),
-	Vertex(Vector3(1.0f, -1.0f, 1.0f), Vector3(1.0f, -1.0f, 1.0f), Vector2(1.0f, 1.0f)),
-	Vertex(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector2(1.0f, 0.0f)),
-	Vertex(Vector3(-1.0f, 1.0f, 1.0f), Vector3(-1.0f, 1.0f, 1.0f), Vector2(0.0f, 0.0f))
-};
-
-WORD Particle::s_particleIndices[36] =
-{
-	3, 1, 0,
-	2, 1, 3,
-
-	6, 4, 5,
-	7, 4, 6,
-
-	11, 9, 8,
-	10, 9, 11,
-
-	14, 12, 13,
-	15, 12, 14,
-
-	19, 17, 16,
-	18, 17, 19,
-
-	22, 20, 21,
-	23, 20, 22
-};
-#pragma endregion STATICS
