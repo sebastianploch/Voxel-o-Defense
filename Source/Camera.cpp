@@ -28,7 +28,7 @@ Camera::Camera(float width,
     m_pitch(0.0f),
     m_roll(0.0f),
     m_movementSpeed(80.0f),
-    m_rotationSpeed(0.5f)
+    m_rotationSpeed(1.5f)
 {
     m_view = Matrix::CreateLookAt(m_position,
                                   m_target,

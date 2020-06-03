@@ -13,6 +13,9 @@ static constexpr float s_scrollOutLimit = 150.0f;
 static constexpr float s_movementScaleBias = 2.5f;
 static constexpr float s_minimumMovementSpeed = 10.0f;
 static constexpr float s_maximumMovementSpeed = 80.0f;
+static constexpr float s_rotationScaleBias = 0.1f;
+static constexpr float s_minimumRotationSpeed = 0.3f;
+static constexpr float s_maximumRotationSpeed = 1.5f;
 
 
 ISOCamera::ISOCamera(float width,
@@ -66,7 +69,7 @@ void ISOCamera::Resize(float width,
 	UNREFERENCED_PARAMETER(fov);
 	m_projection = Matrix::Identity;
 
-	// Clamp zooming in/out
+	// Clamp width & height
 	width = std::clamp(width, s_scrollInLimit, s_scrollOutLimit);
 	height = std::clamp(height, s_scrollInLimit / s_16by9ratio, s_scrollOutLimit / s_16by9ratio);
 
@@ -161,23 +164,21 @@ void ISOCamera::Zoom()
 
 void ISOCamera::ScaleMovement()
 {
-	if (m_movementSpeed >= s_minimumMovementSpeed && m_movementSpeed <= s_maximumMovementSpeed)
+	// Zoom-in
+	if (m_zoom < 1.0f)
 	{
-		// Zoom-in
-		if (m_zoom < 1.0f)
-		{
-			m_movementSpeed -= m_zoom * s_movementScaleBias;
-		}
-		// Zoom-out
-		else
-		{
-			m_movementSpeed += m_zoom * s_movementScaleBias;
-		}
-
-		m_movementSpeed = std::clamp(m_movementSpeed, s_minimumMovementSpeed, s_maximumMovementSpeed);
-
-		DEBUG_PRINT(m_movementSpeed);
+		m_movementSpeed -= m_zoom * s_movementScaleBias;
+		m_rotationSpeed -= m_zoom * s_rotationScaleBias;
 	}
+	// Zoom-out
+	else
+	{
+		m_movementSpeed += m_zoom * s_movementScaleBias;
+		m_rotationSpeed += m_zoom * s_rotationScaleBias;
+	}
+
+	m_movementSpeed = std::clamp(m_movementSpeed, s_minimumMovementSpeed, s_maximumMovementSpeed);
+	m_rotationSpeed = std::clamp(m_rotationSpeed, s_minimumRotationSpeed, s_maximumRotationSpeed);
 }
 
 void ISOCamera::WrapRotation()
