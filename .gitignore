@@ -41,3 +41,7 @@ Debug/
 # Release
 Bin/Win32/Release/
 Bin/x64/Release/
+
+#Whitelist .dll and .lib for assimp
+!Source/Libs/assimp/assimp-vc142-mtd.dll
+!Source/Libs/assimp/assimp-vc142-mtd.lib
