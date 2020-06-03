@@ -117,6 +117,9 @@
     <ClInclude Include="Source\PlaneGameObject.h">
       <Filter>Headers\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CameraManager.h">
+      <Filter>Headers\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -186,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="Source\PlaneGameObject.cpp">
       <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CameraManager.cpp">
+      <Filter>Source\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

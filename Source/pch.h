@@ -44,10 +44,10 @@
 // STD
 #include <vector>
 #include <memory>
+#include <fstream>
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
-#include <fstream>
 
 // JSON nlohmann library
 #include <nlohmann/json.hpp>
@@ -58,6 +58,9 @@
 
 // Input Handling
 #include "InputState.h"
+
+// Camera
+#include "Camera.h"
 
 namespace DX
 {

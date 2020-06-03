@@ -1,9 +1,9 @@
 #pragma once
 
 #include "StepTimer.h"
-#include "FPSCamera.h"
 #include "IGameObject.h"
 #include "ShaderManager.h"
+#include "CameraManager.h"
 
 class Game
 {
@@ -76,7 +76,7 @@ private:
     std::unique_ptr<DirectX::CommonStates>          m_states;
 
     // Basic Camera
-    std::unique_ptr<Camera>                         m_camera;
+    std::unique_ptr<CameraManager>                  m_cameraManager;
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;

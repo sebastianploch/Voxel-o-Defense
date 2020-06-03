@@ -42,6 +42,11 @@ void Game::Initialize(HWND window,
     m_windowHeight = std::max(height, 1);
 
     CreateDevice();
+
+	// Create Camera Manager
+	m_cameraManager = std::make_unique<CameraManager>((float)m_windowWidth,
+													  (float)m_windowHeight);
+
     CreateResources();
 
     // Set locked framerate (60fps)
@@ -239,12 +244,9 @@ void Game::CreateResources()
 	// Set Primitive Topology (Triangles)
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Initialise camera
-	m_camera = std::make_unique<FPSCamera>((float)backBufferWidth,
-										(float)backBufferHeight,
-										0.1f,
-										300.0f,
-										Vector3(0.0f, 0.0f, 4.0f));
+	// Resize camera to current window size
+	m_cameraManager->Resize((float)backBufferWidth,
+							(float)backBufferHeight);
 }
 
 // Create constant buffer to be used as a resource by shader.
@@ -286,7 +288,7 @@ void Game::OnDeviceLost()
 	m_d3dContext.Reset();
 	m_d3dDevice.Reset();
 
-	m_camera.reset();
+	m_cameraManager.reset();
 	m_inputState.reset();
 
 	m_states.reset();
@@ -314,8 +316,8 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 	
-	m_camera->Update(deltaTime,
-					 *m_inputState);
+	m_cameraManager->Update(deltaTime,
+							*m_inputState);
 
 	// Update Input Handler
 	m_inputState->Update();
@@ -327,22 +329,22 @@ void Game::Update(DX::StepTimer const& timer)
 	}
 
 	// Example code for casting ray from camera
-	if (m_inputState->GetKeyboardState().pressed.Space) {
-		//Place random voxel at ray hit point
-		Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
-		diff *= 50;	//Multiply by scalar length
-		diff += m_camera.get()->GetPosition();	//Reapply the camera position
-		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
-		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
-	}
-	if (m_inputState->GetKeyboardState().pressed.Enter) {
-		//Place Structure at ray hit point
-		Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
-		diff *= 50;	//Multiply by scalar length
-		diff += m_camera.get()->GetPosition();	//Reapply the camera position
-		DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
-		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
-	}
+	//if (m_inputState->GetKeyboardState().pressed.Space) {
+	//	//Place random voxel at ray hit point
+	//	Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
+	//	diff *= 50;	//Multiply by scalar length
+	//	diff += m_camera.get()->GetPosition();	//Reapply the camera position
+	//	DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
+	//	WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	//}
+	//if (m_inputState->GetKeyboardState().pressed.Enter) {
+	//	//Place Structure at ray hit point
+	//	Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
+	//	diff *= 50;	//Multiply by scalar length
+	//	diff += m_camera.get()->GetPosition();	//Reapply the camera position
+	//	DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
+	//	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	//}
 
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
@@ -365,11 +367,13 @@ void Game::Render()
     Clear();
 	Prepare();
 
-	// Create ConstantBuffer and assign camera mat's
+	Camera* activeCamera = m_cameraManager->GetActiveCamera();
+
+	// Create ConstantBuffer and assign active camera mat's
 	ConstantBuffer cb;
 	cb.time = m_timer.GetTotalSeconds();
-	cb.projection = m_camera->GetProjection();
-	cb.view = m_camera->GetView();
+	cb.projection = activeCamera->GetProjection();
+	cb.view = activeCamera->GetView();
 
 	//Update Constant Buffer
 	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
@@ -400,22 +404,6 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
-
-	/*std::vector<Particle*> particlesToRender = m_emitter->getParticles();
-	for (Particle* particle : particlesToRender)
-	{
-		cb.world = particle->GetWorldMatrix();
-
-		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
-			0,
-			nullptr,
-			&cb,
-			0, 0);
-
-		particle->Draw(m_d3dContext.Get());
-	}*/
-
-
 
 	// Swap backbuffer
     Present();
