@@ -32,6 +32,10 @@ FPSCamera::FPSCamera(float width,
            up),
 	m_cameraBoost(2.0f)
 {
+	m_movementSpeed = 5.0f;
+	m_rotationSpeed = 0.4f;
+	m_yaw = -2.4f;
+	m_orgYaw = -2.4f;
 }
 
 FPSCamera::~FPSCamera()
@@ -40,13 +44,13 @@ FPSCamera::~FPSCamera()
 
 void FPSCamera::Update(float deltaTime, const InputState& state)
 {
-    ProcessMouseInput(deltaTime, state);
+    ProcessMouse(deltaTime, state);
 
 	// Create orientation from Pitch & Yaw
     Quaternion orientation = Quaternion::CreateFromYawPitchRoll(m_yaw, m_pitch, m_roll);
 
 	// Update position transformed by the orientation
-    m_position += Vector3::Transform(ProcessKeyboardInput(deltaTime, state),
+    m_position += Vector3::Transform(ProcessKeyboard(deltaTime, state),
                                      orientation);
 
 	// Update position to which camera is targeting (forward)
@@ -59,20 +63,20 @@ void FPSCamera::Update(float deltaTime, const InputState& state)
 }
 
 void FPSCamera::Resize(float width,
-					   float height,
-					   float nearPlane,
-					   float farPlane,
-					   const float fov)
+					   float height)
 {
 	m_projection = Matrix::Identity;
 
-	m_projection = Matrix::CreatePerspectiveFieldOfView(fov,
+	m_windowWidth = width;
+	m_windowHeight = height;
+
+	m_projection = Matrix::CreatePerspectiveFieldOfView(m_fov,
 														width / height,
-														nearPlane,
-														farPlane);
+														m_nearPlane,
+														m_farPlane);
 }
 
-void FPSCamera::ProcessMouseInput(float deltaTime,
+void FPSCamera::ProcessMouse(float deltaTime,
 								  const InputState& input)
 {
     auto state = input.GetMouse().GetState();
@@ -91,7 +95,7 @@ void FPSCamera::ProcessMouseInput(float deltaTime,
 	WrapRotation();
 }
 
-Vector3 FPSCamera::ProcessKeyboardInput(float deltaTime,
+Vector3 FPSCamera::ProcessKeyboard(float deltaTime,
                                         const InputState& input)
 {
 	auto kbState = input.GetKeyboard().GetState();
@@ -133,16 +137,6 @@ Vector3 FPSCamera::ProcessKeyboardInput(float deltaTime,
 	}
 
     return move;
-}
-
-void FPSCamera::ResetCamera()
-{
-	m_position = Vector3::Zero;
-	m_target = -Vector3::UnitZ;
-	m_up = Vector3::Up;
-	m_yaw = 0.0f;
-	m_pitch = 0.0f;
-	m_roll = 0.0f;
 }
 
 void FPSCamera::WrapRotation()

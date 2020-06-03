@@ -7,17 +7,6 @@ using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Quaternion;
 
-static constexpr float s_16by9ratio = 1.77f;
-static constexpr float s_scrollInLimit = 10.0f;
-static constexpr float s_scrollOutLimit = 150.0f;
-static constexpr float s_movementScaleBias = 2.5f;
-static constexpr float s_minimumMovementSpeed = 10.0f;
-static constexpr float s_maximumMovementSpeed = 80.0f;
-static constexpr float s_rotationScaleBias = 0.1f;
-static constexpr float s_minimumRotationSpeed = 0.3f;
-static constexpr float s_maximumRotationSpeed = 1.5f;
-
-
 ISOCamera::ISOCamera(float width,
                      float height,
                      float nearPlane,
@@ -36,8 +25,20 @@ ISOCamera::ISOCamera(float width,
            up),
 	m_zoom(1.0f),
 	m_scrollSpeed(5.0f),
+	m_scrollInLimit(10.0f),
+	m_scrollOutLimit(150.0f),
+	m_movementScaleBias(2.5f),
+	m_minimumMovementSpeed(10.0f),
+	m_maximumMovementSpeed(80.0f),
+	m_rotationScaleBias(0.1f),
+	m_minimumRotationSpeed(0.3f),
+	m_maximumRotationSpeed(1.5f),
 	m_lookOffset(Vector3(100.0f, 0.0f, 100.0f))
 {
+	m_movementSpeed = 80.0f;
+	m_rotationSpeed = 1.5f;
+	m_yaw = -2.5f;
+	m_orgYaw = -2.5f;
 }
 
 ISOCamera::~ISOCamera()
@@ -61,25 +62,22 @@ void ISOCamera::Update(float deltaTime, const InputState& input)
 }
 
 void ISOCamera::Resize(float width,
-					   float height,
-					   float nearPlane,
-					   float farPlane,
-					   const float fov)
+					   float height)
 {
-	UNREFERENCED_PARAMETER(fov);
 	m_projection = Matrix::Identity;
 
-	// Clamp width & height
-	width = std::clamp(width, s_scrollInLimit, s_scrollOutLimit);
-	height = std::clamp(height, s_scrollInLimit / s_16by9ratio, s_scrollOutLimit / s_16by9ratio);
+	ResetMovement();
+	ClampDimensions(width, height);
 
+	// Replace stored window dimensions
 	m_windowWidth = width;
 	m_windowHeight = height;
 
+	// Update Projection
 	m_projection = Matrix::CreateOrthographic(m_windowWidth,
 											  m_windowHeight,
-											  nearPlane,
-											  farPlane);
+											  m_nearPlane,
+											  m_farPlane);
 }
 
 Vector3 ISOCamera::ProcessKeyboard(float deltaTime, const InputState& input)
@@ -88,13 +86,13 @@ Vector3 ISOCamera::ProcessKeyboard(float deltaTime, const InputState& input)
 	Vector3 move = Vector3::Zero;
 
 	// Camera Movement
-	if (kbState.W)
+	if (kbState.W && m_position.z)
 	{
-		move.z -= m_movementSpeed * deltaTime;
+		move.z -= m_movementSpeed * 2.0f * deltaTime;
 	}
 	if (kbState.S)
 	{
-		move.z += m_movementSpeed * deltaTime;
+		move.z += m_movementSpeed * 2.0f * deltaTime;
 	}
 	if (kbState.A)
 	{
@@ -103,6 +101,12 @@ Vector3 ISOCamera::ProcessKeyboard(float deltaTime, const InputState& input)
 	if (kbState.D)
 	{
 		move.x += m_movementSpeed * deltaTime;
+	}
+
+	// Camera Reset
+	if (input.GetKeyboardState().pressed.R)
+	{
+		ResetCamera();
 	}
 
 	// Camera Rotation
@@ -119,6 +123,31 @@ Vector3 ISOCamera::ProcessKeyboard(float deltaTime, const InputState& input)
 	WrapRotation();
 
 	return move;
+}
+
+void ISOCamera::ResizeZoom(float width, float height)
+{
+	m_projection = Matrix::Identity;
+
+	ClampDimensions(width, height);
+
+	// Replace stored window dimensions
+	m_windowWidth = width;
+	m_windowHeight = height;
+
+	// Update Projection
+	m_projection = Matrix::CreateOrthographic(m_windowWidth,
+											  m_windowHeight,
+											  m_nearPlane,
+											  m_farPlane);
+}
+
+void ISOCamera::ClampDimensions(float& width, float& height)
+{
+	// Calculate ratio of new Camera Dimensions and Clamp
+	float ratio = GetRatio(width, height);
+	width = std::clamp(width, m_scrollInLimit, m_scrollOutLimit);
+	height = std::clamp(height, m_scrollInLimit / ratio, m_scrollOutLimit / ratio);
 }
 
 void ISOCamera::ProcessMouse(float deltaTime, const InputState& input)
@@ -150,11 +179,9 @@ void ISOCamera::ProcessMouse(float deltaTime, const InputState& input)
 
 void ISOCamera::Zoom()
 {
-	// Resize window by the zoom offset
-	Resize(m_windowWidth * m_zoom,
-		   m_windowHeight * m_zoom,
-		   m_nearPlane,
-		   m_farPlane);
+	// Resize window with new zoomed camera window dimensions
+	ResizeZoom(m_windowWidth * m_zoom,
+			   m_windowHeight * m_zoom);
 
 	ScaleMovement();
 
@@ -167,18 +194,24 @@ void ISOCamera::ScaleMovement()
 	// Zoom-in
 	if (m_zoom < 1.0f)
 	{
-		m_movementSpeed -= m_zoom * s_movementScaleBias;
-		m_rotationSpeed -= m_zoom * s_rotationScaleBias;
+		m_movementSpeed -= m_zoom * m_movementScaleBias;
+		m_rotationSpeed -= m_zoom * m_rotationScaleBias;
 	}
 	// Zoom-out
 	else
 	{
-		m_movementSpeed += m_zoom * s_movementScaleBias;
-		m_rotationSpeed += m_zoom * s_rotationScaleBias;
+		m_movementSpeed += m_zoom * m_movementScaleBias;
+		m_rotationSpeed += m_zoom * m_rotationScaleBias;
 	}
 
-	m_movementSpeed = std::clamp(m_movementSpeed, s_minimumMovementSpeed, s_maximumMovementSpeed);
-	m_rotationSpeed = std::clamp(m_rotationSpeed, s_minimumRotationSpeed, s_maximumRotationSpeed);
+	m_movementSpeed = std::clamp(m_movementSpeed, m_minimumMovementSpeed, m_maximumMovementSpeed);
+	m_rotationSpeed = std::clamp(m_rotationSpeed, m_minimumRotationSpeed, m_maximumRotationSpeed);
+}
+
+void ISOCamera::ResetMovement()
+{
+	m_movementSpeed = m_maximumMovementSpeed;
+	m_rotationSpeed = m_maximumRotationSpeed;
 }
 
 void ISOCamera::WrapRotation()

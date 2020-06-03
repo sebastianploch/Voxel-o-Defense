@@ -19,19 +19,15 @@ public:
 				const InputState& state) override;
 
 	void Resize(float width,
-				float height,
-				float nearPlane,
-				float farPlane,
-				const float fov = DirectX::XM_PIDIV4) override;
+				float height) override;
 
 private:
-	void ProcessMouseInput(float deltaTime,
-						   const InputState& input);
+	void ProcessMouse(float deltaTime,
+					  const InputState& input) override;
 
-	DirectX::SimpleMath::Vector3 ProcessKeyboardInput(float deltaTime,
-													  const InputState& input);
+	DirectX::SimpleMath::Vector3 ProcessKeyboard(float deltaTime,
+												 const InputState& input) override;
 
-	void ResetCamera();
 	void WrapRotation();
 	void UpdateTargetPosition();
 

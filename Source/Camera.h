@@ -17,10 +17,7 @@ public:
 
 	// Resize Camera to match new window size
 	virtual void Resize(float width,
-						float height,
-						float nearPlane,
-						float farPlane,
-						const float fov = DirectX::XM_PIDIV4) = 0;
+						float height) = 0;
 
 #pragma region Getters/Setters
 	#pragma region Camera_Properties
@@ -71,6 +68,9 @@ public:
 	#pragma endregion Window_Dimensions
 
 	#pragma region Camera_Frustum
+	inline float GetFOV() const { return m_fov; }
+	inline void SetFOV(float fov) { m_fov = fov; }
+
 	inline float GetNearPlane() const { return m_nearPlane; }
 	inline void SetNearPlane(float nearPlane) { m_nearPlane = nearPlane; }
 
@@ -99,17 +99,31 @@ protected:
 		   const DirectX::SimpleMath::Vector3& target = -DirectX::SimpleMath::Vector3::UnitZ,
 		   const DirectX::SimpleMath::Vector3& up = DirectX::SimpleMath::Vector3::Up);
 
+	virtual void ProcessMouse(float deltaTime,
+							  const InputState& input) = 0;
+
+	virtual DirectX::SimpleMath::Vector3 ProcessKeyboard(float deltaTime,
+														 const InputState& input) = 0;
+
+	void ResetCamera();
+
+	// Helper function to find screen ratio
+	inline static float GetRatio(float width, float height) { return width / height; }
+
 protected:
 	// Camera Eye
 	DirectX::SimpleMath::Vector3 m_position;
+	DirectX::SimpleMath::Vector3 m_orgPosition;
 
 	// Camera At
 	DirectX::SimpleMath::Vector3 m_target;
+	DirectX::SimpleMath::Vector3 m_orgTarget;
 
 	// Camera Up
 	DirectX::SimpleMath::Vector3 m_up;
 
 	// Camera Frustum
+	float						 m_fov;
 	float						 m_nearPlane;
 	float						 m_farPlane;
 
@@ -119,8 +133,11 @@ protected:
 
 	// Rotation
 	float						 m_yaw;
+	float						 m_orgYaw;
 	float						 m_pitch;
+	float						 m_orgPitch;
 	float						 m_roll;
+	float						 m_orgRoll;
 
 	// Movement
 	float						 m_movementSpeed;

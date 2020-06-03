@@ -62,16 +62,6 @@ void Game::Initialize(HWND window,
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
-	/*for (int i = 0; i < 5; ++i)
-	{
-		for (int j = 0; j < 5; ++j)
-		{
-			m_gameObjects.push_back(std::make_shared<DebugSimpleCube>(Vector3(-2.0f + (j * 2), 0.0f, -4.0f + (i * 2.0f)),
-																	  Vector3(),
-																	  Vector3(0.5f, 0.5f, 0.5f)));
-		}
-	}*/
-
 	InitialiseVoxelWorld();
 }
 
@@ -246,9 +236,7 @@ void Game::CreateResources()
 
 	// Resize camera to current window size
 	m_camera->Resize((float)backBufferWidth,
-					 (float)backBufferHeight,
-					 -500.0f,
-					 500.0f);
+					 (float)backBufferHeight);
 }
 
 // Create constant buffer to be used as a resource by shader.
