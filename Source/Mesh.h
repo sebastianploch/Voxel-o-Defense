@@ -1,9 +1,9 @@
 #pragma once
-#include <assimp/Importer.hpp>
-#include <assimp/config.h>
-#include <assimp/cimport.h>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
+#include <Importer.hpp>
+#include <config.h>
+#include <cimport.h>
+#include <postprocess.h>
+#include <scene.h>
 class Mesh
 {
 public:
