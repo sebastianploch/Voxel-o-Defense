@@ -1,6 +1,15 @@
 #include "pch.h"
 #include "Model.h"
 
+
+Model::Model() :
+	m_Translation(0.0f, 0.0f, 0.0f),
+	m_Rotation(0.0f, 0.0f, 0.0f),
+	m_Scale(0.0f, 0.0f, 0.0f),
+	m_BoxDist(0.0f, 0.0f, 0.0f)
+{
+}
+
 bool Model::Initialise(const std::string& filePath, Microsoft::WRL::ComPtr <ID3D11Device1> device)
 {
 	this->m_Translation = DirectX::XMFLOAT3(0.0f, 2.0f, -4.0f);

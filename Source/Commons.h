@@ -15,10 +15,8 @@ struct ConstantBuffer
 	DirectX::SimpleMath::Matrix projection;
 	DirectX::SimpleMath::Matrix view;
 	DirectX::SimpleMath::Matrix world;
-    float time;
-    float padding1;
-    float padding2;
-    float padding3;
+    float time{ 0.0f };
+    float padding[3]{ 0.0f };
 };
 
 //Surface and light information which can define an objects surface and its light caluclation

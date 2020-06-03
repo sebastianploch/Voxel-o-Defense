@@ -11,7 +11,7 @@
 class Model : public IGameObject
 {
 public:
-	Model() {}
+	Model();
 	bool Initialise(const std::string& filePath, Microsoft::WRL::ComPtr <ID3D11Device1> device);
 	void Update(float deltaTime) override;
 	void Draw(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb,ID3D11DeviceContext1 &context);
