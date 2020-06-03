@@ -14,7 +14,7 @@ Mesh::Mesh(ID3D11Device1 * device, aiMesh& mesh, aiMaterial& material, std::stri
 
     for (UINT i = 0; i < numOfVertices; i++)
     {
-        DirectX::VertexPositionNormalTexture vertex;
+        DirectX::VertexPositionNormalTexture vertex = {};
         if (mesh.mNumVertices > 0) //If we have vertices and normals push them back
         {
             vertex.position.x = mesh.mVertices[i].x;
@@ -71,7 +71,7 @@ Mesh::Mesh(ID3D11Device1 * device, aiMesh& mesh, aiMaterial& material, std::stri
         aiFace face = mesh.mFaces[i];
         for (UINT j = 0; j < face.mNumIndices; j++) //for each face within the mesh, we store it's indices
         {
-            indices[currInd] = face.mIndices[j];
+            indices[currInd] = (WORD)face.mIndices[j];
             currInd++;
         }
     }

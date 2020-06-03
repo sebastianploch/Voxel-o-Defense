@@ -25,6 +25,8 @@ bool Model::Initialise(const std::string& filePath, Microsoft::WRL::ComPtr <ID3D
 
 void Model::Update(float deltaTime)
 {
+	UNREFERENCED_PARAMETER(deltaTime);
+
 	DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(this->m_Scale.x, this->m_Scale.y, this->m_Scale.z);
 	DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationX(this->m_Rotation.x) * DirectX::XMMatrixRotationY(this->m_Rotation.y) * DirectX::XMMatrixRotationZ(this->m_Rotation.z);
 	DirectX::XMMATRIX translate = DirectX::XMMatrixTranslation(this->m_Translation.x, this->m_Translation.y, this->m_Translation.z);
@@ -44,7 +46,7 @@ void Model::Draw(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb,ID3D11DeviceC
 
 void Model::Draw(ID3D11DeviceContext* context)
 {
-
+	UNREFERENCED_PARAMETER(context);
 }
 
 bool Model::LoadModel(const std::string& filePath,ID3D11Device1 * device)

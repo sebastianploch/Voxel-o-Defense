@@ -167,7 +167,7 @@ void ParticleEmitter::updateParticles(float deltaTime)
 		m_particles.push_back(newParticle);
 	}
 
-	for (int i = m_particles.size() - 1; i >= 0; i--)
+	for (int i = (int)m_particles.size() - 1; i >= 0; i--)
 	{
 		m_particles[i]->Update(deltaTime);
 

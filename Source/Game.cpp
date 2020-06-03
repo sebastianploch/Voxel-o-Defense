@@ -61,8 +61,8 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Initialise Water
-	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() * 0.25f,
-																			ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() * 0.25f), 
+	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() * 0.25f),
+																			static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() * 0.25f)),
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
@@ -376,7 +376,7 @@ void Game::Render()
 
 	// Create ConstantBuffer and assign active camera mat's
 	ConstantBuffer cb;
-	cb.time = m_timer.GetTotalSeconds();
+	cb.time = (float)m_timer.GetTotalSeconds();
 	cb.projection = activeCamera->GetProjection();
 	cb.view = activeCamera->GetView();
 

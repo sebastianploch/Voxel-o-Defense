@@ -27,7 +27,7 @@ void GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device,
 
         int x[] = { 0, 0, 0 };
         int q[] = { 0, 0, 0 };
-        int* mask = new int[(dims[u] + 1.0) * (dims[v] + 1.0)]();
+        int* mask = new int[static_cast<int>((dims[u] + 1.0) * (dims[v] + 1.0))]();
 
         q[dir] = 1;
 
@@ -94,7 +94,7 @@ void GreedyVoxelMeshGeneration::GenerateMesh(Chunk* chunk, ID3D11Device* device,
                             dv[u] = width;
                         }
 
-                        Vector3 chunkPos = Vector3(chunk->GetXIndex() * chunk->GetWidth(), 0, chunk->GetZIndex() * chunk->GetDepth());
+                        Vector3 chunkPos = Vector3(static_cast<float>(chunk->GetXIndex() * chunk->GetWidth()), 0.f, static_cast<float>(chunk->GetZIndex() * chunk->GetDepth()));
                         Vector3 v1 = Vector3(x[0] + chunkPos.x, 
                                              x[1] + chunkPos.y, 
                                              x[2] + chunkPos.z);
@@ -150,8 +150,8 @@ void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, VoxelMesh* m
     }
 
     auto indicesArray = std::make_unique<unsigned short[]>(indices->size());
-    for (unsigned int i = 0; i < indices->size(); i++) {
-        indicesArray[i] = indices->at(i);
+    for (auto i = 0; i < indices->size(); i++) {
+        indicesArray[i] = (unsigned short)indices->at(i);
     }
 
     //Create Vertex Buffer
@@ -159,7 +159,7 @@ void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, VoxelMesh* m
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(VertexPositionNormalDualTexture) * vertices->size();
+    bd.ByteWidth = sizeof(VertexPositionNormalDualTexture) * (UINT)vertices->size();
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
 
@@ -175,7 +175,7 @@ void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, VoxelMesh* m
     D3D11_BUFFER_DESC bd1;
     ZeroMemory(&bd1, sizeof(bd1));
     bd1.Usage = D3D11_USAGE_DEFAULT;
-    bd1.ByteWidth = sizeof(WORD) * indices->size();
+    bd1.ByteWidth = sizeof(WORD) * (UINT)indices->size();
     bd1.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd1.CPUAccessFlags = 0;
 
@@ -188,7 +188,7 @@ void GreedyVoxelMeshGeneration::CreateBuffers(ID3D11Device* device, VoxelMesh* m
     mesh->m_VertexBuffer = vertexBuffer;
     mesh->m_VBOffset = 0;
     mesh->m_VBStride = sizeof(VertexPositionNormalDualTexture);
-    mesh->m_IndexCount = indices->size();
+    mesh->m_IndexCount = (UINT)indices->size();
     mesh->m_IndexBuffer = indexBuffer;
 }
 
@@ -196,8 +196,8 @@ void GreedyVoxelMeshGeneration::GenerateQuad(Vector3 v1, Vector3 v2, Vector3 v3,
                                             std::vector<Vector3>* vertices, std::vector<int>* indices, std::vector<Vector3>* normals, std::vector<Vector2>* uvs, std::vector<Vector2>* uvs1, 
                                             int w, int h, int vox) {
 
-    int vc = vertices->size();
-    char abs_vox = abs(vox);
+    int vc = (int)vertices->size();
+    char abs_vox = (char)abs(vox);
 
     //Add vertices
     vertices->push_back(v1);
@@ -219,7 +219,7 @@ void GreedyVoxelMeshGeneration::GenerateQuad(Vector3 v1, Vector3 v2, Vector3 v3,
     const int TILES_PER_AXIS = TEX_SIZE / TILE_SIZE;
     const float UV_TILE_INCR = (float)TILE_SIZE / TEX_SIZE;
 
-    int tileY = floorf(abs_vox / (float)TILES_PER_AXIS);            //Tile offset X
+    int tileY = (int)floorf(abs_vox / (float)TILES_PER_AXIS);            //Tile offset X
     int tileX = abs_vox - (tileY * TILES_PER_AXIS);                 //Tile offset Y
     Vector2 offset = Vector2(tileX * UV_TILE_INCR, tileY * UV_TILE_INCR); //Converted to UV space
 
@@ -251,16 +251,16 @@ std::vector<Vector2> GreedyVoxelMeshGeneration::GenerateCorrectUVs(Vector3 norma
     if (normal.y == 1 ||
         normal.z == -1 ||
         normal.x == 1) {
-        resultList.push_back(Vector2(0, h));
-        resultList.push_back(Vector2(0, 0));
-        resultList.push_back(Vector2(w, 0));
-        resultList.push_back(Vector2(w, h));
+        resultList.push_back(Vector2(0.f, (float)h));
+        resultList.push_back(Vector2(0.f, 0.f));
+        resultList.push_back(Vector2((float)w, 0.f));
+        resultList.push_back(Vector2((float)w, (float)h));
         
     } else {
-        resultList.push_back(Vector2(h, w));
-        resultList.push_back(Vector2(0, w));
-        resultList.push_back(Vector2(0, 0));
-        resultList.push_back(Vector2(h, 0));
+        resultList.push_back(Vector2((float)h, (float)w));
+        resultList.push_back(Vector2(0.f, (float)w));
+        resultList.push_back(Vector2(0.f, 0.f));
+        resultList.push_back(Vector2((float)h, 0.f));
         
     }
 
@@ -271,15 +271,15 @@ Vector3 GreedyVoxelMeshGeneration::GetNormal(bool isBackFace, int axis) {
     int backface = (isBackFace ? -1 : 1);
     switch (axis) {
     case 0:
-        return Vector3(1 * backface, 0, 0);
+        return Vector3(1.f * backface, 0.f, 0.f);
 
     case 1:
-        return Vector3(0, 1 * backface, 0);
+        return Vector3(0.f, 1.f * backface, 0.f);
 
     case 2:
-        return Vector3(0, 0, 1 * backface);
+        return Vector3(0.f, 0.f, 1.f * backface);
 
     default:
-        return Vector3(0, 0, 0);
+        return Vector3(0.f, 0.f, 0.f);
     }
 }

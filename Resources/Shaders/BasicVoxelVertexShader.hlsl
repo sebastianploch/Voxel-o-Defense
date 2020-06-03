@@ -28,7 +28,7 @@ VS_OUTPUT VSMain(VS_INPUT Input)
 {
     VS_OUTPUT Output;
 
-    Output.posW = Input.position;
+    Output.posW = Input.position.xyz;
 
     Output.position = mul(world, Input.position);
     Output.position = mul(view, Output.position);
