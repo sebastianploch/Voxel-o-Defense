@@ -107,6 +107,7 @@ Vector3 ISOCamera::ProcessKeyboard(float deltaTime, const InputState& input)
 	if (input.GetKeyboardState().pressed.R)
 	{
 		ResetCamera();
+		Resize(m_orgWindowWidth, m_orgWindowHeight);
 	}
 
 	// Camera Rotation

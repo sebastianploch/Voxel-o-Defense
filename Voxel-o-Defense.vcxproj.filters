@@ -163,7 +163,7 @@
       <Filter>Source\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\CameraManager.cpp">
-      <Filter>Headers\Camera</Filter>
+      <Filter>Source\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

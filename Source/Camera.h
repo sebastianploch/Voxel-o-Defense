@@ -122,14 +122,16 @@ protected:
 	// Camera Up
 	DirectX::SimpleMath::Vector3 m_up;
 
-	// Camera Frustum
+	// Camera FrustumS
 	float						 m_fov;
 	float						 m_nearPlane;
 	float						 m_farPlane;
 
 	// Window Dimensions
 	float						 m_windowWidth;
+	float						 m_orgWindowWidth;
 	float						 m_windowHeight;
+	float						 m_orgWindowHeight;
 
 	// Rotation
 	float						 m_yaw;
