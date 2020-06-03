@@ -77,20 +77,20 @@ static void DEBUG_PRINT(T val)
     OutputDebugStringA(str.c_str());
 }
 template<>
-static void DEBUG_PRINT(std::string str)
+void DEBUG_PRINT(std::string str)
 {
     str += "\n";
     OutputDebugStringA(str.c_str());
 }
 template<>
-static void DEBUG_PRINT(const char* msg)
+void DEBUG_PRINT(const char* msg)
 {
     std::string str = msg;
     str += "\n";
     OutputDebugStringA(str.c_str());
 }
 template<>
-static void DEBUG_PRINT(DirectX::SimpleMath::Vector3 vec)
+void DEBUG_PRINT(DirectX::SimpleMath::Vector3 vec)
 {
     std::string str = "X: " + std::to_string(vec.x);
     str += "  Y: " + std::to_string(vec.y);
@@ -99,7 +99,7 @@ static void DEBUG_PRINT(DirectX::SimpleMath::Vector3 vec)
     OutputDebugStringA(str.c_str());
 }
 template<>
-static void DEBUG_PRINT(DirectX::SimpleMath::Vector2 vec)
+void DEBUG_PRINT(DirectX::SimpleMath::Vector2 vec)
 {
 	std::string str = "X: " + std::to_string(vec.x);
 	str += "  Y: " + std::to_string(vec.y);
