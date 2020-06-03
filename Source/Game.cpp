@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Game.h"
 
-#include "FPSCamera.h"
-#include "ISOCamera.h"
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
 #include "DebugSimpleCube.h"
@@ -39,12 +37,9 @@ void Game::Initialize(HWND window,
 
     CreateDevice();
 
-	// Create Camera
-	m_camera = std::make_unique<ISOCamera>((float)m_windowWidth,
-										   (float)m_windowHeight,
-										   -500.0f,
-										   500.0f,
-										   Vector3(0.0f, 20.0f, 0.0f));
+	// Create Camera Manager
+	m_cameraManager = std::make_unique<CameraManager>((float)m_windowWidth,
+													  (float)m_windowHeight);
 
     CreateResources();
 
@@ -235,8 +230,8 @@ void Game::CreateResources()
 	m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Resize camera to current window size
-	m_camera->Resize((float)backBufferWidth,
-					 (float)backBufferHeight);
+	m_cameraManager->Resize((float)backBufferWidth,
+							(float)backBufferHeight);
 }
 
 // Create constant buffer to be used as a resource by shader.
@@ -279,7 +274,7 @@ void Game::OnDeviceLost()
 	m_d3dContext.Reset();
 	m_d3dDevice.Reset();
 
-	m_camera.reset();
+	m_cameraManager.reset();
 	m_inputState.reset();
 
 	m_states.reset();
@@ -310,8 +305,8 @@ void Game::Update(DX::StepTimer const& timer)
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 	
-	m_camera->Update(deltaTime,
-					 *m_inputState);
+	m_cameraManager->Update(deltaTime,
+							*m_inputState);
 
 	// Update Input Handler
 	m_inputState->Update();
@@ -340,10 +335,12 @@ void Game::Render()
     Clear();
 	Prepare();
 
-	// Create ConstantBuffer and assign camera mat's
+	Camera* activeCamera = m_cameraManager->GetActiveCamera();
+
+	// Create ConstantBuffer and assign active camera mat's
 	ConstantBuffer cb;
-	cb.projection = m_camera->GetProjection();
-	cb.view = m_camera->GetView();
+	cb.projection = activeCamera->GetProjection();
+	cb.view = activeCamera->GetView();
 
 	// Render chunks
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
