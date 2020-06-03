@@ -66,12 +66,15 @@ void Game::Initialize(HWND window,
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
+	//initialise the test model
+	m_modelTest.Initialise("Resources/Models/bigzombie1/bigzombie.obj", m_d3dDevice.Get());
+
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
-
+	
 	InitialiseVoxelWorld();
 }
 
@@ -354,6 +357,8 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		object->Update(deltaTime);
 	}
+
+	m_modelTest.Update(deltaTime);
 }
 
 void Game::Render()
@@ -385,7 +390,7 @@ void Game::Render()
 	// Render chunks
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
 
-	// Render all objects
+	//Render all objects
 	for (const auto& object : m_gameObjects)
 	{
 		// Assign Shader to be used to render upcoming object

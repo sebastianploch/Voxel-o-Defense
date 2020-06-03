@@ -40,6 +40,7 @@
 #include <VertexTypes.h>
 #include <CommonStates.h>
 #include <DDSTextureLoader.h>
+#include <WICTextureLoader.h>
 
 // STD
 #include <vector>

@@ -3,6 +3,7 @@
 #include "StepTimer.h"
 #include "IGameObject.h"
 #include "ShaderManager.h"
+#include "Model.h"
 #include "CameraManager.h"
 
 class Game
@@ -80,4 +81,6 @@ private:
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;
+
+    Model                                           m_modelTest;
 };
