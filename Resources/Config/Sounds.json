@@ -1,0 +1,6 @@
+{
+    "sounds": {
+        "amount": 1,
+        "paths": ["Resources/Audio/test.wav"]
+    }
+}

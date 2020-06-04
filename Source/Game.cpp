@@ -55,6 +55,8 @@ void Game::Initialize(HWND window,
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
 	InitialiseVoxelWorld();
+
+	Sound::InitialiseSounds(m_audioEngine.get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.

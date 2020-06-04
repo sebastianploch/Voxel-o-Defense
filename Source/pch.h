@@ -61,6 +61,9 @@
 #include "Commons.h"
 #include "JSONLoader.h"
 
+// Sound Handling
+#include "Sound.h"
+
 // Input Handling
 #include "InputState.h"
 
