@@ -284,28 +284,52 @@ void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode, in
 //- Resused Code -//
 Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 {
+	int SameFCostCount = 1;
+
 	int lowest_fCost = 9999999999999;
-	Nodes* currentLowest = nullptr;
+	Nodes* currentLowestFNode = nullptr;
 	//- go though open nodes and see whats the lowest and set it an the next node -//
 	//- looping though this method gives a prefrance to later squares if they have the same _fCost -//
 	for (int i = 0; i < openList.size(); i++)
 	{
+		if (openList[i]->GetFCost() == lowest_fCost)
+		{
+			SameFCostCount++;
+		}
+
 		//- if the node is lower then save its values-//
 		if (openList[i]->GetFCost() <= lowest_fCost)
 		{
 			lowest_fCost = openList[i]->GetFCost();
-			currentLowest = openList[i];
+			currentLowestFNode = openList[i];
 		}
 	}
 
+	if (SameFCostCount >= 2)
+	{
+		int lowest_hCost = 9999999999999;
+		Nodes* currentLowest = nullptr;
+		//- go though open nodes and see whats the lowest and set it an the next node -//
+		//- looping though this method gives a prefrance to later squares if they have the same _fCost -//
+		for (int i = 0; i < openList.size(); i++)
+		{
+			//- if the node is lower then save its values-//
+			if (openList[i]->GetHCost() <= lowest_hCost)
+			{
+				lowest_hCost = openList[i]->GetHCost();
+				currentLowest = openList[i];
+			}
+		}
+		return currentLowest;
+	}
 	//- return the lowest -//
-	return currentLowest;
+	return currentLowestFNode;
 }
 
 void RouteConstructor::CalculateWeighting(Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos)
 {
 	node->SetGCost(node->GetParentWayPoint()->GetGCost() + 10);
-	node->SetHCost(ReturnDistance(startPos, endPos));
+	node->SetHCost(ReturnDistance(node->GetPosition(), endPos));
 	node->SetFCost(node->GetGCost() + node->GetHCost());
 }
 
