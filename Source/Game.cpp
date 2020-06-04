@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "Game.h"
 #include "DebugSimpleCube.h"
+#include "UIButton.h"
+#include "UISprite.h"
+#include "UIText.h"
+#include "Subject.h"
+#include "Observer.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -42,12 +47,33 @@ void Game::Initialize(HWND window,
 	// Initialise Input Handler
 	m_inputState = std::make_unique<InputState>(m_window);
 
+	// Initialise UI Manager
+	m_UIManager = std::make_unique<UISystem>();
+
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+
+	// Create test button
+	std::shared_ptr<UIButton> testButton = std::make_shared<UIButton>();
+	testButton->Initialise(SimpleMath::Vector2(m_windowWidth / 2, m_windowHeight / 2), L"Resources/Textures/samplebutton.dds", L"Resources/Fonts/Calibri.spritefont", L"Click me", m_d3dDevice.Get());
+
+	// Create test text with a lifetime
+	std::shared_ptr<UIText> testText = std::make_shared<UIText>();
+	testText->Initialise(SimpleMath::Vector2(m_windowWidth / 4, m_windowHeight / 4), L"Text element", SimpleMath::Color(Colors::White), L"Resources/Fonts/Calibri.spritefont", m_d3dDevice.Get(), 3.0f);
+	testText->SetScale(0.5f);
+
+	// Create test image
+	std::shared_ptr<UISprite> testSprite = std::make_shared<UISprite>();
+	testSprite->Initialise(SimpleMath::Vector2(m_windowWidth / 2 + m_windowWidth / 4, m_windowHeight / 4), L"Resources/Textures/sampleimage.dds", m_d3dDevice.Get(), -1.0f, 128, 64);
+	testSprite->SetScale(0.25f);
+	// Add UI to manager
+	m_UIManager->Add(testButton);
+	m_UIManager->Add(testText);
+	m_UIManager->Add(testSprite);
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -108,6 +134,8 @@ void Game::CreateDevice()
 	DX::ThrowIfFailed(context.As(&m_d3dContext));
 
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
+
+	m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
 
 	CreateShaders();
 	CreateConstantBuffer();
@@ -226,6 +254,8 @@ void Game::CreateResources()
 													 static_cast<float>(backBufferWidth) / static_cast<float>(backBufferHeight),
 													 0.1f,
 													 100.0f);
+
+	//m_projMat2D = Matrix::CreateOrthographic(static_cast<float>(m_windowWidth), static_cast<float>(m_windowHeight), 0.1f, 100.0f);
 }
 
 // Compile and Assign Shaders to buffers & Create Input Layout.
@@ -299,6 +329,8 @@ void Game::OnDeviceLost()
 	m_basicPixelShader.Reset();
 	m_basicVertexShader.Reset();
 
+	m_spriteBatch.reset();
+
 	CreateDevice();
 	CreateResources();
 }
@@ -334,6 +366,8 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		object->Update(deltaTime);
 	}
+
+	m_UIManager->Update(deltaTime, m_inputState);
 }
 
 void Game::Render()
@@ -368,6 +402,11 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
+
+	// Render sprites (UI)
+	m_spriteBatch->Begin();
+	m_UIManager->Render(m_spriteBatch.get());
+	m_spriteBatch->End();
 
 	// Swap backbuffer
     Present();

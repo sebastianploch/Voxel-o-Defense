@@ -1,8 +1,8 @@
 #pragma once
 #include "StepTimer.h"
+#include "UISystem.h"
 
 class IGameObject;
-
 
 class Game
 {
@@ -50,35 +50,39 @@ private:
 
 private:
     // Device resources.
-    HWND                                            m_window;
-    int                                             m_windowWidth;
-    int                                             m_windowHeight;
+    HWND												m_window;
+    int													m_windowWidth;
+    int													m_windowHeight;
 
-    D3D_FEATURE_LEVEL                               m_featureLevel;
-    Microsoft::WRL::ComPtr<ID3D11Device1>           m_d3dDevice;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext1>    m_d3dContext;
+    D3D_FEATURE_LEVEL									m_featureLevel;
+    Microsoft::WRL::ComPtr<ID3D11Device1>				m_d3dDevice;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext1>		m_d3dContext;
 
-    Microsoft::WRL::ComPtr<IDXGISwapChain1>         m_swapChain;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_renderTargetView;
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
+    Microsoft::WRL::ComPtr<IDXGISwapChain1>				m_swapChain;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView>		m_renderTargetView;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>		m_depthStencilView;
 
     // Input Handler
-    std::unique_ptr<InputState>                     m_inputState;
+    std::unique_ptr<InputState>							m_inputState;
 
     // Game Objects
-    std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
+    std::vector<std::shared_ptr<IGameObject>>			m_gameObjects;
 
     // Rendering
-    std::unique_ptr<DirectX::CommonStates>          m_states;
-    Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout>       m_posNorTextInputLayout;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader>       m_basicPixelShader;
-    Microsoft::WRL::ComPtr<ID3D11VertexShader>      m_basicVertexShader;
+    std::unique_ptr<DirectX::CommonStates>				m_states;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>				m_constantBuffer;
+    Microsoft::WRL::ComPtr<ID3D11InputLayout>			m_posNorTextInputLayout;
+    Microsoft::WRL::ComPtr<ID3D11PixelShader>			m_basicPixelShader;
+    Microsoft::WRL::ComPtr<ID3D11VertexShader>			m_basicVertexShader;
 
     // Basic Camera
-	DirectX::SimpleMath::Matrix                     m_viewMat;
-	DirectX::SimpleMath::Matrix                     m_projMat;
+	DirectX::SimpleMath::Matrix							m_viewMat;
+	DirectX::SimpleMath::Matrix							m_projMat;
+
+	// UI
+	std::unique_ptr<UISystem>							m_UIManager;
+	std::unique_ptr<DirectX::SpriteBatch>				m_spriteBatch;
 
     // DeltaTime Timer
-    DX::StepTimer                                   m_timer;
+    DX::StepTimer										m_timer;
 };

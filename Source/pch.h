@@ -40,6 +40,8 @@
 #include <VertexTypes.h>
 #include <CommonStates.h>
 #include <DDSTextureLoader.h>
+#include <SpriteBatch.h>
+#include <SpriteFont.h>
 
 // STD
 #include <vector>

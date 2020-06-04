@@ -22,7 +22,7 @@
     <RootNamespace>Voxel_o_Defense</RootNamespace>
     <ProjectGuid>{67997304-d815-4c88-994c-96af048f13e3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -188,8 +188,15 @@
     <ClInclude Include="Source\IGameObject.h" />
     <ClInclude Include="Source\InputState.h" />
     <ClInclude Include="Source\JSONLoader.h" />
+    <ClInclude Include="Source\Observer.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\StepTimer.h" />
+    <ClInclude Include="Source\Subject.h" />
+    <ClInclude Include="Source\UIButton.h" />
+    <ClInclude Include="Source\UISprite.h" />
+    <ClInclude Include="Source\UISystem.h" />
+    <ClInclude Include="Source\IUIObject.h" />
+    <ClInclude Include="Source\UIText.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
@@ -198,12 +205,19 @@
     <ClCompile Include="Source\InputState.cpp" />
     <ClCompile Include="Source\JSONLoader.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Observer.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Subject.cpp" />
+    <ClCompile Include="Source\UIButton.cpp" />
+    <ClCompile Include="Source\UISprite.cpp" />
+    <ClCompile Include="Source\UISystem.cpp" />
+    <ClCompile Include="Source\IUIObject.cpp" />
+    <ClCompile Include="Source\UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\resource.rc" />
