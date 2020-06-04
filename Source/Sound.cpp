@@ -105,6 +105,7 @@ void Sound::ValidateName(const wchar_t* name)
 	/* If it failed here, that means you are trying to use non-existent name for the sound
 	   Verify that the sound name is correct (same as JSON) */
 	assert(s_sounds.find(name) != s_sounds.end());
+	UNREFERENCED_PARAMETER(name);
 }
 
 void Sound::ValidateInstanceName(const wchar_t* name)
@@ -112,4 +113,5 @@ void Sound::ValidateInstanceName(const wchar_t* name)
 	/* If it failed here, that means you are trying to use non-existent name for the sound instance
 	   Verify that the sound instance name is correct) */
 	assert(s_instances.find(name) != s_instances.end());
+	UNREFERENCED_PARAMETER(name);
 }

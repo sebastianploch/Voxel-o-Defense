@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable: 4996)
 
 enum class Shaders
 {
@@ -19,7 +20,7 @@ struct ConstantBuffer
     float padding[3]{ 0.0f };
 };
 
-//Surface and light information which can define an objects surface and its light caluclation
+//Surface and light information which can define an objects surface and its light calculation
 //can be extended in the future for more lighting calculations
 
 //-------------------------------------------------------------------------------------
