@@ -4,18 +4,18 @@
 
 AiManager::AiManager(int totalAgents, DirectX::XMFLOAT3 spawnRate)
 {
-
 	m_totalAmountOfAgents = totalAgents;
 	m_spawnRates = spawnRate;
 
 	for (int i = 0; i < m_totalAmountOfAgents; i++)
 	{
-		float ten = rand() % 100;
-
 		m_aiAgents.push_back(std::make_shared<AiAgent>(Zombie));
 	}
 	m_routeConstructor = std::make_shared<RouteConstructor>();
 	ImportTerrainInfo();
+
+	SetStartLocation(DirectX::XMFLOAT3(200, 4, 200), 1);
+	SetEndLocation(DirectX::XMFLOAT3(0, 4, 0), 1);
 }
 
 AiManager::~AiManager()
@@ -55,25 +55,36 @@ void AiManager::ImportTerrainInfo()
 	m_routeConstructor->CreatePathfindingMap();
 }
 
-void AiManager::SetStartLocation(DirectX::XMFLOAT3 pos)
+void AiManager::SetStartLocation(DirectX::XMFLOAT3 pos, int startingPosition)
 {
-	m_routeConstructor->SetStarting(pos);
+	m_routeConstructor->SetStarting(pos, startingPosition);
 }
 
-void AiManager::SetEndLocation(DirectX::XMFLOAT3 pos)
+void AiManager::SetEndLocation(DirectX::XMFLOAT3 pos, int startingPosition)
 {
-	m_routeConstructor->SetEnding(pos);
+	m_routeConstructor->SetEnding(pos, startingPosition);
 }
 
-void AiManager::StartWave()
+void AiManager::StartWave(STEP_UP_AMOUNT step, int startingLocation)
 {
-	m_routeConstructor->A_star();
+	m_routeConstructor->A_star(step, startingLocation);
 	for (int i = 0; i < m_aiAgents.size(); i++)
 	{
-		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute());
+		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute(startingLocation));
 		m_aiAgents[i]->SpawnAiAgent();
 	}
+}
 
+bool AiManager::HasWaveStarted()
+{
+	for (int i = 0; i < m_aiAgents.size(); i++)
+	{
+		if (m_aiAgents[i]->IsAiAgentActive() == true)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 //---------------------------------------------------//

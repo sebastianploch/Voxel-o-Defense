@@ -16,12 +16,6 @@ Nodes::Nodes(int ID, DirectX::XMFLOAT3 position)
 	m_position = position;
 }
 
-void Nodes::SecondaryNodeCreation(std::vector<int> connections, DirectX::XMFLOAT3 position)
-{
-	m_connectedWaypointIDs = connections;
-	m_position = position;
-}
-
 Nodes::~Nodes()
 {
 }
@@ -30,16 +24,16 @@ Nodes::~Nodes()
 //------------ Access Variable Functions ------------//
 //---------------------------------------------------//
 
-std::vector<int> Nodes::GetConnectedWaypointIDs()
+std::vector<int> Nodes::GetConnectedWaypointIDs(STEP_UP_AMOUNT stepUpAmmount)
 {
-	return m_connectedWaypointIDs;
+	return m_connectedWaypointIDs[stepUpAmmount];
 }
 
-bool Nodes::IsConnectedTo(int waypointIDToCheck)
+bool Nodes::IsConnectedTo(STEP_UP_AMOUNT stepUpAmount ,int waypointIDToCheck)
 {
-	for (int i = 0; i < m_connectedWaypointIDs.size(); i++)
+	for (int i = 0; i < m_connectedWaypointIDs[stepUpAmount].size(); i++)
 	{
-		if (m_connectedWaypointIDs[i] == m_ID)
+		if (m_connectedWaypointIDs[stepUpAmount][i] == m_ID)
 		{
 			return true;
 		}

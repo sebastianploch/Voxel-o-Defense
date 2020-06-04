@@ -6,6 +6,7 @@
 #include "ShaderManager.h"
 #include "AiManager.h"
 
+#include <thread>
 
 class Game
 {
@@ -86,4 +87,6 @@ private:
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;
+
+	std::thread AiPathingThread;
 };

@@ -15,6 +15,16 @@
 #include <Vector>
 
 //-----------//
+//-- Enums --//
+//-----------//
+
+enum STEP_UP_AMOUNT
+{
+	ONE = 0,
+	FIVE = 1
+};
+
+//-----------//
 //-- Class --//
 //-----------//
 
@@ -24,12 +34,11 @@ public:
 	Nodes(Nodes* itSelf, Nodes* parent);
 	//- Node Constructor when first creating -//
 	Nodes(int ID, DirectX::XMFLOAT3 position);
-	void SecondaryNodeCreation(std::vector<int> connections, DirectX::XMFLOAT3 position);
 	~Nodes();
 
 	//- Core -//
-	std::vector<int> GetConnectedWaypointIDs();
-	bool IsConnectedTo(int waypointIDToCheck);
+	std::vector<int> GetConnectedWaypointIDs(STEP_UP_AMOUNT stepUpAmmount);
+	bool IsConnectedTo(STEP_UP_AMOUNT stepUpAmount, int waypointIDToCheckint);
 	int GetID();
 	DirectX::XMFLOAT3 GetPosition();
 	Nodes* GetParentWayPoint();
@@ -43,7 +52,7 @@ public:
 	float GetFCost();
 	void SetFCost(float passIn);
 
-	std::vector<int> m_connectedWaypointIDs;
+	std::vector<std::vector<int>> m_connectedWaypointIDs;
 
 
 private:

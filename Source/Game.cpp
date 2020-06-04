@@ -10,6 +10,9 @@
 #include "VoxelModelManager.h"
 #include "VoxelRay.h"
 
+//- Required Header for threading dont delete - David -//
+#include <thread>
+
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
 
@@ -21,7 +24,6 @@ using Microsoft::WRL::ComPtr;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector3Int;
 using DirectX::SimpleMath::Matrix;
-
 
 Game::Game() noexcept :
     m_window(nullptr),
@@ -60,10 +62,6 @@ void Game::Initialize(HWND window,
 
 	// Create Ai Manager
 	m_AiManager = std::make_unique<AiManager>(1, DirectX::XMFLOAT3(50,30,20));
-
-	//Setting the start and end position for all ai agents
-	m_AiManager->SetStartLocation(DirectX::XMFLOAT3(200,4,200));
-	m_AiManager->SetEndLocation(DirectX::XMFLOAT3(0, 4, 0));
 
 	InitialiseVoxelWorld();
 }
@@ -328,7 +326,9 @@ void Game::Update(DX::StepTimer const& timer)
 
 	if (m_inputState->GetKeyboardState().pressed.M)
 	{
-		m_AiManager->StartWave();
+		//- Creating a new thread to run StartWave() -//
+		//- This thread runs untill finished with creating a route -//
+		AiPathingThread = std::thread(&AiManager::StartWave, m_AiManager.get(), FIVE, 1);
 	}
 
 
@@ -359,6 +359,7 @@ void Game::Update(DX::StepTimer const& timer)
 		object->Update(deltaTime);
 	}
 
+	//AiPathingThread.join();
 	m_AiManager->Update(deltaTime, timer.GetTotalSeconds());
 }
 

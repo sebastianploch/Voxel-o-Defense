@@ -6,6 +6,9 @@
 //- Defines -//
 //-----------//
 
+#define SizeOfVoxel 1
+#define MAX 479
+#define MIN 0
 
 
 //------------//
@@ -21,13 +24,16 @@
 //-- Enums --//
 //-----------//
 
-
-
 //------------//
 //-- Struct --//
 //------------//
 
-
+struct routes
+{
+	DirectX::SimpleMath::Vector3 startPos;
+	DirectX::SimpleMath::Vector3 endPos;
+	std::vector<Nodes*> m_route;
+};
 
 //-----------//
 //-- Class --//
@@ -41,20 +47,20 @@ public:
 	void Update();
 	void CreatePathfindingMap();
 
-	void SetStarting(DirectX::XMFLOAT3 pos);
-	void SetEnding(DirectX::XMFLOAT3 pos);
+	void SetStarting(DirectX::XMFLOAT3 pos, int startingPosition);
+	void SetEnding(DirectX::XMFLOAT3 pos, int endingPosition);
 	
-	void A_star();
+	void A_star(STEP_UP_AMOUNT stepUpAmmount, int startingLocation);
 
 	std::vector<Nodes*> GetCreatedPathingMap();
 
-	std::vector<Nodes*> GetRoute();
+	std::vector<Nodes*> GetRoute(int startingLocation);
 
 protected:
 
 	//- Core Pathfinding Functions -//
-	std::vector<Nodes*> GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes);
-	void GetPathResults(Nodes* parentNode, Nodes* startingNode);
+	std::vector<Nodes*> GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation);
+	void GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation);
 
 	//- Code That is Resused multiple times in functions -//
 	void CalculateWeighting(Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos);
@@ -66,22 +72,16 @@ protected:
 	bool IsNodeClosed(Nodes* NodeToCheck, std::vector<Nodes*> closed);
 	void OpenNode(Nodes* NodeToMove);
 	void CloseNode(Nodes* NodeToMove);
-	void NewTarget(DirectX::XMFLOAT3 target);
-	void StopMoving();
 
 private:
 
 	//- Pathfinding Core Veriables -//
-	std::vector<Nodes*> m_route;
+	std::vector<routes> m_route;
 	std::vector<Nodes*> m_openNodes;
 	std::vector<Nodes*> m_closedNodes;
 	Nodes* m_nodeToTravelTo = nullptr;
 
 	bool FinalDestinationChanged = true;
-
-	DirectX::XMFLOAT3 m_targetPos;
-	DirectX::XMFLOAT3 m_StartingPos;
-
 
 	std::vector<Nodes*> m_createdPathingMap;
 

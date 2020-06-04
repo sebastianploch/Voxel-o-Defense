@@ -3,12 +3,12 @@
 #include "Chunk.h"
 #include "ChunkHandler.h"
 
-#define SizeOfVoxel 1
-#define MAX 479
-#define MIN 0
-
 RouteConstructor::RouteConstructor()
 {
+	routes temp1; m_route.push_back(temp1);
+	routes temp2; m_route.push_back(temp2);
+	routes temp3; m_route.push_back(temp3);
+	routes temp4; m_route.push_back(temp4);
 }
 
 RouteConstructor::~RouteConstructor()
@@ -34,25 +34,133 @@ void RouteConstructor::CreatePathfindingMap()
 			Nodes* tempNode = new Nodes(IdCounter, DirectX::XMFLOAT3(i, WorldManipulation::GetHeightmap(i,j), j));
 			IdCounter++;
 
-			std::vector<int> connectedIds;
+			std::vector<int> StepUpOneConnections;
+			std::vector<int> StepUpFiveConnections;
 
-			if (i != MAX && j != MIN)	tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) - 2);	//Top Left
-			if (i != MAX)				tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) - 1);	//Top Mid
-			if (i != MAX && j != MAX)	tempNode->m_connectedWaypointIDs.push_back((IdCounter + (32 * 15)) + 0);	//TopRIght
-			if (j != MAX)				tempNode->m_connectedWaypointIDs.push_back(IdCounter + 1);					//Mid right
-			if (j != MIN)				tempNode->m_connectedWaypointIDs.push_back(IdCounter - 1);					//Mid Left
-			if (i != MIN && j != MIN)	tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) - 2);	//Bottom Left
-			if (i != MIN)				tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) - 1);	//Botom Mid
-			if (i != MIN && j != MAX)	tempNode->m_connectedWaypointIDs.push_back((IdCounter - (32 * 15)) + 0);	//Botom Right
+			//-----------------------------------------------------//
+			//------------ Step up of One Calculations ------------//
+			//-----------------------------------------------------//
 
-			m_createdPathingMap.push_back(tempNode);
+			//- Check if the Node Id Is valid -//
+			if (i != MAX && j != MIN ) 
+				//- If Node is within StepUpRange Add to ConnectedWaypoints -//
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i + 1, j - 1) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i + 1, j - 1))
+				{
+					//- Save As Connected Waypoint -//
+					StepUpOneConnections.push_back((IdCounter + (32 * 15)) - 2);	//Top Left
+				}
+
+			if (i != MAX)
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i + 1, j) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i + 1, j))
+				{
+					StepUpOneConnections.push_back((IdCounter + (32 * 15)) - 1);	//Top Mid
+				}
+
+			if (i != MAX && j != MAX)
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i + 1, j + 1) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i + 1, j + 1))
+				{
+					StepUpOneConnections.push_back((IdCounter + (32 * 15)) + 0);	//Top RIght
+				}
+
+			if (j != MAX)
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i, j + 1) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i, j + 1))
+				{
+					StepUpOneConnections.push_back(IdCounter + 1);					//Mid right
+				}
+
+			if (j != MIN)
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i, j - 1) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i, j - 1))
+				{
+					StepUpOneConnections.push_back(IdCounter - 1);					//Mid Left
+				}
+
+			if (i != MIN && j != MIN)
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i - 1, j - 1) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i - 1, j - 1))
+				{
+					StepUpOneConnections.push_back((IdCounter - (32 * 15)) - 2);	//Bottom Left
+				}
+
+			if (i != MIN)
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i - 1,j) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i - 1, j))
+				{
+					StepUpOneConnections.push_back((IdCounter - (32 * 15)) - 1);	//Botom Mid
+				}
+
+			if (i != MIN && j != MAX)
+				if (tempNode->GetPosition().y + 1 >= WorldManipulation::GetHeightmap(i - 1, j + 1) && tempNode->GetPosition().y - 1 <= WorldManipulation::GetHeightmap(i - 1, j + 1))
+				{
+					StepUpOneConnections.push_back((IdCounter - (32 * 15)) + 0);	//Botom Right
+				}
+
+
+			//------------------------------------------------------//
+			//------------ Step up of Five Calculations ------------//
+			//------------------------------------------------------//
+
+			//- Check if the Node Id Is valid -//
+			if (i != MAX && j != MIN)
+				//- If Node is within StepUpRange Add to ConnectedWaypoints -//
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i + 1, j - 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i + 1, j - 1))
+				{
+					//- Save As Connected Waypoint -//
+					StepUpFiveConnections.push_back((IdCounter + (32 * 15)) - 2);	//Top Left
+				}
+
+			if (i != MAX)
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i + 1, j) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i + 1, j))
+				{
+					StepUpFiveConnections.push_back((IdCounter + (32 * 15)) - 1);	//Top Mid
+				}
+
+			if (i != MAX && j != MAX)
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i + 1, j + 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i + 1, j + 1))
+				{
+					StepUpFiveConnections.push_back((IdCounter + (32 * 15)) + 0);	//Top RIght
+				}
+
+			if (j != MAX)
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i, j + 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i, j + 1))
+				{
+					StepUpFiveConnections.push_back(IdCounter + 1);					//Mid right
+				}
+
+			if (j != MIN)
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i, j - 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i, j - 1))
+				{
+					StepUpFiveConnections.push_back(IdCounter - 1);					//Mid Left
+				}
+
+			if (i != MIN && j != MIN)
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i - 1, j - 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i - 1, j - 1))
+				{
+					StepUpFiveConnections.push_back((IdCounter - (32 * 15)) - 2);	//Bottom Left
+				}
+
+			if (i != MIN)
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i - 1, j) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i - 1, j))
+				{
+					StepUpFiveConnections.push_back((IdCounter - (32 * 15)) - 1);	//Botom Mid
+				}
+
+			if (i != MIN && j != MAX)
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i - 1, j + 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i - 1, j + 1))
+				{
+					StepUpFiveConnections.push_back((IdCounter - (32 * 15)) + 0);	//Botom Right
+				}
+
+			//- Pushing Both Node Connectors StepUpOneConnections and StepUpFiveConnections -//
+			tempNode->m_connectedWaypointIDs.push_back(StepUpOneConnections);
+			tempNode->m_connectedWaypointIDs.push_back(StepUpFiveConnections);
+
+			//- Pushing created Node to Pathing map vector to be used in calculations -//
+ 			m_createdPathingMap.push_back(tempNode);
 		}
 	}
 
 }
 
 //- CORE FUNCTIONS -//
-void RouteConstructor::A_star()
+void RouteConstructor::A_star(STEP_UP_AMOUNT stepUpAmmount, int StartingLocation)
 {
 	std::vector<Nodes*> _waypoints = GetCreatedPathingMap();
 	std::vector<Nodes*> _nodes;
@@ -67,20 +175,20 @@ void RouteConstructor::A_star()
 	//- loops though all the waypoints -//
 	for (int i = 0; i < _waypoints.size(); i++)
 	{
-		tempish = ReturnDistance(m_StartingPos, _waypoints[i]->GetPosition());
+		tempish = ReturnDistance(m_route[StartingLocation].startPos, _waypoints[i]->GetPosition());
 		//- checking if the waypoint is the closes to current position -//
 		if (distanceToTank > tempish)
 		{
 			//- seting it as the lowest target -//
-			distanceToTank = ReturnDistance(m_StartingPos, _waypoints[i]->GetPosition());
+			distanceToTank = ReturnDistance(m_route[StartingLocation].startPos, _waypoints[i]->GetPosition());
 			_closesToTank = _waypoints[i];
 		}
-		temp2ish = ReturnDistance(m_targetPos, _waypoints[i]->GetPosition());
+		temp2ish = ReturnDistance(m_route[StartingLocation].endPos, _waypoints[i]->GetPosition());
 		//- checking if the waypoint is the closes to the target desinations -//
 		if (distanceToDestination > temp2ish)
 		{
 			//- seting to lowest value -//
-			distanceToDestination = ReturnDistance(m_targetPos, _waypoints[i]->GetPosition());
+			distanceToDestination = ReturnDistance(m_route[StartingLocation].endPos, _waypoints[i]->GetPosition());
 			_closesToDestination = _waypoints[i];
 		}
 		//- turning waypoints into custom struct to easy use -//
@@ -88,20 +196,20 @@ void RouteConstructor::A_star()
 
 	}
 
-	if (m_route.size() == 0 && FinalDestinationChanged == true)
+	if (m_route[StartingLocation].m_route.size() == 0 && FinalDestinationChanged == true)
 	{
-		GetPath(_closesToTank, _closesToDestination, _nodes);
+		GetPath(_closesToTank, _closesToDestination, _nodes, stepUpAmmount, StartingLocation);
 		FinalDestinationChanged = false;
 	}
 
-	if (m_route.size() >= 1)
+	if (m_route[StartingLocation].m_route.size() >= 1)
 	{
-		m_nodeToTravelTo = m_route[m_route.size() - 1];
-		if (m_StartingPos.x > m_nodeToTravelTo->GetPosition().x && m_StartingPos.x < m_nodeToTravelTo->GetPosition().x &&
-			m_StartingPos.y > m_nodeToTravelTo->GetPosition().y && m_StartingPos.y < m_nodeToTravelTo->GetPosition().y &&
-			m_StartingPos.z > m_nodeToTravelTo->GetPosition().z && m_StartingPos.z < m_nodeToTravelTo->GetPosition().z)
+		m_nodeToTravelTo = m_route[StartingLocation].m_route[m_route.size() - 1];
+		if (m_route[StartingLocation].startPos.x > m_nodeToTravelTo->GetPosition().x && m_route[StartingLocation].startPos.x < m_nodeToTravelTo->GetPosition().x &&
+			m_route[StartingLocation].startPos.y > m_nodeToTravelTo->GetPosition().y && m_route[StartingLocation].startPos.y < m_nodeToTravelTo->GetPosition().y &&
+			m_route[StartingLocation].startPos.z > m_nodeToTravelTo->GetPosition().z && m_route[StartingLocation].startPos.z < m_nodeToTravelTo->GetPosition().z)
 		{
-			m_route.erase(m_route.begin() + (m_route.size() - 1));
+			m_route[StartingLocation].m_route.erase(m_route[StartingLocation].m_route.begin() + (m_route[StartingLocation].m_route.size() - 1));
 		}
 	}
 	else
@@ -111,7 +219,7 @@ void RouteConstructor::A_star()
 
 }
 
-std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes)
+std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation)
 {
 	//- Decliration of vectors -//
 	Nodes* CurrentLowestNode;
@@ -129,14 +237,14 @@ std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, st
 		}
 
 		//- opening new nodes  -//
-		for (int j = 0; j < CurrentLowestNode->GetConnectedWaypointIDs().size(); j++)
+		for (int j = 0; j < CurrentLowestNode->GetConnectedWaypointIDs(stepUpAmmount).size(); j++)
 		{
 			//- if the node is Open dont re-Open it -//
-			if (IsNodeOpen(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], m_openNodes) == false && IsNodeClosed(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], m_closedNodes) == false)
+			if (IsNodeOpen(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs(stepUpAmmount)[j]], m_openNodes) == false && IsNodeClosed(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs(stepUpAmmount)[j]], m_closedNodes) == false)
 			{
-				AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]]->SetParentWaypoint(CurrentLowestNode);
-				CalculateWeighting(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]], CurrentLowestNode->GetPosition(), ending->GetPosition());
-				m_openNodes.push_back(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs()[j]]);
+				AllNodes[CurrentLowestNode->GetConnectedWaypointIDs(stepUpAmmount)[j]]->SetParentWaypoint(CurrentLowestNode);
+				CalculateWeighting(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs(stepUpAmmount)[j]], CurrentLowestNode->GetPosition(), ending->GetPosition());
+				m_openNodes.push_back(AllNodes[CurrentLowestNode->GetConnectedWaypointIDs(stepUpAmmount)[j]]);
 			}
 		}
 
@@ -153,23 +261,23 @@ std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, st
 		{
 			if (ending != starting)
 			{
-				GetPathResults(m_closedNodes[i], starting);
+				GetPathResults(m_closedNodes[i], starting, startingLocation);
 			}
 			break;
 		}
 	}
 	//- Retrace Steps to the Starting Node -//
 
-	return m_route;
+	return m_route[startingLocation].m_route;
 
 }
 
-void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode)
+void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation)
 {
-	m_route.push_back(parentNode);
+	m_route[startingLocation].m_route.push_back(parentNode);
 	if (parentNode->GetParentWayPoint() != nullptr)
 	{
-		GetPathResults(parentNode->GetParentWayPoint(), startingNode);
+		GetPathResults(parentNode->GetParentWayPoint(), startingNode, startingLocation);
 	}
 }
 
@@ -193,11 +301,6 @@ Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 	//- return the lowest -//
 	return currentLowest;
 }
-
-//bool RouteConstructor::IsThereDuplicateFCosts()
-//{
-//
-//}
 
 void RouteConstructor::CalculateWeighting(Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos)
 {
@@ -262,23 +365,14 @@ void RouteConstructor::CloseNode(Nodes* NodeToMove)
 	}
 }
 
-void RouteConstructor::NewTarget(DirectX::XMFLOAT3 target)
+void RouteConstructor::SetStarting(DirectX::XMFLOAT3 pos, int startingPosition)
 {
-	m_targetPos = target;
-	FinalDestinationChanged = true;
-	m_route.clear();
-	m_closedNodes.clear();
-	m_openNodes.clear();
+	m_route[startingPosition].startPos = pos;
 }
 
-void RouteConstructor::SetStarting(DirectX::XMFLOAT3 pos)
+void RouteConstructor::SetEnding(DirectX::XMFLOAT3 pos, int startingPosition)
 {
-	m_StartingPos = pos;
-}
-
-void RouteConstructor::SetEnding(DirectX::XMFLOAT3 pos)
-{
-	m_targetPos = pos;
+	m_route[startingPosition].endPos = pos;
 }
 
 //-----------------------------------------//
@@ -290,7 +384,7 @@ std::vector<Nodes*> RouteConstructor::GetCreatedPathingMap()
 	return m_createdPathingMap;
 }
 
-std::vector<Nodes*> RouteConstructor::GetRoute()
+std::vector<Nodes*> RouteConstructor::GetRoute(int startingLocation)
 {
-	return m_route;
+	return m_route[startingLocation].m_route;
 }

@@ -48,15 +48,15 @@ public:
 	void Render(ID3D11DeviceContext* deviceContext, ID3D11DeviceContext1* dc1, ConstantBuffer cb, ID3D11Buffer* constBuffer, ShaderManager* m_shaderManager);
 
 	void ImportTerrainInfo();
-	void SetStartLocation(DirectX::XMFLOAT3 pos);
-	void SetEndLocation(DirectX::XMFLOAT3 pos);
+	void SetStartLocation(DirectX::XMFLOAT3 pos, int startingPosition);
+	void SetEndLocation(DirectX::XMFLOAT3 pos, int startingPosition);
 
 	std::vector<std::shared_ptr<AiAgent>> GetAiAgents();
 	int GetTotalAgents();
 	void SetTotalAgents(int totalAgents);
 
-	void StartWave();
-	bool HasWaveFinished();
+	void StartWave(STEP_UP_AMOUNT step, int startingLocation);
+	bool HasWaveStarted();
 
 private:
 	std::vector<std::shared_ptr<AiAgent>> m_aiAgents;
