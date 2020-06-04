@@ -28,6 +28,13 @@ struct JSONINFO
 
 };
 
+struct SoundsCfg : public JSONINFO
+{
+    std::string* type = new std::string();
+    int amount;
+    std::vector<std::string> paths;
+};
+
 struct GameObjectCfg : public JSONINFO
 {
 	std::string* type = new std::string();
@@ -122,3 +129,21 @@ void DEBUG_PRINT(DirectX::SimpleMath::Vector2 vec)
 	str += "\n";
 	OutputDebugStringA(str.c_str());
 }
+
+#pragma region STRING_CONVERSION
+static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> s_converter;
+
+// Helper function to convert string into wstring
+static std::wstring TO_WSTRING(const std::string& string)
+{
+    std::wstring str = s_converter.from_bytes(string);
+    return str;
+}
+
+// Helper function to convert string into wstring
+static std::string TO_STRING(const std::wstring& string)
+{
+    std::string str = s_converter.to_bytes(string);
+    return str;
+}
+#pragma endregion STRING_CONVERSION

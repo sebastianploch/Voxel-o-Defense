@@ -5,10 +5,12 @@ namespace JSONLoader
 	{
 		GAMEOBJECT = 0,
 		CAMERA = 1,
+		SOUNDS = 2,
 	};
 
 	void LoadFile(std::string filePath, GameObjectCfg& cfg, std::string name);
 	void LoadFile(std::string filePath, CamCfg& cfg, std::string name);
+	void LoadFile(std::string filePath, SoundsCfg& cfg, std::string name);
 	void LoadFile(std::string filePath, JSONINFO& cfg, CONFIG_TYPE cfgType, std::string name); //Load different jsoninfo types to perform their specified file loaders
  	nlohmann::json _CHECKFILE(std::string filePath);
 

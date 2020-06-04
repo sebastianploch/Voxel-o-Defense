@@ -227,6 +227,7 @@
     <ClInclude Include="Source\PlaneGameObject.h" />
     <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\ShaderManager.h" />
+    <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\StepTimer.h" />
     <ClInclude Include="Source\VoxelModel.h" />
     <ClInclude Include="Source\VoxelModelManager.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="Source\VoxelModel.cpp" />
     <ClCompile Include="Source\VoxelModelManager.cpp" />
     <ClCompile Include="Source\VoxelRay.cpp" />
+    <ClCompile Include="Source\Sound.cpp" />
     <ClCompile Include="Source\WorldManipulation.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\ShaderManager.cpp" />
@@ -277,6 +279,9 @@
     <Manifest Include="settings.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Source\Libs\DirectXTK\Audio\DirectXTKAudio_Desktop_2019_Win8.vcxproj">
+      <Project>{4f150a30-cecb-49d1-8283-6a3f57438cf5}</Project>
+    </ProjectReference>
     <ProjectReference Include="Source\Libs\DirectXTK\DirectXTK_Desktop_2019.vcxproj">
       <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
     </ProjectReference>

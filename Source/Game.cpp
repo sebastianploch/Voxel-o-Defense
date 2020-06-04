@@ -48,6 +48,7 @@ void Game::Initialize(HWND window,
 													  (float)m_windowHeight);
 
     CreateResources();
+	CreateAudioEngine();
 
     // Set locked framerate (60fps)
     m_timer.SetFixedTimeStep(true);
@@ -76,6 +77,8 @@ void Game::Initialize(HWND window,
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
 	
 	InitialiseVoxelWorld();
+
+	Sound::InitialiseSounds(m_audioEngine.get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -252,6 +255,18 @@ void Game::CreateResources()
 							(float)backBufferHeight);
 }
 
+void Game::CreateAudioEngine()
+{
+	DX::ThrowIfFailed(CoInitializeEx(nullptr, COINIT_MULTITHREADED));
+
+	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
+#ifdef _DEBUG
+	eflags = eflags | AudioEngine_Debug;
+#endif
+
+	m_audioEngine = std::make_unique<AudioEngine>(eflags);
+}
+
 // Create constant buffer to be used as a resource by shader.
 void Game::CreateConstantBuffer()
 {
@@ -359,6 +374,20 @@ void Game::Update(DX::StepTimer const& timer)
 	}
 
 	m_modelTest.Update(deltaTime);
+
+	UpdateAudio();
+}
+
+void Game::UpdateAudio()
+{
+	if (!m_audioEngine->Update())
+	{
+		// No audio device
+		if (m_audioEngine->IsCriticalError())
+		{
+			OutputDebugStringA("[ERROR] : No Audio Device Active! \n");
+		}
+	}
 }
 
 void Game::Render()

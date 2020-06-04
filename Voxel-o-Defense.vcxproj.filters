@@ -138,6 +138,9 @@
     <ClInclude Include="Source\Mesh.h">
       <Filter>Headers\GameObjects\ModelObject</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Sound.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -216,6 +219,9 @@
     </ClCompile>
     <ClCompile Include="Source\Mesh.cpp">
       <Filter>Source\GameObjects\ModelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound.cpp">
+      <Filter>Source\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
