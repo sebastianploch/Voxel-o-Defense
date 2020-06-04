@@ -189,12 +189,13 @@
     <ClInclude Include="Source\InputState.h" />
     <ClInclude Include="Source\JSONLoader.h" />
     <ClInclude Include="Source\Observer.h" />
+    <ClInclude Include="Source\ObserverEvents.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\StepTimer.h" />
     <ClInclude Include="Source\Subject.h" />
     <ClInclude Include="Source\UIButton.h" />
     <ClInclude Include="Source\UISprite.h" />
-    <ClInclude Include="Source\UISystem.h" />
+    <ClInclude Include="Source\UIManager.h" />
     <ClInclude Include="Source\IUIObject.h" />
     <ClInclude Include="Source\UIText.h" />
   </ItemGroup>
@@ -205,7 +206,6 @@
     <ClCompile Include="Source\InputState.cpp" />
     <ClCompile Include="Source\JSONLoader.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\Observer.cpp" />
     <ClCompile Include="Source\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -215,7 +215,7 @@
     <ClCompile Include="Source\Subject.cpp" />
     <ClCompile Include="Source\UIButton.cpp" />
     <ClCompile Include="Source\UISprite.cpp" />
-    <ClCompile Include="Source\UISystem.cpp" />
+    <ClCompile Include="Source\UIManager.cpp" />
     <ClCompile Include="Source\IUIObject.cpp" />
     <ClCompile Include="Source\UIText.cpp" />
   </ItemGroup>

@@ -18,7 +18,22 @@ UIText::~UIText()
 	m_font.reset();
 }
 
-bool UIText::Update(float deltaTime, std::unique_ptr<InputState>& inputState)
+void UIText::OnNotify(std::shared_ptr<Event> event)
+{
+	switch (event->m_type)
+	{
+	case EVENTTYPE::CLICK:
+
+		break;
+	case EVENTTYPE::VALCHANGE:
+		std::shared_ptr<ValChangeEvent> valChangeEvent = std::static_pointer_cast<ValChangeEvent>(event);
+		SetText(std::to_wstring(valChangeEvent->m_newVal).c_str());
+		break;
+	}
+}
+
+bool UIText::Update(float deltaTime,
+					std::unique_ptr<InputState>& inputState)
 {
 	if (m_lifeTime > 0.0f)
 	{
@@ -31,7 +46,8 @@ bool UIText::Update(float deltaTime, std::unique_ptr<InputState>& inputState)
 	return false;
 }
 
-void UIText::Draw(SpriteBatch* spriteBatch)
+void UIText::Draw(SpriteBatch
+	spriteBatch)
 {
 	if (m_isOutlined)
 	{

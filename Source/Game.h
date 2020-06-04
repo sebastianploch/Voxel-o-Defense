@@ -1,6 +1,7 @@
 #pragma once
 #include "StepTimer.h"
-#include "UISystem.h"
+#include "UIManager.h"
+#include "Observer.h"
 
 class IGameObject;
 
@@ -46,7 +47,8 @@ private:
 	HRESULT CompileShader(LPCTSTR path,
 						  LPCSTR entryPoint,
 						  LPCSTR profile,
-						  ID3DBlob** blob);
+						  ID3DBlob
+		* blob);
 
 private:
     // Device resources.
@@ -80,7 +82,7 @@ private:
 	DirectX::SimpleMath::Matrix							m_projMat;
 
 	// UI
-	std::unique_ptr<UISystem>							m_UIManager;
+	std::unique_ptr<UIManager>							m_UIManager;
 	std::unique_ptr<DirectX::SpriteBatch>				m_spriteBatch;
 
     // DeltaTime Timer

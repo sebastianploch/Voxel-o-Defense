@@ -82,8 +82,11 @@
     <ClInclude Include="Source\Observer.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UISystem.h">
+    <ClInclude Include="Source\UIManager.h">
       <Filter>Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObserverEvents.h">
+      <Filter>Headers\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -120,13 +123,10 @@
     <ClCompile Include="Source\UISprite.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Observer.cpp">
-      <Filter>Source\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Subject.cpp">
       <Filter>Source\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UISystem.cpp">
+    <ClCompile Include="Source\UIManager.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>

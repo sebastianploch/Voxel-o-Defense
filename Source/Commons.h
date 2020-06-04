@@ -27,8 +27,8 @@ struct CamCfg : public JSONINFO
 	DirectX::SimpleMath::Vector3 at;
 	std::string* type = new std::string();
 };
-
-enum class EVENT
-{
-	CLICK = 0
-};
+//
+//enum class EVENT
+//{
+//	CLICK = 0
+//};

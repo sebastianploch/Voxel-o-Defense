@@ -4,8 +4,6 @@
 #include "UIButton.h"
 #include "UISprite.h"
 #include "UIText.h"
-#include "Subject.h"
-#include "Observer.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -48,7 +46,7 @@ void Game::Initialize(HWND window,
 	m_inputState = std::make_unique<InputState>(m_window);
 
 	// Initialise UI Manager
-	m_UIManager = std::make_unique<UISystem>();
+	m_UIManager = std::make_unique<UIManager>();
 
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
@@ -59,17 +57,20 @@ void Game::Initialize(HWND window,
 
 	// Create test button
 	std::shared_ptr<UIButton> testButton = std::make_shared<UIButton>();
-	testButton->Initialise(SimpleMath::Vector2(m_windowWidth / 2, m_windowHeight / 2), L"Resources/Textures/samplebutton.dds", L"Resources/Fonts/Calibri.spritefont", L"Click me", m_d3dDevice.Get());
+	testButton->Initialise(SimpleMath::Vector2(m_windowWidth / 2, m_windowHeight / 2), L"Resources/Textures/samplebuttonblack.dds", L"Resources/Fonts/Calibri.spritefont", L"Start", m_d3dDevice.Get());
 
 	// Create test text with a lifetime
 	std::shared_ptr<UIText> testText = std::make_shared<UIText>();
 	testText->Initialise(SimpleMath::Vector2(m_windowWidth / 4, m_windowHeight / 4), L"Text element", SimpleMath::Color(Colors::White), L"Resources/Fonts/Calibri.spritefont", m_d3dDevice.Get(), 3.0f);
 	testText->SetScale(0.5f);
 
+	testButton->Clicked()->AddObserver(testText);
+
 	// Create test image
 	std::shared_ptr<UISprite> testSprite = std::make_shared<UISprite>();
-	testSprite->Initialise(SimpleMath::Vector2(m_windowWidth / 2 + m_windowWidth / 4, m_windowHeight / 4), L"Resources/Textures/sampleimage.dds", m_d3dDevice.Get(), -1.0f, 128, 64);
-	testSprite->SetScale(0.25f);
+	testSprite->Initialise(SimpleMath::Vector2(m_windowWidth / 2 + m_windowWidth / 4, m_windowHeight / 4), L"Resources/Textures/lanternicon.dds", m_d3dDevice.Get());
+	testSprite->SetScale(10.0f);
+
 	// Add UI to manager
 	m_UIManager->Add(testButton);
 	m_UIManager->Add(testText);
@@ -254,8 +255,6 @@ void Game::CreateResources()
 													 static_cast<float>(backBufferWidth) / static_cast<float>(backBufferHeight),
 													 0.1f,
 													 100.0f);
-
-	//m_projMat2D = Matrix::CreateOrthographic(static_cast<float>(m_windowWidth), static_cast<float>(m_windowHeight), 0.1f, 100.0f);
 }
 
 // Compile and Assign Shaders to buffers & Create Input Layout.
@@ -404,7 +403,7 @@ void Game::Render()
 	}
 
 	// Render sprites (UI)
-	m_spriteBatch->Begin();
+	m_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, m_states->PointClamp());
 	m_UIManager->Render(m_spriteBatch.get());
 	m_spriteBatch->End();
 

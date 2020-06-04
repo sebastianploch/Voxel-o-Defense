@@ -10,7 +10,8 @@ UISprite::UISprite() :
 	m_height(0),
 	m_rotation(0.0f),
 	m_scale(1.0f),
-	m_tint(Colors::White)
+	m_tint(Colors::White),
+	m_isStretched(false)
 {
 }
 
@@ -18,7 +19,8 @@ UISprite::~UISprite()
 {
 }
 
-bool UISprite::Update(float deltaTime, std::unique_ptr<InputState>& inputState)
+bool UISprite::Update(float deltaTime,
+					  std::unique_ptr<InputState>& inputState)
 {
 	if (m_lifeTime > 0.0f)
 	{
@@ -31,19 +33,10 @@ bool UISprite::Update(float deltaTime, std::unique_ptr<InputState>& inputState)
 	return false;
 }
 
-void UISprite::Draw(SpriteBatch* spriteBatch)
+void UISprite::Draw(SpriteBatch
+	spriteBatch)
 {
-	if (m_width < 0 || m_height < 0)
-	{
-		spriteBatch->Draw(m_texture.Get(),
-						  m_screenPos,
-						  nullptr,
-						  m_tint,
-						  m_rotation,
-						  m_origin,
-						  m_scale);
-	}
-	else
+	if (m_isStretched)
 	{
 		RECT destRect;
 		destRect.left = m_screenPos.x;
@@ -57,6 +50,16 @@ void UISprite::Draw(SpriteBatch* spriteBatch)
 			m_tint,
 			m_rotation,
 			m_origin);
+	}
+	else
+	{
+		spriteBatch->Draw(m_texture.Get(),
+			m_screenPos,
+			nullptr,
+			m_tint,
+			m_rotation,
+			m_origin,
+			m_scale);
 	}
 }
 
@@ -90,6 +93,8 @@ void UISprite::Initialise(DirectX::SimpleMath::Vector2 screenPos,
 	}
 	else
 	{
+		m_isStretched = true;
+
 		DX::ThrowIfFailed(CreateDDSTextureFromFile(device,
 			texturePath,
 			nullptr,

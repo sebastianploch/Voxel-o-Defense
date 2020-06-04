@@ -1,9 +1,11 @@
 #pragma once
 
+#include "ObserverEvents.h"
+
 class Observer
 {
 public:
-	virtual ~Observer();
+	virtual ~Observer() {}
 
-	virtual void OnNotify(EVENT event) = 0;
+	virtual void OnNotify(std::shared_ptr<Event> event) = 0;
 };

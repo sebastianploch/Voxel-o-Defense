@@ -14,8 +14,7 @@ enum class BUTTONSTATE
 };
 
 class UIButton :
-	public IUIObject,
-	public Subject
+	public IUIObject
 {
 public:
 	UIButton();
@@ -30,9 +29,13 @@ public:
 					const wchar_t* text,
 					ID3D11Device* device,
 					float lifeTime = -1.0f);
+
+	std::shared_ptr<Subject> Clicked() { return m_clickedSubject; }
+
 private:
 	std::shared_ptr<UISprite>		m_sprite;
 	std::shared_ptr<UIText>			m_text;
+	std::shared_ptr<Subject>		m_clickedSubject;
 
 	DirectX::SimpleMath::Rectangle	m_bounds; // Defines clickable area
 

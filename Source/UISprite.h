@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IUIObject.h"
+#include "Observer.h"
 
 class UISprite : public IUIObject
 {
@@ -27,7 +28,6 @@ public:
 	void SetRotation(float newRotation) { m_rotation = newRotation; }
 	void SetTint(DirectX::SimpleMath::Color newTint) { m_tint = newTint; }
 
-	// Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> GetTexture() { return m_texture; }
 protected:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	m_texture;
 	int													m_width;
@@ -37,4 +37,6 @@ protected:
 	float												m_rotation;
 	float												m_scale;
 	DirectX::SimpleMath::Color							m_tint;
+
+	bool												m_isStretched;
 };

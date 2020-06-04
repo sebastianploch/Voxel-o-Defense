@@ -11,6 +11,7 @@ UIButton::UIButton() :
 	m_bounds(SimpleMath::Rectangle()),
 	m_sprite(std::make_shared<UISprite>()),
 	m_text(std::make_shared<UIText>()),
+	m_clickedSubject(new Subject()),
 	m_state(BUTTONSTATE::INACTIVE)
 {
 }
@@ -19,7 +20,8 @@ UIButton::~UIButton()
 {
 }
 
-bool UIButton::Update(float deltaTime, std::unique_ptr<InputState>& inputState)
+bool UIButton::Update(float deltaTime,
+			   std::unique_ptr<InputState>& inputState)
 {
 	Mouse::State mouseState = inputState->GetMouse().GetState();
 
@@ -57,7 +59,7 @@ bool UIButton::Update(float deltaTime, std::unique_ptr<InputState>& inputState)
 		if (mouseState.leftButton)
 		{
 			m_state = BUTTONSTATE::CLICKED;
-			m_sprite->SetTint(SimpleMath::Color(Colors::Black));
+			m_sprite->SetTint(SimpleMath::Color(Colors::DarkGray));
 		}
 
 		break;
@@ -65,9 +67,23 @@ bool UIButton::Update(float deltaTime, std::unique_ptr<InputState>& inputState)
 		// Check for mouse up
 		if (!mouseState.leftButton)
 		{
-			Notify(EVENT::CLICK);
+			m_clickedSubject->Notify(std::make_shared<ClickEvent>());
 			m_state = BUTTONSTATE::INACTIVE;
 			m_sprite->SetTint(SimpleMath::Color(Colors::White));
+
+			// Check if no longer hovering over
+			if (!m_bounds.Contains(SimpleMath::Vector2(mouseState.x, mouseState.y)))
+			{
+				m_state = BUTTONSTATE::INACTIVE;
+				m_sprite->SetTint(SimpleMath::Color(Colors::White));
+
+				break; // Skip click check
+			}
+			else
+			{
+				m_state = BUTTONSTATE::HOVER;
+				m_sprite->SetTint(SimpleMath::Color(Colors::LightGray));
+			}
 		}
 
 		break;
