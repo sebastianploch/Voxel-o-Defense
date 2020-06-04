@@ -33,7 +33,7 @@ bool UISprite::Update(float deltaTime,
 	return false;
 }
 
-void UISprite::Draw(SpriteBatch
+void UISprite::Draw(SpriteBatch*
 	spriteBatch)
 {
 	if (m_isStretched)

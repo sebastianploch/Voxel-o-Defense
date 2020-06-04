@@ -47,8 +47,7 @@ private:
 	HRESULT CompileShader(LPCTSTR path,
 						  LPCSTR entryPoint,
 						  LPCSTR profile,
-						  ID3DBlob
-		* blob);
+						  ID3DBlob** blob);
 
 private:
     // Device resources.

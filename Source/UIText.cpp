@@ -46,7 +46,7 @@ bool UIText::Update(float deltaTime,
 	return false;
 }
 
-void UIText::Draw(SpriteBatch
+void UIText::Draw(SpriteBatch*
 	spriteBatch)
 {
 	if (m_isOutlined)
