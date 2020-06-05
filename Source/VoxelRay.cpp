@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "VoxelRay.h"
 #include "WorldManipulation.h"
+#include "Camera.h"
 #include <vector>
 
 using namespace DirectX::SimpleMath;
@@ -99,5 +100,45 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
         }
     }
 
-	return DirectX::SimpleMath::Vector3Int();
+	return DirectX::SimpleMath::Vector3Int();   //If nothing is found, return 0,0,0 vector
+}
+
+DirectX::SimpleMath::Vector3Int VoxelRay::VoxelRaycastFromMousePos(Camera* activeCam, InputState* m_inputState, int winWidth, int winHeight) {
+
+    //Get normalised mouse position (-1 to 1)
+    auto mState = m_inputState->GetMouse().GetState();
+    Vector2 normMousePos = Vector2(mState.x, mState.y) * 2 - Vector2(winWidth, winHeight);
+    normMousePos.x /= winWidth;
+    normMousePos.y /= winHeight;
+
+    //Convert radians to vector
+    Vector2 dir = Vector2(-sin(activeCam->GetYaw()), -cos(activeCam->GetYaw()));
+
+    //Offset by number of blocks on screen
+    Vector3 offset = Vector3(activeCam->GetWidth() * -(normMousePos.x / 2.0f),
+                             0,
+                             activeCam->GetHeight() * -(normMousePos.y * 2.66));
+
+
+    //Get ray direction from centre of camera
+    Vector3 end = activeCam->GetTarget() - activeCam->GetPosition();	//Get normalised direction
+    Vector3 start = -end;
+    end *= 300;
+    start *= 300;
+    end += activeCam->GetPosition();	//Reapply the camera position
+    start += activeCam->GetPosition();
+
+
+    //Calculate final offset
+    Vector3 finalOffset = Vector3(abs(dir.y) > abs(dir.x) ? offset.x * dir.y : offset.z * dir.x,
+                                  0,
+                                  abs(dir.y) > abs(dir.x) ? offset.z * dir.y : -offset.x * dir.x);
+
+
+    //Apply final offset to ray positions
+    end += finalOffset;
+    start += finalOffset;
+
+    //Cast ray and set voxel
+    return VoxelRaycast(start, end);
 }

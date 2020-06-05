@@ -33,11 +33,13 @@ ISOCamera::ISOCamera(float width,
 	m_rotationScaleBias(0.1f),
 	m_minimumRotationSpeed(0.3f),
 	m_maximumRotationSpeed(1.5f),
-	m_lookOffset(Vector3(100.0f, 0.0f, 100.0f))
+	m_lookOffset(Vector3(100.0f, 0.0f, 100.0f)),
+	m_isBuildMode(false),
+	m_targetYaw(0.0f)
 {
 	m_movementSpeed = 80.0f;
 	m_rotationSpeed = 1.5f;
-	m_yaw = -2.5f;
+	m_yaw = -XM_PI;
 	m_orgYaw = -2.5f;
 }
 
@@ -104,21 +106,52 @@ Vector3 ISOCamera::ProcessKeyboard(float deltaTime, const InputState& input)
 	}
 
 	// Camera Reset
-	if (input.GetKeyboardState().pressed.R)
+	if (input.GetKeyboardState().pressed.R && !m_isBuildMode)
 	{
 		ResetCamera();
 		Resize(m_orgWindowWidth, m_orgWindowHeight);
 	}
 
+	// Camera Snapping (Build Mode Only)
+	if (m_targetYaw != 0.0f) {
+		float rotAmount = deltaTime * 5;
+		if (m_targetYaw > 0) {
+			if (m_targetYaw < rotAmount) {
+				m_yaw += m_targetYaw;
+				m_targetYaw = 0.0f;
+			} else {
+				m_yaw += rotAmount;
+				m_targetYaw -= rotAmount;
+			}
+		} else {
+			if (m_targetYaw > rotAmount) {
+				m_yaw -= m_targetYaw;
+				m_targetYaw = 0.0f;
+			} else {
+				m_yaw -= rotAmount;
+				m_targetYaw += rotAmount;
+			}
+		}
+		
+		return move;
+	}
+
+
 	// Camera Rotation
 	if (kbState.Q)
 	{
-		m_yaw += m_rotationSpeed * deltaTime;
+		if (m_isBuildMode)
+			m_targetYaw += XM_PIDIV2;
+		else
+			m_yaw += m_rotationSpeed * deltaTime;
 	}
 
 	if (kbState.E)
 	{
-		m_yaw -= m_rotationSpeed * deltaTime;
+		if (m_isBuildMode)
+			m_targetYaw -= XM_PIDIV2;
+		else
+			m_yaw -= m_rotationSpeed * deltaTime;
 	}
 
 	WrapRotation();

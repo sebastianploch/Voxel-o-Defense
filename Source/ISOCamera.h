@@ -89,4 +89,6 @@ private:
 	float						 m_minimumRotationSpeed;
 	float						 m_maximumRotationSpeed;
 	DirectX::SimpleMath::Vector3 m_lookOffset;
+	bool						 m_isBuildMode;
+	float						 m_targetYaw;
 };
