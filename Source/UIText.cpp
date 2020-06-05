@@ -35,6 +35,8 @@ void UIText::OnNotify(std::shared_ptr<Event> event)
 bool UIText::Update(float deltaTime,
 					std::unique_ptr<InputState>& inputState)
 {
+	UNREFERENCED_PARAMETER(inputState);
+
 	if (m_lifeTime > 0.0f)
 	{
 		m_lifeTimeTimer -= deltaTime;
