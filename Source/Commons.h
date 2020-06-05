@@ -6,6 +6,7 @@ enum class Shaders
 	BASIC_SHADER = 0,
 	VOXEL_SHADER,
     WATER_SHADER,
+    LINE_SHADER,
 	//TOON_SHADER,
 	NONE
 };
