@@ -69,8 +69,8 @@ void Game::Initialize(HWND window,
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Initialise Water
-	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() * 0.25f),
-																			static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() * 0.25f)),
+	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() + 4 * 0.25f),
+																			static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() + 4 * 0.25f)),
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
@@ -362,23 +362,28 @@ void Game::Update(DX::StepTimer const& timer)
 		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(20.0f, 10.0f, -10.0f));
 	}
 
-	// Example code for casting ray from camera
-	//if (m_inputState->GetKeyboardState().pressed.Space) {
-	//	//Place random voxel at ray hit point
-	//	Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
-	//	diff *= 50;	//Multiply by scalar length
-	//	diff += m_camera.get()->GetPosition();	//Reapply the camera position
-	//	DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
-	//	WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
-	//}
-	//if (m_inputState->GetKeyboardState().pressed.Enter) {
-	//	//Place Structure at ray hit point
-	//	Vector3 diff = (m_camera.get()->GetTarget()) - (m_camera.get()->GetPosition());	//Get normalised direction
-	//	diff *= 50;	//Multiply by scalar length
-	//	diff += m_camera.get()->GetPosition();	//Reapply the camera position
-	//	DirectX::SimpleMath::Vector3Int rayHit = VoxelRay::VoxelRaycast(m_camera.get()->GetPosition(), diff);
-	//	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
-	//}
+	//Raycasting from mouse position examples
+	if (m_inputState->GetMouse().GetState().leftButton) {
+		Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(m_cameraManager->GetActiveCamera(), 
+															   m_inputState.get(), 
+															   m_windowWidth, 
+															   m_windowHeight);
+		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_4.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	}
+	if (m_inputState->GetKeyboardState().pressed.Space) {
+		Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(m_cameraManager->GetActiveCamera(), 
+															   m_inputState.get(), 
+															   m_windowWidth, 
+															   m_windowHeight);
+		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	}
+	if (m_inputState->GetKeyboardState().pressed.Enter) {
+		Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(m_cameraManager->GetActiveCamera(), 
+															   m_inputState.get(), 
+															   m_windowWidth, 
+															   m_windowHeight);
+		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
+	}
 
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
