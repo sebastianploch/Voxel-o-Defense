@@ -53,6 +53,13 @@ struct CamCfg : public JSONINFO
 	std::string* type = new std::string();
 };
 
+struct ScoresCfg : public JSONINFO
+{
+    std::string* type = new std::string();
+    unsigned int entryNum;
+    std::vector<std::pair<std::string, float>> entries;
+};
+
 enum VOXEL_TYPE {
     AIR = 0,
     STONE,

@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Leaderboard.h"
 
 Leaderboard::Leaderboard() :
@@ -46,10 +48,21 @@ bool Leaderboard::addEntry(std::pair<std::string, float> entry)
 
 void Leaderboard::saveEntries(const std::string& filePath)
 {
-	// TODO
+	ScoresCfg scfg;
+	scfg.entries = m_entries;
+	scfg.entryNum = m_entries.size();
+
+	JSONLoader::CreateConfig(scfg, filePath, "scores");
 }
 
 void Leaderboard::loadEntries(const std::string& filePath)
 {
-	// TODO
+	ScoresCfg scfg;
+	JSONLoader::LoadFile(filePath, scfg, "scores");
+
+	m_entries = scfg.entries;
+	while (m_entries.size() > m_maxEntryNum)
+	{
+		m_entries.pop_back();
+	}
 }

@@ -178,7 +178,7 @@
     <ClInclude Include="Source\ParticleEmitter.h">
       <Filter>Headers\GameObjects\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Leaderboard.h">
+    <ClInclude Include="Source\Leaderboard.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
   </ItemGroup>
@@ -288,7 +288,7 @@
     <ClCompile Include="Source\ParticleEmitter.cpp">
       <Filter>Source\GameObjects\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Leaderboard.cpp">
+    <ClCompile Include="Source\Leaderboard.cpp">
       <Filter>Source\Utils</Filter>
     </ClCompile>
   </ItemGroup>
