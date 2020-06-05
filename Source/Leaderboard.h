@@ -9,7 +9,9 @@ public:
 	void setMaxEntryNum(unsigned int maxEntryNum);
 	unsigned int getMaxEntryNum();
 
-	bool addEntry(std::pair<std::string, float> entry);
+	void addEntry(std::pair<std::string, float> entry);
+
+	// Save and load via JSON
 	void saveEntries(const std::string& filePath);
 	void loadEntries(const std::string& filePath);
 

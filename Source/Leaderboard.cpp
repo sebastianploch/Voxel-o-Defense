@@ -24,7 +24,7 @@ unsigned int Leaderboard::getMaxEntryNum()
 	return m_maxEntryNum;
 }
 
-bool Leaderboard::addEntry(std::pair<std::string, float> entry)
+void Leaderboard::addEntry(std::pair<std::string, float> entry)
 {
 	// Find the address of the first entry that has a score that is less than the score of the entry being inserted
 	std::vector<std::pair<std::string, float>>::iterator iter = m_entries.begin();
