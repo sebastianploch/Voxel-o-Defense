@@ -79,27 +79,6 @@ void Game::Initialize(HWND window,
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
-	// Create test button
-	std::shared_ptr<UIButton> testButton = std::make_shared<UIButton>();
-	testButton->Initialise(SimpleMath::Vector2(m_windowWidth / 2, m_windowHeight / 2), L"Resources/Textures/samplebuttonblack.dds", L"Resources/Fonts/Calibri.spritefont", L"Start", m_d3dDevice.Get());
-
-	// Create test text with a lifetime
-	std::shared_ptr<UIText> testText = std::make_shared<UIText>();
-	testText->Initialise(SimpleMath::Vector2(m_windowWidth / 4, m_windowHeight / 4), L"Text element", SimpleMath::Color(Colors::White), L"Resources/Fonts/Calibri.spritefont", m_d3dDevice.Get(), 3.0f);
-	testText->SetScale(0.5f);
-
-	testButton->Clicked()->AddObserver(testText);
-
-	// Create test image
-	std::shared_ptr<UISprite> testSprite = std::make_shared<UISprite>();
-	testSprite->Initialise(SimpleMath::Vector2(m_windowWidth / 2 + m_windowWidth / 4, m_windowHeight / 4), L"Resources/Textures/lanternicon.dds", m_d3dDevice.Get());
-	testSprite->SetScale(10.0f);
-
-	// Add UI to manager
-	m_UIManager->Add(testButton);
-	m_UIManager->Add(testText);
-	m_UIManager->Add(testSprite);
-
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
 	
@@ -170,7 +149,6 @@ void Game::CreateDevice()
 
 	m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
 
-	CreateShaders();
 	// Create Shader Manager Instance
 	m_shaderManager = std::make_unique<ShaderManager>(m_d3dDevice.Get());
 
@@ -558,6 +536,9 @@ void Game::Clear()
 
 	// Rasterizer State (Clockwise)
 	m_d3dContext->RSSetState(m_states->CullClockwise());
+
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	m_d3dContext->OMSetBlendState(m_states->Opaque(), blendFactor, 0xffffffff);
 }
 
 // Helper method to prepare the scene (set shaders/constant buffer)

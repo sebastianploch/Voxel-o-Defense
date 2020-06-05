@@ -38,7 +38,7 @@ bool UIButton::Update(float deltaTime,
 	{
 	case BUTTONSTATE::INACTIVE:
 		// Check for hover over
-		if (m_bounds.Contains(SimpleMath::Vector2(mouseState.x, mouseState.y)))
+		if (m_bounds.Contains(SimpleMath::Vector2((float)mouseState.x, (float)mouseState.y)))
 		{
 			m_state = BUTTONSTATE::HOVER;
 			m_sprite->SetTint(SimpleMath::Color(Colors::LightGray));
@@ -47,7 +47,7 @@ bool UIButton::Update(float deltaTime,
 		break;
 	case BUTTONSTATE::HOVER:
 		// Check if no longer hovering over
-		if (!m_bounds.Contains(SimpleMath::Vector2(mouseState.x, mouseState.y)))
+		if (!m_bounds.Contains(SimpleMath::Vector2((float)mouseState.x, (float)mouseState.y)))
 		{
 			m_state = BUTTONSTATE::INACTIVE;
 			m_sprite->SetTint(SimpleMath::Color(Colors::White));
@@ -72,7 +72,7 @@ bool UIButton::Update(float deltaTime,
 			m_sprite->SetTint(SimpleMath::Color(Colors::White));
 
 			// Check if no longer hovering over
-			if (!m_bounds.Contains(SimpleMath::Vector2(mouseState.x, mouseState.y)))
+			if (!m_bounds.Contains(SimpleMath::Vector2((float)mouseState.x, (float)mouseState.y)))
 			{
 				m_state = BUTTONSTATE::INACTIVE;
 				m_sprite->SetTint(SimpleMath::Color(Colors::White));
@@ -115,5 +115,5 @@ void UIButton::Initialise(DirectX::SimpleMath::Vector2 screenPos,
 
 	SimpleMath::Vector2 origin = m_sprite->GetOrigin();
 
-	m_bounds = SimpleMath::Rectangle(screenPos.x - origin.x, screenPos.y - origin.y, m_sprite->GetWidth(), m_sprite->GetHeight());
+	m_bounds = SimpleMath::Rectangle((long)(screenPos.x - origin.x), (long)(screenPos.y - origin.y), (long)m_sprite->GetWidth(), (long)m_sprite->GetHeight());
 }

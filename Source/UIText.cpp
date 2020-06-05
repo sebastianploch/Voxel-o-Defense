@@ -53,28 +53,32 @@ void UIText::Draw(SpriteBatch*
 	{
 		m_font->DrawString(spriteBatch,
 						   m_text,
-						   m_screenPos + SimpleMath::Vector2(1.0f, 1.0f),
+						   m_screenPos + SimpleMath::Vector2(m_scale, m_scale),
 						   m_outlineColor,
 						   0.0f,
-						   m_origin);
+						   m_origin,
+						   m_scale);
 		m_font->DrawString(spriteBatch,
 						   m_text,
-						   m_screenPos + SimpleMath::Vector2(-1.0f, 1.0f),
+						   m_screenPos + SimpleMath::Vector2(-m_scale, m_scale),
 						   m_outlineColor,
 						   0.0f,
-						   m_origin);
+						   m_origin,
+						   m_scale);
 		m_font->DrawString(spriteBatch,
 						   m_text,
-						   m_screenPos + SimpleMath::Vector2(-1.0f, -1.0f),
+						   m_screenPos + SimpleMath::Vector2(-m_scale, -m_scale),
 						   m_outlineColor,
 						   0.0f,
-						   m_origin);
+						   m_origin,
+						   m_scale);
 		m_font->DrawString(spriteBatch,
 						   m_text,
-						   m_screenPos + SimpleMath::Vector2(1.0f, -1.0f),
+						   m_screenPos + SimpleMath::Vector2(m_scale, -m_scale),
 						   m_outlineColor,
 						   0.0f,
-						   m_origin);
+						   m_origin,
+						   m_scale);
 	}
 
 	m_font->DrawString(spriteBatch,

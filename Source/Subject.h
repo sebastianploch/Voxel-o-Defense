@@ -1,6 +1,6 @@
 #pragma once
 
-class Event;
+struct Event;
 class Observer;
 
 class Subject
@@ -12,5 +12,5 @@ public:
 	void Notify(std::shared_ptr<Event> event);
 
 private:
-	std::vector< std::shared_ptr<Observer>> mObservers;
+	std::vector<std::shared_ptr<Observer>> mObservers;
 };
