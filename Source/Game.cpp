@@ -11,7 +11,7 @@
 #include "VoxelRay.h"
 
 //- Required Header for threading dont delete - David -//
-#include <thread>
+#include <future>
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -61,7 +61,7 @@ void Game::Initialize(HWND window,
 	//m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
 
 	// Create Ai Manager
-	m_AiManager = std::make_unique<AiManager>(1, DirectX::XMFLOAT3(50,30,20));
+	m_AiManager = std::make_unique<AiManager>(128, DirectX::XMFLOAT3(50,30,20));
 
 	InitialiseVoxelWorld();
 }
@@ -327,8 +327,9 @@ void Game::Update(DX::StepTimer const& timer)
 	if (m_inputState->GetKeyboardState().pressed.M)
 	{
 		//- Creating a new thread to run StartWave() -//
-		//- This thread runs untill finished with creating a route -//
-		AiPathingThread = std::thread(&AiManager::StartWave, m_AiManager.get(), FIVE, 1);
+		//- This thread runs untill finished with creating a route -/
+
+		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
 	}
 
 
@@ -401,24 +402,24 @@ void Game::Render()
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
 
 	/* Render all objects*/
-	//for (const auto& object : m_gameObjects)
-	//{
-	//	// Assign Shader to be used to render upcoming object
-	//	m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
+	for (const auto& object : m_gameObjects)
+	{
+		// Assign Shader to be used to render upcoming object
+		m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
 
-	//	// Assign Object World Mat data to ConstantBuffer
-	//	cb.world = object->GetWorldMatrix();
+		// Assign Object World Mat data to ConstantBuffer
+		cb.world = object->GetWorldMatrix();
 
-	//	// Update Constant Buffer
-	//	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
-	//									0,
-	//									nullptr,
-	//									&cb,
-	//									0, 0);
+		// Update Constant Buffer
+		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+										0,
+										nullptr,
+										&cb,
+										0, 0);
 
-	//	// Draw Object
-		//object->Draw(m_d3dContext.Get());
-	//}
+		// Draw Object
+		object->Draw(m_d3dContext.Get());
+	}
 
 	m_AiManager->Render(m_d3dContext.Get(), m_d3dContext.Get(), cb,m_constantBuffer.Get(), m_shaderManager.get());
 

@@ -160,66 +160,83 @@ void RouteConstructor::CreatePathfindingMap()
 }
 
 //- CORE FUNCTIONS -//
-void RouteConstructor::A_star(STEP_UP_AMOUNT stepUpAmmount, int StartingLocation)
+void RouteConstructor::A_star(int StartingLocation)
 {
-	std::vector<Nodes*> _waypoints = GetCreatedPathingMap();
+	m_openNodes.clear();
+	m_closedNodes.clear();
+
+	std::vector<Nodes*> _waypoints;
 	std::vector<Nodes*> _nodes;
 
-	Nodes* _closesToTank = nullptr;
-	Nodes* _closesToDestination = nullptr;
-	float distanceToTank = 9999999;
-	float distanceToDestination = 99999999;
+	Nodes* _closesToTank;
+	Nodes* _closesToDestination;
+	float distanceToTank;
+	float distanceToDestination;
 
-	float tempish = 0.0f; float temp2ish = 0.0f;
+	STEP_UP_AMOUNT stepUpAmmount;
 
-	//- loops though all the waypoints -//
-	for (int i = 0; i < _waypoints.size(); i++)
+	for (int i = 0; i < 2; i++)
 	{
-		tempish = ReturnDistance(m_route[StartingLocation].startPos, _waypoints[i]->GetPosition());
-		//- checking if the waypoint is the closes to current position -//
-		if (distanceToTank > tempish)
+		_waypoints = GetCreatedPathingMap();
+		_nodes.clear();
+
+		_closesToTank = nullptr;
+		_closesToDestination = nullptr;
+		distanceToTank = 9999999;
+		distanceToDestination = 99999999;
+
+		stepUpAmmount = (STEP_UP_AMOUNT)i;
+
+		float tempish = 0.0f; float temp2ish = 0.0f;
+
+		//- loops though all the waypoints -//
+		for (int J = 0; J < _waypoints.size(); J++)
 		{
-			//- seting it as the lowest target -//
-			distanceToTank = ReturnDistance(m_route[StartingLocation].startPos, _waypoints[i]->GetPosition());
-			_closesToTank = _waypoints[i];
+			tempish = ReturnDistance(m_route[StartingLocation].startPos, _waypoints[J]->GetPosition());
+			//- checking if the waypoint is the closes to current position -//
+			if (distanceToTank > tempish)
+			{
+				//- seting it as the lowest target -//
+				distanceToTank = ReturnDistance(m_route[StartingLocation].startPos, _waypoints[J]->GetPosition());
+				_closesToTank = _waypoints[J];
+			}
+			temp2ish = ReturnDistance(m_route[StartingLocation].endPos, _waypoints[J]->GetPosition());
+			//- checking if the waypoint is the closes to the target desinations -//
+			if (distanceToDestination > temp2ish)
+			{
+				//- seting to lowest value -//
+				distanceToDestination = ReturnDistance(m_route[StartingLocation].endPos, _waypoints[J]->GetPosition());
+				_closesToDestination = _waypoints[J];
+			}
+			//- turning waypoints into custom struct to easy use -//
+			_nodes.push_back(_waypoints[J]);
+
 		}
-		temp2ish = ReturnDistance(m_route[StartingLocation].endPos, _waypoints[i]->GetPosition());
-		//- checking if the waypoint is the closes to the target desinations -//
-		if (distanceToDestination > temp2ish)
+
+		if (m_route[StartingLocation].m_route.size() == 0 && m_route[StartingLocation].FinalDestinationChanged == true)
 		{
-			//- seting to lowest value -//
-			distanceToDestination = ReturnDistance(m_route[StartingLocation].endPos, _waypoints[i]->GetPosition());
-			_closesToDestination = _waypoints[i];
+			GetPath(_closesToTank, _closesToDestination, _nodes, stepUpAmmount, StartingLocation);
+			m_route[StartingLocation].FinalDestinationChanged = false;
 		}
-		//- turning waypoints into custom struct to easy use -//
-		_nodes.push_back(_waypoints[i]);
 
-	}
-
-	if (m_route[StartingLocation].m_route.size() == 0 && FinalDestinationChanged == true)
-	{
-		GetPath(_closesToTank, _closesToDestination, _nodes, stepUpAmmount, StartingLocation);
-		FinalDestinationChanged = false;
-	}
-
-	if (m_route[StartingLocation].m_route.size() >= 1)
-	{
-		m_nodeToTravelTo = m_route[StartingLocation].m_route[m_route.size() - 1];
-		if (m_route[StartingLocation].startPos.x > m_nodeToTravelTo->GetPosition().x && m_route[StartingLocation].startPos.x < m_nodeToTravelTo->GetPosition().x &&
-			m_route[StartingLocation].startPos.y > m_nodeToTravelTo->GetPosition().y && m_route[StartingLocation].startPos.y < m_nodeToTravelTo->GetPosition().y &&
-			m_route[StartingLocation].startPos.z > m_nodeToTravelTo->GetPosition().z && m_route[StartingLocation].startPos.z < m_nodeToTravelTo->GetPosition().z)
+		if (m_route[StartingLocation].m_route.size() >= 1)
 		{
-			m_route[StartingLocation].m_route.erase(m_route[StartingLocation].m_route.begin() + (m_route[StartingLocation].m_route.size() - 1));
+			m_nodeToTravelTo = m_route[StartingLocation].m_route[m_route.size() - 1];
+			if (m_route[StartingLocation].startPos.x > m_nodeToTravelTo->GetPosition().x&& m_route[StartingLocation].startPos.x < m_nodeToTravelTo->GetPosition().x &&
+				m_route[StartingLocation].startPos.y > m_nodeToTravelTo->GetPosition().y&& m_route[StartingLocation].startPos.y < m_nodeToTravelTo->GetPosition().y &&
+				m_route[StartingLocation].startPos.z > m_nodeToTravelTo->GetPosition().z&& m_route[StartingLocation].startPos.z < m_nodeToTravelTo->GetPosition().z)
+			{
+				m_route[StartingLocation].m_route.erase(m_route[StartingLocation].m_route.begin() + (m_route[StartingLocation].m_route.size() - 1));
+			}
+		}
+		else
+		{
+			//cout << "ARRIVED AT CLOSEST NODE" << endl;
 		}
 	}
-	else
-	{
-		//cout << "ARRIVED AT CLOSEST NODE" << endl;
-	}
-
 }
 
-std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation)
+void RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation)
 {
 	//- Decliration of vectors -//
 	Nodes* CurrentLowestNode;
@@ -266,9 +283,6 @@ std::vector<Nodes*> RouteConstructor::GetPath(Nodes* starting, Nodes* ending, st
 			break;
 		}
 	}
-	//- Retrace Steps to the Starting Node -//
-
-	return m_route[startingLocation].m_route;
 
 }
 

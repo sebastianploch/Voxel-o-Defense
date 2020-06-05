@@ -33,6 +33,7 @@ struct routes
 	DirectX::SimpleMath::Vector3 startPos;
 	DirectX::SimpleMath::Vector3 endPos;
 	std::vector<Nodes*> m_route;
+	bool FinalDestinationChanged = true;
 };
 
 //-----------//
@@ -50,7 +51,7 @@ public:
 	void SetStarting(DirectX::XMFLOAT3 pos, int startingPosition);
 	void SetEnding(DirectX::XMFLOAT3 pos, int endingPosition);
 	
-	void A_star(STEP_UP_AMOUNT stepUpAmmount, int startingLocation);
+	void A_star(int startingLocation);
 
 	std::vector<Nodes*> GetCreatedPathingMap();
 
@@ -59,7 +60,7 @@ public:
 protected:
 
 	//- Core Pathfinding Functions -//
-	std::vector<Nodes*> GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation);
+	void GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation);
 	void GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation);
 
 	//- Code That is Resused multiple times in functions -//
@@ -80,8 +81,6 @@ private:
 	std::vector<Nodes*> m_openNodes;
 	std::vector<Nodes*> m_closedNodes;
 	Nodes* m_nodeToTravelTo = nullptr;
-
-	bool FinalDestinationChanged = true;
 
 	std::vector<Nodes*> m_createdPathingMap;
 

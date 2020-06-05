@@ -11,6 +11,8 @@ AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float dama
 	_movementSpeed = movementSpeed;
 	_damage = damage;
 	_active = active;
+	_stepHeightIndex = maxStepUp;
+
 	m_position = DirectX::SimpleMath::Vector3(0.5f, 4.5f, 0.5f);
 	m_gameObject = std::make_unique<DumbObject>(m_position, DirectX::SimpleMath::Vector3(), DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f), "Resources/config/cube.json", "cube");
 }
@@ -26,23 +28,30 @@ void AiAgent::Update(float deltaTime, float time)
 {
 	if (_active == true)
 	{
-		if (_totalTimeCoverd > 1.0f)
+		if (_SpawnOffset == 0)
 		{
-			_totalTimeCoverd = 0.0f;
-			m_route.erase(m_route.end() - 1);
-			if (m_route.size() != 0)
+			if (_totalTimeCoverd > 1.0f)
 			{
-				m_position = m_route[m_route.size() - 1]->GetPosition() + DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f);
-				m_gameObject->SetPosition(m_position);
+				_totalTimeCoverd = 0.0f;
+				m_route.erase(m_route.end() - 1);
+				if (m_route.size() != 0)
+				{
+					m_position = m_route[m_route.size() - 1]->GetPosition() + DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f);
+					m_gameObject->SetPosition(m_position);
+				}
+				else
+				{
+					_active = false;
+				}
 			}
 			else
 			{
-				_active = false;
+				_totalTimeCoverd += _movementSpeed;
 			}
 		}
 		else
 		{
-			_totalTimeCoverd += deltaTime;
+			_SpawnOffset--;
 		}
 	}
 
@@ -51,7 +60,10 @@ void AiAgent::Update(float deltaTime, float time)
 
 void AiAgent::Render(ID3D11DeviceContext* deviceContex)
 {
-	m_gameObject->Draw(deviceContex);
+	if (_active == true && _SpawnOffset == 0)
+	{
+		m_gameObject->Draw(deviceContex);
+	}
 }
 #pragma endregion Game_Loop
 
@@ -128,13 +140,19 @@ std::vector<Nodes*> AiAgent::GetRoute()
 	return m_route;
 }
 
+int AiAgent::GetStepHeight()
+{
+	return _stepHeightIndex;
+}
+
 bool AiAgent::IsAiAgentActive()
 {
 	return _active;
 }
 
-void AiAgent::SpawnAiAgent()
+void AiAgent::SpawnAiAgent(int offset)
 {
+	_SpawnOffset = offset;
 	_active = true;
 }
 

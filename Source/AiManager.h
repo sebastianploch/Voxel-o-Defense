@@ -8,7 +8,7 @@
 
 // type health movementSPeed damage active stepup
 #define NullType NULLTYPE, 0.1, 1, 1, false, 1
-#define Zombie ZOMBIE, 1, 1, 2, false, 1
+#define Zombie ZOMBIE, 0.5, 1, 2, false, 1
 #define Spider SPIDER, 0.1, 3, 1, false, 50
 #define Skeleton SKELETON, 0.1, 2, 2, false, 1
 
@@ -55,7 +55,7 @@ public:
 	int GetTotalAgents();
 	void SetTotalAgents(int totalAgents);
 
-	void StartWave(STEP_UP_AMOUNT step, int startingLocation);
+	void StartWave();
 	bool HasWaveStarted();
 
 private:
@@ -63,5 +63,8 @@ private:
 	int m_totalAmountOfAgents;
 	DirectX::XMFLOAT3 m_spawnRates;
 	std::shared_ptr<RouteConstructor> m_routeConstructor;
+
+	bool CalculationsDone = false;
+	int temp = 0;
 };
 #endif // !AI_MANAGER

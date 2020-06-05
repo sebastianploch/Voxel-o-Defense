@@ -67,8 +67,10 @@ public:
 
 	std::vector<Nodes*> GetRoute();
 
+	int GetStepHeight();
+
 	bool IsAiAgentActive();
-	void SpawnAiAgent();
+	void SpawnAiAgent(int offSet);
 	void DieAiAgent();
 
 	DirectX::SimpleMath::Vector3 GetPosition();
@@ -93,8 +95,10 @@ private:
 	float _movementSpeed = 0.0f;
 	int _damage = 0;
 	bool _active = false;
+	int _stepHeightIndex = 0;
+	
 	float _startTime = 0.0f;
-
 	float _totalTimeCoverd = 0;
+	int _SpawnOffset = 0;
 };
 #endif // !AI_AGENT
