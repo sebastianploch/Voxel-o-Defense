@@ -2,6 +2,9 @@
 #include "Game.h"
 
 #include "DebugSimpleCube.h"
+#include "UIButton.h"
+#include "UISprite.h"
+#include "UIText.h"
 #include "PlaneGameObject.h"
 #include "ParticleEmitter.h"
 
@@ -57,6 +60,9 @@ void Game::Initialize(HWND window,
 	// Initialise Input Handler
 	m_inputState = std::make_unique<InputState>(m_window);
 
+	// Initialise UI Manager
+	m_UIManager = std::make_unique<UIManager>();
+
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
@@ -72,6 +78,27 @@ void Game::Initialize(HWND window,
 
 	// Create one debug cube
 	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+
+	// Create test button
+	std::shared_ptr<UIButton> testButton = std::make_shared<UIButton>();
+	testButton->Initialise(SimpleMath::Vector2(m_windowWidth / 2, m_windowHeight / 2), L"Resources/Textures/samplebuttonblack.dds", L"Resources/Fonts/Calibri.spritefont", L"Start", m_d3dDevice.Get());
+
+	// Create test text with a lifetime
+	std::shared_ptr<UIText> testText = std::make_shared<UIText>();
+	testText->Initialise(SimpleMath::Vector2(m_windowWidth / 4, m_windowHeight / 4), L"Text element", SimpleMath::Color(Colors::White), L"Resources/Fonts/Calibri.spritefont", m_d3dDevice.Get(), 3.0f);
+	testText->SetScale(0.5f);
+
+	testButton->Clicked()->AddObserver(testText);
+
+	// Create test image
+	std::shared_ptr<UISprite> testSprite = std::make_shared<UISprite>();
+	testSprite->Initialise(SimpleMath::Vector2(m_windowWidth / 2 + m_windowWidth / 4, m_windowHeight / 4), L"Resources/Textures/lanternicon.dds", m_d3dDevice.Get());
+	testSprite->SetScale(10.0f);
+
+	// Add UI to manager
+	m_UIManager->Add(testButton);
+	m_UIManager->Add(testText);
+	m_UIManager->Add(testSprite);
 
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
@@ -141,6 +168,9 @@ void Game::CreateDevice()
 	// Create Common States Instance
 	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
 
+	m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
+
+	CreateShaders();
 	// Create Shader Manager Instance
 	m_shaderManager = std::make_unique<ShaderManager>(m_d3dDevice.Get());
 
@@ -313,6 +343,8 @@ void Game::OnDeviceLost()
 	m_constantBuffer.Reset();
 	m_shaderManager.reset();
 
+	m_spriteBatch.reset();
+
 	CreateDevice();
 	CreateResources();
 }
@@ -372,6 +404,8 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		object->Update(deltaTime);
 	}
+
+	m_UIManager->Update(deltaTime, m_inputState);
 
 	m_modelTest.Update(deltaTime);
 
@@ -438,6 +472,11 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
+
+	// Render sprites (UI)
+	m_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, m_states->PointClamp());
+	m_UIManager->Render(m_spriteBatch.get());
+	m_spriteBatch->End();
 
 	// Swap backbuffer
     Present();

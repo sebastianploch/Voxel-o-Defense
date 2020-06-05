@@ -56,6 +56,12 @@
     <Filter Include="Source\GameObjects\ModelObject">
       <UniqueIdentifier>{bf301b13-1bb6-4657-83a0-ce0989da88ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\UI">
+      <UniqueIdentifier>{1dd748e8-f337-47bc-a1a3-44b76fbdc808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\UI">
+      <UniqueIdentifier>{a654436c-e592-4afb-8a27-e489b9cf795d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -141,6 +147,30 @@
     <ClInclude Include="Source\Sound.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\IUIObject.h">
+      <Filter>Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIButton.h">
+      <Filter>Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIText.h">
+      <Filter>Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UISprite.h">
+      <Filter>Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Subject.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Observer.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIManager.h">
+      <Filter>Headers\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObserverEvents.h">
+      <Filter>Headers\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -222,6 +252,24 @@
     </ClCompile>
     <ClCompile Include="Source\Sound.cpp">
       <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IUIObject.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UIButton.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UIText.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UISprite.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Subject.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UIManager.cpp">
+      <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

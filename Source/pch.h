@@ -42,6 +42,8 @@
 #include <CommonStates.h>
 #include <DDSTextureLoader.h>
 #include <WICTextureLoader.h>
+#include <SpriteBatch.h>
+#include <SpriteFont.h>
 
 // STD
 #include <map>

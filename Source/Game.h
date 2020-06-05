@@ -5,6 +5,7 @@
 #include "ShaderManager.h"
 #include "Model.h"
 #include "CameraManager.h"
+#include "UIManager.h"
 
 class Game
 {
@@ -56,23 +57,23 @@ private:
 
 private:
     // Device resources.
-    HWND                                            m_window;
-    int                                             m_windowWidth;
-    int                                             m_windowHeight;
+    HWND												m_window;
+    int													m_windowWidth;
+    int													m_windowHeight;
 
-    D3D_FEATURE_LEVEL                               m_featureLevel;
-    Microsoft::WRL::ComPtr<ID3D11Device1>           m_d3dDevice;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext1>    m_d3dContext;
+    D3D_FEATURE_LEVEL									m_featureLevel;
+    Microsoft::WRL::ComPtr<ID3D11Device1>				m_d3dDevice;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext1>		m_d3dContext;
 
-    Microsoft::WRL::ComPtr<IDXGISwapChain1>         m_swapChain;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_renderTargetView;
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
+    Microsoft::WRL::ComPtr<IDXGISwapChain1>				m_swapChain;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView>		m_renderTargetView;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>		m_depthStencilView;
 
     // Input Handler
-    std::unique_ptr<InputState>                     m_inputState;
+    std::unique_ptr<InputState>							m_inputState;
 
     // Game Objects
-    std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
+    std::vector<std::shared_ptr<IGameObject>>			m_gameObjects;
 
     // Rendering
     std::unique_ptr<ShaderManager>                  m_shaderManager;
@@ -84,6 +85,10 @@ private:
 
     // Audio
     std::unique_ptr<DirectX::AudioEngine>           m_audioEngine;
+
+	// UI
+	std::unique_ptr<UIManager>							m_UIManager;
+	std::unique_ptr<DirectX::SpriteBatch>				m_spriteBatch;
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;
