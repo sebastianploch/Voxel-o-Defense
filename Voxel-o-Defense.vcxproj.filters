@@ -62,6 +62,12 @@
     <Filter Include="Source\GameObjects\Particle">
       <UniqueIdentifier>{7a249e4f-2453-4d02-8a40-0c154643ef3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\AI">
+      <UniqueIdentifier>{e7d67018-e5cd-4fe5-b876-f8c1041b59c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\AI">
+      <UniqueIdentifier>{27ee2709-bf66-4e08-bb08-09e4e7bf0039}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -178,6 +184,21 @@
     <ClInclude Include="Source\ParticleEmitter.h">
       <Filter>Headers\GameObjects\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AiAgent.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AiManager.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DumbObject.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Node.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RouteConstructor.h">
+      <Filter>Headers\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -284,6 +305,21 @@
     </ClCompile>
     <ClCompile Include="Source\ParticleEmitter.cpp">
       <Filter>Source\GameObjects\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiAgent.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiManager.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DumbObject.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node.cpp">
+      <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RouteConstructor.cpp">
+      <Filter>Source\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

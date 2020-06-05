@@ -1,5 +1,6 @@
 #pragma once
 #include "IGameObject.h"
+
 class DumbObject : public IGameObject
 {
 public:

@@ -30,7 +30,7 @@ void AiAgent::Update(float deltaTime, float time)
 	{
 		if (_SpawnOffset == 0)
 		{
-			if (_totalTimeCoverd > 1.0f)
+			if (_totalTimeCoverd > _movementSpeed)
 			{
 				_totalTimeCoverd = 0.0f;
 				m_route.erase(m_route.end() - 1);
@@ -46,7 +46,7 @@ void AiAgent::Update(float deltaTime, float time)
 			}
 			else
 			{
-				_totalTimeCoverd += _movementSpeed;
+				_totalTimeCoverd += 0.1;
 			}
 		}
 		else

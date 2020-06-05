@@ -96,7 +96,7 @@ void AiManager::StartWave()
 	for (int i = 0; i < m_aiAgents.size(); i++)
 	{
 		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute(RouteSelector));
-		m_aiAgents[i]->SpawnAiAgent(i * 20);
+		m_aiAgents[i]->SpawnAiAgent(i * 5);
 
 		if (RouteSelector == 3)
 		{

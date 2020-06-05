@@ -8,7 +8,6 @@
 #include "UIManager.h"
 
 #include "AiManager.h"
-#include <thread>
 
 class Game
 {
