@@ -1,11 +1,13 @@
 #pragma once
 
 #include "StepTimer.h"
-#include "FPSCamera.h"
 #include "IGameObject.h"
 #include "ShaderManager.h"
-#include "AiManager.h"
+#include "Model.h"
+#include "CameraManager.h"
+#include "UIManager.h"
 
+#include "AiManager.h"
 #include <thread>
 
 class Game
@@ -35,10 +37,13 @@ public:
 
 private:
     void Update(DX::StepTimer const& timer);
+    void UpdateAudio();
+
     void Render();
 
     void CreateDevice();
     void CreateResources();
+    void CreateAudioEngine();
     void CreateConstantBuffer();
 
     void OnDeviceLost();
@@ -55,23 +60,23 @@ private:
 
 private:
     // Device resources.
-    HWND                                            m_window;
-    int                                             m_windowWidth;
-    int                                             m_windowHeight;
+    HWND												m_window;
+    int													m_windowWidth;
+    int													m_windowHeight;
 
-    D3D_FEATURE_LEVEL                               m_featureLevel;
-    Microsoft::WRL::ComPtr<ID3D11Device1>           m_d3dDevice;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext1>    m_d3dContext;
+    D3D_FEATURE_LEVEL									m_featureLevel;
+    Microsoft::WRL::ComPtr<ID3D11Device1>				m_d3dDevice;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext1>		m_d3dContext;
 
-    Microsoft::WRL::ComPtr<IDXGISwapChain1>         m_swapChain;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_renderTargetView;
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
+    Microsoft::WRL::ComPtr<IDXGISwapChain1>				m_swapChain;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView>		m_renderTargetView;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>		m_depthStencilView;
 
     // Input Handler
-    std::unique_ptr<InputState>                     m_inputState;
+    std::unique_ptr<InputState>							m_inputState;
 
     // Game Objects
-    std::vector<std::shared_ptr<IGameObject>>       m_gameObjects;
+    std::vector<std::shared_ptr<IGameObject>>			m_gameObjects;
 
 	// Ai Manager
 
@@ -79,14 +84,21 @@ private:
 
     // Rendering
     std::unique_ptr<ShaderManager>                  m_shaderManager;
-    Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
     std::unique_ptr<DirectX::CommonStates>          m_states;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
 
     // Basic Camera
-    std::unique_ptr<Camera>                         m_camera;
+    std::unique_ptr<CameraManager>                  m_cameraManager;
+
+    // Audio
+    std::unique_ptr<DirectX::AudioEngine>           m_audioEngine;
+
+	// UI
+	std::unique_ptr<UIManager>							m_UIManager;
+	std::unique_ptr<DirectX::SpriteBatch>				m_spriteBatch;
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;
 
-	std::thread AiPathingThread;
+    Model                                           m_modelTest;
 };

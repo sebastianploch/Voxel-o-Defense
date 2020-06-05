@@ -17,6 +17,25 @@ void JSONLoader::LoadFile(std::string filePath, GameObjectCfg& cfg, std::string 
 	}
 }
 
+void JSONLoader::LoadFile(std::string filePath, SoundsCfg& cfg, std::string name)
+{
+	nlohmann::json config = _CHECKFILE(filePath);
+	try
+	{ //try to set game objects members
+		cfg.type = &name;
+		cfg.amount = config[name]["amount"];
+
+		for (int i = cfg.amount - 1; i >= 0; --i)
+		{
+			cfg.paths.push_back(config[name]["paths"][i]);
+		}
+	}
+	catch (std::exception e)
+	{
+		OutputDebugStringA("Error creating cube attributes from JSON file!");
+	}
+}
+
 void JSONLoader::LoadFile(std::string filePath, CamCfg& cfg, std::string name)
 {
 	nlohmann::json file = _CHECKFILE(filePath);

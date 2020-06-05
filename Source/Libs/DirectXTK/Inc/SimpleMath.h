@@ -10,6 +10,8 @@
 
 #pragma once
 
+#pragma warning(disable: 4244 4238 4081)
+
 #if !defined(__d3d11_h__) && !defined(__d3d11_x_h__) && !defined(__d3d12_h__) && !defined(__d3d12_x_h__) && !defined(__XBOX_D3D12_X__)
 #error include d3d11.h or d3d12.h before including SimpleMath.h
 #endif

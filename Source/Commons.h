@@ -1,24 +1,40 @@
 #pragma once
-
+#pragma warning(disable: 4996)
 
 enum class Shaders
 {
 	BASIC_SHADER = 0,
 	VOXEL_SHADER,
+    WATER_SHADER,
+    LINE_SHADER,
 	//TOON_SHADER,
 	NONE
 };
+
 
 struct ConstantBuffer
 {
 	DirectX::SimpleMath::Matrix projection;
 	DirectX::SimpleMath::Matrix view;
 	DirectX::SimpleMath::Matrix world;
+    float time{ 0.0f };
+    float padding[3]{ 0.0f };
 };
 
+//Surface and light information which can define an objects surface and its light calculation
+//can be extended in the future for more lighting calculations
+
+//-------------------------------------------------------------------------------------
 struct JSONINFO
 {
 
+};
+
+struct SoundsCfg : public JSONINFO
+{
+    std::string* type = new std::string();
+    int amount;
+    std::vector<std::string> paths;
 };
 
 struct GameObjectCfg : public JSONINFO
@@ -64,3 +80,72 @@ struct VoxelMesh {
     UINT m_VBOffset;
     UINT m_IndexCount;
 };
+
+struct Geometry
+{
+    ID3D11Buffer* vertexBuffer;
+    ID3D11Buffer* indexBuffer;
+    int numberOfIndices;
+    UINT vertexBufferStride;
+    UINT vertexBufferOffset;
+};
+
+/* Prints provided compatible data structure to the Output Window during runtime
+   @Int's, Float's, Double's
+   @String's, Char's
+   @Vector3's, Vector2's
+*/
+template <class T>
+static void DEBUG_PRINT(T val)
+{
+    std::string str = std::to_string(val) + "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+void DEBUG_PRINT(std::string str)
+{
+    str += "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+void DEBUG_PRINT(const char* msg)
+{
+    std::string str = msg;
+    str += "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+void DEBUG_PRINT(DirectX::SimpleMath::Vector3 vec)
+{
+    std::string str = "X: " + std::to_string(vec.x);
+    str += "  Y: " + std::to_string(vec.y);
+    str += "  Z: " + std::to_string(vec.z);
+    str += "\n";
+    OutputDebugStringA(str.c_str());
+}
+template<>
+void DEBUG_PRINT(DirectX::SimpleMath::Vector2 vec)
+{
+	std::string str = "X: " + std::to_string(vec.x);
+	str += "  Y: " + std::to_string(vec.y);
+	str += "\n";
+	OutputDebugStringA(str.c_str());
+}
+
+#pragma region STRING_CONVERSION
+static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> s_converter;
+
+// Helper function to convert string into wstring
+static std::wstring TO_WSTRING(const std::string& string)
+{
+    std::wstring str = s_converter.from_bytes(string);
+    return str;
+}
+
+// Helper function to convert string into wstring
+static std::string TO_STRING(const std::wstring& string)
+{
+    std::string str = s_converter.to_bytes(string);
+    return str;
+}
+#pragma endregion STRING_CONVERSION

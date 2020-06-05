@@ -1,5 +1,4 @@
 #pragma once
-#include "Camera.h"
 
 
 class FPSCamera : public Camera
@@ -9,8 +8,9 @@ public:
 			  float height,
 			  float nearPlane,
 			  float farPlane,
-			  const DirectX::SimpleMath::Vector3& position = DirectX::SimpleMath::Vector3::UnitZ,
-			  const DirectX::SimpleMath::Vector3& target = DirectX::SimpleMath::Vector3::Zero,
+			  const float fov = DirectX::XM_PIDIV4,
+			  const DirectX::SimpleMath::Vector3& position = DirectX::SimpleMath::Vector3::Zero,
+			  const DirectX::SimpleMath::Vector3& target = -DirectX::SimpleMath::Vector3::UnitZ,
 			  const DirectX::SimpleMath::Vector3& up = DirectX::SimpleMath::Vector3::Up);
 
 	~FPSCamera();
@@ -18,24 +18,19 @@ public:
 	void Update(float deltaTime,
 				const InputState& state) override;
 
-	// Camera Rotation Speed
-	inline float GetRotationSpeed() const { return m_rotationSpeed; }
-	inline void SetRotationSpeed(float speed) { m_rotationSpeed = speed; }
+	void Resize(float width,
+				float height) override;
 
 private:
-	void ProcessMouseInput(float deltaTime,
-						   const InputState& input);
+	void ProcessMouse(float deltaTime,
+					  const InputState& input) override;
 
-	DirectX::SimpleMath::Vector3 ProcessKeyboardInput(float deltaTime,
-													  const InputState& input);
+	DirectX::SimpleMath::Vector3 ProcessKeyboard(float deltaTime,
+												 const InputState& input) override;
 
-	void ResetCamera();
 	void WrapRotation();
 	void UpdateTargetPosition();
 
 private:
-	float m_yaw;
-	float m_pitch;
-	float m_rotationSpeed;
 	float m_cameraBoost;
 };

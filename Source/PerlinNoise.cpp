@@ -26,7 +26,7 @@ int PerlinNoise::perm[] = {
 
 void PerlinNoise::RandomiseSeed() {
     auto s = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-    auto r = std::bind(std::uniform_real_distribution<float>(0, 1000), std::mt19937(s));
+    auto r = std::bind(std::uniform_real_distribution<float>(0, 1000), std::mt19937((unsigned int)s));
     seed = r();
 }
 

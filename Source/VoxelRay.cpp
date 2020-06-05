@@ -21,15 +21,15 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
     // This id of the first/current voxel hit by the ray.
   // Using floor (round down) is actually very important,
   // the implicit int-casting will round up for negative numbers.
-    Vector3Int current_voxel(std::floor(ray_start.x / _bin_size),
-                            std::floor(ray_start.y / _bin_size),
-                            std::floor(ray_start.z / _bin_size));
+    Vector3Int current_voxel((int)std::floor(ray_start.x / _bin_size),
+                             (int)std::floor(ray_start.y / _bin_size),
+                             (int)std::floor(ray_start.z / _bin_size));
 
     // The id of the last voxel hit by the ray.
     // TODO: what happens if the end point is on a border?
-    Vector3Int last_voxel(std::floor(ray_end.x / _bin_size),
-        std::floor(ray_end.y / _bin_size),
-        std::floor(ray_end.z / _bin_size));
+    Vector3Int last_voxel((int)std::floor(ray_end.x / _bin_size),
+                          (int)std::floor(ray_end.y / _bin_size),
+                          (int)std::floor(ray_end.z / _bin_size));
 
     // Compute normalized ray direction.
     Vector3 ray = ray_end - ray_start;
@@ -75,18 +75,18 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
              current_voxel.z == last_voxel.z)) {
         if (tMaxX < tMaxY) {
             if (tMaxX < tMaxZ) {
-                current_voxel.x += stepX;
+                current_voxel.x += (int)stepX;
                 tMaxX += tDeltaX;
             } else {
-                current_voxel.z += stepZ;
+                current_voxel.z += (int)stepZ;
                 tMaxZ += tDeltaZ;
             }
         } else {
             if (tMaxY < tMaxZ) {
-                current_voxel.y += stepY;
+                current_voxel.y += (int)stepY;
                 tMaxY += tDeltaY;
             } else {
-                current_voxel.z += stepZ;
+                current_voxel.z += (int)stepZ;
                 tMaxZ += tDeltaZ;
             }
         }

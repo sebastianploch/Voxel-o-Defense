@@ -13,8 +13,8 @@ Chunk* ChunkHandler::GetChunk(int cx, int cz) {
 }
 
 Chunk* ChunkHandler::GetChunk(DirectX::SimpleMath::Vector3Int worldPos) {
-	int cx = (int)floorf(worldPos.x / s_chunks[0][0].GetWidth());
-	int cz = (int)floorf(worldPos.z / s_chunks[0][0].GetDepth());
+	int cx = (int)floorf(static_cast<float>(worldPos.x / s_chunks[0][0].GetWidth()));
+	int cz = (int)floorf(static_cast<float>(worldPos.z / s_chunks[0][0].GetDepth()));
 
 	return GetChunk(cx, cz);
 }
@@ -31,6 +31,7 @@ void ChunkHandler::DrawChunks(ID3D11DeviceContext1* context, ShaderManager* shad
 	for (int x = 0; x < MAP_SIZE; x++) {
 		for (int z = 0; z < MAP_SIZE; z++) {
 			shaderManager->SetShader(s_chunks[x][z].GetChunkGameObject()->GetShaderType(), context);
+			
 			s_chunks[x][z].Draw(context);
 		}
 	}

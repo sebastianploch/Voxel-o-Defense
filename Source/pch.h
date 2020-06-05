@@ -1,7 +1,7 @@
 #pragma once
 
 #include <winsdkver.h>
-#define _WIN32_WINNT 0x0601
+#define _WIN32_WINNT 0x0602
 #include <sdkddkver.h>
 
 // Use the C++ standard templated min/max
@@ -34,20 +34,28 @@
 #include <DirectXColors.h>
 
 // DirectXTK
+#include <Audio.h>
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <SimpleMath.h>
 #include <VertexTypes.h>
 #include <CommonStates.h>
 #include <DDSTextureLoader.h>
+#include <WICTextureLoader.h>
+#include <SpriteBatch.h>
+#include <SpriteFont.h>
 
 // STD
+#include <map>
+#include <string>
 #include <vector>
 #include <memory>
+#include <locale>
+#include <codecvt>
+#include <fstream>
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
-#include <fstream>
 
 // JSON nlohmann library
 #include <nlohmann/json.hpp>
@@ -56,8 +64,14 @@
 #include "Commons.h"
 #include "JSONLoader.h"
 
+// Sound Handling
+#include "Sound.h"
+
 // Input Handling
 #include "InputState.h"
+
+// Camera
+#include "Camera.h"
 
 namespace DX
 {

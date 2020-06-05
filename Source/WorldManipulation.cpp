@@ -45,7 +45,7 @@ void WorldManipulation::SetVoxelSphere(char v, Vector3Int worldPos, int r) {
 	for (int x = -r; x <= r; x++) {
 		for (int y = -r; y <= r; y++) {
 			for (int z = -r; z <= r; z++) {
-				float dist = sqrt(pow(-x, 2) + pow(-y, 2) + pow(-z, 2)); //Distance from 0,0,0
+				float dist = sqrtf(static_cast<float>(pow(-x, 2) + pow(-y, 2) + pow(-z, 2))); //Distance from 0,0,0
 				if(dist < r)
 					SetVoxel(v, Vector3Int(worldPos.x + x, worldPos.y + y, worldPos.z + z));
 			}
@@ -106,8 +106,8 @@ void WorldManipulation::GenerateTerrainData(Chunk* c) {
 												(c->GetDepth() * ChunkHandler::GetMapSize()) / 2);
 			Vector2Int currentCol = Vector2Int(c->GetXIndex() * c->GetWidth() + x,
 											   c->GetZIndex() * c->GetDepth() + z);
-			float dist = sqrt(pow(middleOfMap.x - currentCol.x, 2.0f) + pow(middleOfMap.y - currentCol.y, 2.0f));
-			float normalisedDist = 1.0f - sqrt(std::min(dist / middleOfMap.x, 1.0f));
+			float dist = sqrtf(powf((float)middleOfMap.x - currentCol.x, 2.0f) + powf((float)middleOfMap.y - currentCol.y, 2.0f));
+			float normalisedDist = 1.0f - sqrtf(std::min(dist / middleOfMap.x, 1.0f));
 
 			//Get final terrain height
 			int terrainHeight = (int)((baseHeight + (remainderHeight * noiseSample) * std::min(normalisedDist, 0.90f)) + 0.5f);
@@ -133,7 +133,11 @@ void WorldManipulation::PlaceVoxelModel(VoxelModel* model, Vector3Int position) 
 				Vector3Int pos = Vector3Int(position.x - model->GetOrigin().x + x, 
 											position.y - model->GetOrigin().y + y, 
 											position.z - model->GetOrigin().z + z);
-				SetVoxel(data[x][y][z], pos);
+
+				if (!model->GetAirRemoveVoxels() && data[(long long)size.x - x][y][z] == VOXEL_TYPE::AIR)
+					continue;
+
+				SetVoxel(data[(long long)size.x - x][y][z], pos);	//For some reason X loads mirrored, so it's fixed here.
 			}
 		}
 	}
