@@ -57,4 +57,11 @@ void ShaderManager::InitialiseShaders(ID3D11Device1* device)
 		DirectX::VertexPositionNormalDualTexture::InputElementCount));
 
 	// #TODO Toon Shader 
+
+	// Line Shader
+	m_shaders.push_back(std::make_unique<Shader>(device,
+												 L"Resources/Shaders/DebugLineVertexShader.hlsl",
+												 L"Resources/Shaders/DebugLinePixelShader.hlsl",
+												 *DirectX::VertexPositionColor::InputElements,
+												 DirectX::VertexPositionColor::InputElementCount));
 }

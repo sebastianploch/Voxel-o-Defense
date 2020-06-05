@@ -32,12 +32,6 @@
     <Filter Include="Headers\Resources\Shaders">
       <UniqueIdentifier>{f7f06c61-7f30-4328-919d-8dfaec6b482e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\Voxel Terrain">
-      <UniqueIdentifier>{3ff922b0-c232-4e60-b5e7-51b99b3edcda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Voxel Terrain">
-      <UniqueIdentifier>{ca92a1e2-6cc7-44b7-b17e-7e4f00bdb6ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers\Camera">
       <UniqueIdentifier>{f20cf6fc-d128-49fc-8623-cc6ac36d11c4}</UniqueIdentifier>
     </Filter>
@@ -171,6 +165,9 @@
     <ClInclude Include="Source\ObserverEvents.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\DebugLine.h">
+      <Filter>Headers\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -271,6 +268,9 @@
     <ClCompile Include="Source\UIManager.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\DebugLine.cpp">
+      <Filter>Source\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -304,6 +304,12 @@
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\WaterVertexShader.hlsl">
+      <Filter>Headers\Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\DebugLineVertexShader.hlsl">
+      <Filter>Headers\Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\DebugLinePixelShader.hlsl">
       <Filter>Headers\Resources\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

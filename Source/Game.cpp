@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 
+#include "DebugLine.h"
 #include "DebugSimpleCube.h"
 #include "UIButton.h"
 #include "UISprite.h"
@@ -74,10 +75,10 @@ void Game::Initialize(HWND window,
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
 	//initialise the test model
-	m_modelTest.Initialise("Resources/Models/bigzombie1/bigzombie.obj", m_d3dDevice.Get());
+	//m_modelTest.Initialise("Resources/Models/bigzombie1/bigzombie.obj", m_d3dDevice.Get());
 
-	// Create one debug cube
-	m_gameObjects.push_back(std::make_shared<DebugSimpleCube>("Resources/config/cube.json", "cube"));
+	// Create Debug Line
+	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
 
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
@@ -356,6 +357,11 @@ void Game::Update(DX::StepTimer const& timer)
 		ExitGame();
 	}
 
+	if (m_inputState->GetKeyboardState().pressed.H)
+	{
+		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(20.0f, 10.0f, -10.0f));
+	}
+
 	// Example code for casting ray from camera
 	//if (m_inputState->GetKeyboardState().pressed.Space) {
 	//	//Place random voxel at ray hit point
@@ -383,9 +389,8 @@ void Game::Update(DX::StepTimer const& timer)
 		object->Update(deltaTime);
 	}
 
+	//m_modelTest.Update(deltaTime);
 	m_UIManager->Update(deltaTime, m_inputState);
-
-	m_modelTest.Update(deltaTime);
 
 	UpdateAudio();
 }
