@@ -62,6 +62,12 @@
     <Filter Include="Source\GameObjects\Particle">
       <UniqueIdentifier>{7a249e4f-2453-4d02-8a40-0c154643ef3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Gameplay">
+      <UniqueIdentifier>{708b5e05-7d72-45d5-9d84-8f5780617207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Gameplay">
+      <UniqueIdentifier>{e812e5ef-29f3-4230-9800-64dd833559f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -178,6 +184,9 @@
     <ClInclude Include="Source\ParticleEmitter.h">
       <Filter>Headers\GameObjects\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Source\BuildManager.h">
+      <Filter>Headers\Gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -284,6 +293,9 @@
     </ClCompile>
     <ClCompile Include="Source\ParticleEmitter.cpp">
       <Filter>Source\GameObjects\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BuildManager.cpp">
+      <Filter>Source\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

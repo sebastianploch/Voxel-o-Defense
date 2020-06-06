@@ -5,6 +5,8 @@
 
 using namespace DirectX::SimpleMath;
 
+int WorldManipulation::dir = 0;
+
 const char WorldManipulation::GetVoxel(int x, int y, int z) {
 	return GetVoxel(Vector3Int(x, y, z));;
 }
@@ -130,17 +132,42 @@ void WorldManipulation::PlaceVoxelModel(VoxelModel* model, Vector3Int position) 
 	for (int x = 0; x <= size.x; x++) {
 		for (int y = 0; y <= size.y; y++) {
 			for (int z = 0; z <= size.z; z++) {
-				Vector3Int pos = Vector3Int(position.x - model->GetOrigin().x + x, 
-											position.y - model->GetOrigin().y + y, 
-											position.z - model->GetOrigin().z + z);
-
 				if (!model->GetAirRemoveVoxels() && data[(long long)size.x - x][y][z] == VOXEL_TYPE::AIR)
 					continue;
 
-				SetVoxel(data[(long long)size.x - x][y][z], pos);	//For some reason X loads mirrored, so it's fixed here.
+				Vector3Int pos;
+
+				switch (dir) {
+				case 1:
+					pos = Vector3Int(position.x - model->GetOrigin().x + z + size.x / 2,
+									position.y - model->GetOrigin().y + y,
+									position.z - model->GetOrigin().z + -x + size.z / 2);
+					break;
+				case 2:
+					pos = Vector3Int(position.x - model->GetOrigin().x + -x + size.x / 2,
+									position.y - model->GetOrigin().y + y,
+									position.z - model->GetOrigin().z + -z + size.z / 2);
+					break;
+				case 3:
+					pos = Vector3Int(position.x - model->GetOrigin().x + -z + size.x / 2,
+									position.y - model->GetOrigin().y + y,
+									position.z - model->GetOrigin().z + x + size.z / 2);
+					break;
+				default:
+					pos = Vector3Int(position.x - model->GetOrigin().x + x + size.x / 2,
+									position.y - model->GetOrigin().y + y,
+									position.z - model->GetOrigin().z + z + size.z / 2);
+					break;
+				}
+				
+				SetVoxel(data[(long long)size.x - x][y][z], pos);
 			}
 		}
 	}
+}
+
+void WorldManipulation::IncrementDir() {
+	if (++dir == 4) dir = 0;
 }
 
 char WorldManipulation::GetVoxelType(Vector3Int pos, int terrainHeight) {

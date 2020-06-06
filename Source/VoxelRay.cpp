@@ -17,24 +17,22 @@ using namespace DirectX::SimpleMath;
 Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
 	std::vector<Vector3Int> visited_voxels;
 
-    double _bin_size = 1;
 
     // This id of the first/current voxel hit by the ray.
   // Using floor (round down) is actually very important,
   // the implicit int-casting will round up for negative numbers.
-    Vector3Int current_voxel((int)std::floor(ray_start.x / _bin_size),
-                             (int)std::floor(ray_start.y / _bin_size),
-                             (int)std::floor(ray_start.z / _bin_size));
+    Vector3Int current_voxel((int)std::floor(ray_start.x),
+                             (int)std::floor(ray_start.y),
+                             (int)std::floor(ray_start.z));
 
     // The id of the last voxel hit by the ray.
     // TODO: what happens if the end point is on a border?
-    Vector3Int last_voxel((int)std::floor(ray_end.x / _bin_size),
-                          (int)std::floor(ray_end.y / _bin_size),
-                          (int)std::floor(ray_end.z / _bin_size));
+    Vector3Int last_voxel((int)std::floor(ray_end.x),
+                          (int)std::floor(ray_end.y),
+                          (int)std::floor(ray_end.z));
 
     // Compute normalized ray direction.
     Vector3 ray = ray_end - ray_start;
-    //ray.normalize();
 
     // In which direction the voxel ids are incremented.
     double stepX = (ray.x >= 0) ? 1 : -1; // correct
@@ -42,9 +40,9 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
     double stepZ = (ray.z >= 0) ? 1 : -1; // correct
 
     // Distance along the ray to the next voxel border from the current position (tMaxX, tMaxY, tMaxZ).
-    double next_voxel_boundary_x = (current_voxel.x + stepX) * _bin_size; // correct
-    double next_voxel_boundary_y = (current_voxel.y + stepY) * _bin_size; // correct
-    double next_voxel_boundary_z = (current_voxel.z + stepZ) * _bin_size; // correct
+    double next_voxel_boundary_x = (current_voxel.x + stepX); // correct
+    double next_voxel_boundary_y = (current_voxel.y + stepY); // correct
+    double next_voxel_boundary_z = (current_voxel.z + stepZ); // correct
 
     // tMaxX, tMaxY, tMaxZ -- distance until next intersection with voxel-border
     // the value of t at which the ray crosses the first vertical voxel boundary
@@ -56,9 +54,9 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
     // how far along the ray we must move for the horizontal component to equal the width of a voxel
     // the direction in which we traverse the grid
     // can only be FLT_MAX if we never go in that direction
-    double tDeltaX = (ray.x != 0) ? _bin_size / ray.x * stepX : DBL_MAX;
-    double tDeltaY = (ray.y != 0) ? _bin_size / ray.y * stepY : DBL_MAX;
-    double tDeltaZ = (ray.z != 0) ? _bin_size / ray.z * stepZ : DBL_MAX;
+    double tDeltaX = (ray.x != 0) ? 1 / ray.x * stepX : DBL_MAX;
+    double tDeltaY = (ray.y != 0) ? 1 / ray.y * stepY : DBL_MAX;
+    double tDeltaZ = (ray.z != 0) ? 1 / ray.z * stepZ : DBL_MAX;
 
     Vector3Int diff(0, 0, 0);
     bool neg_ray = false;

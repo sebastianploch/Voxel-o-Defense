@@ -64,13 +64,16 @@ void Game::Initialize(HWND window,
 	// Initialise UI Manager
 	m_UIManager = std::make_unique<UIManager>();
 
+	// Initialise Build Manager
+	m_buildManager = std::make_unique<BuildManager>();
+
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
 	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
 
 	// Initialise Water
-	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() + 4 * 0.25f),
-																			static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() + 4 * 0.25f)),
+	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>((ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() + 4) * 0.25f),
+																			static_cast<int>((ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() + 4) * 0.25f)),
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
@@ -78,6 +81,9 @@ void Game::Initialize(HWND window,
 	//m_modelTest.Initialise("Resources/Models/bigzombie1/bigzombie.obj", m_d3dDevice.Get());
 
 	// Create Debug Line
+	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
+	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
+	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
 
 	// Create Water
@@ -359,31 +365,19 @@ void Game::Update(DX::StepTimer const& timer)
 
 	if (m_inputState->GetKeyboardState().pressed.H)
 	{
-		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(20.0f, 10.0f, -10.0f));
+		static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(20.0f, 10.0f, -10.0f));
 	}
 
-	//Raycasting from mouse position examples
-	if (m_inputState->GetMouse().GetState().leftButton) {
-		Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(m_cameraManager->GetActiveCamera(), 
-															   m_inputState.get(), 
-															   m_windowWidth, 
-															   m_windowHeight);
-		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_4.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
-	}
-	if (m_inputState->GetKeyboardState().pressed.Space) {
-		Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(m_cameraManager->GetActiveCamera(), 
-															   m_inputState.get(), 
-															   m_windowWidth, 
-															   m_windowHeight);
-		WorldManipulation::SetVoxel(rand() % 16 + 1, rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
-	}
-	if (m_inputState->GetKeyboardState().pressed.Enter) {
-		Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(m_cameraManager->GetActiveCamera(), 
-															   m_inputState.get(), 
-															   m_windowWidth, 
-															   m_windowHeight);
-		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + DirectX::SimpleMath::Vector3Int::UnitY);
-	}
+	// Update build manager
+	std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime, 
+																	m_inputState.get(),
+																	m_cameraManager.get(), 
+																	SimpleMath::Vector2Int(m_windowWidth, m_windowHeight));
+
+	static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(verts[0], verts[1]);
+	static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(verts[1], verts[2]);
+	static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(verts[2], verts[3]);
+	static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(verts[3], verts[0]);
 
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());

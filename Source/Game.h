@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "CameraManager.h"
 #include "UIManager.h"
+#include "BuildManager.h"
 
 class Game
 {
@@ -76,22 +77,25 @@ private:
     std::vector<std::shared_ptr<IGameObject>>			m_gameObjects;
 
     // Rendering
-    std::unique_ptr<ShaderManager>                  m_shaderManager;
-    std::unique_ptr<DirectX::CommonStates>          m_states;
-    Microsoft::WRL::ComPtr<ID3D11Buffer>            m_constantBuffer;
+    std::unique_ptr<ShaderManager>                      m_shaderManager;
+    std::unique_ptr<DirectX::CommonStates>              m_states;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>                m_constantBuffer;
 
     // Basic Camera
-    std::unique_ptr<CameraManager>                  m_cameraManager;
+    std::unique_ptr<CameraManager>                      m_cameraManager;
 
     // Audio
-    std::unique_ptr<DirectX::AudioEngine>           m_audioEngine;
+    std::unique_ptr<DirectX::AudioEngine>               m_audioEngine;
 
 	// UI
 	std::unique_ptr<UIManager>							m_UIManager;
 	std::unique_ptr<DirectX::SpriteBatch>				m_spriteBatch;
 
-    // DeltaTime Timer
-    DX::StepTimer                                   m_timer;
+    // Building
+    std::unique_ptr<BuildManager>                       m_buildManager;
 
-    Model                                           m_modelTest;
+    // DeltaTime Timer
+    DX::StepTimer                                       m_timer;
+
+    Model                                               m_modelTest;
 };
