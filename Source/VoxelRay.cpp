@@ -69,6 +69,10 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
         visited_voxels.push_back(current_voxel);
     }
 
+    if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
+        return current_voxel;   //Traverse list of visit voxels, return first voxel which isn't air
+    }
+
     while (!(current_voxel.x == last_voxel.x && 
              current_voxel.y == last_voxel.y && 
              current_voxel.z == last_voxel.z)) {
@@ -89,12 +93,11 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
                 tMaxZ += tDeltaZ;
             }
         }
-        visited_voxels.push_back(current_voxel);
-    }
 
-    for (Vector3Int& v : visited_voxels) {
-        if (WorldManipulation::GetVoxel(v) != VOXEL_TYPE::AIR) {
-            return v;   //Traverse list of visit voxels, return first voxel which isn't air
+        visited_voxels.push_back(current_voxel);
+
+        if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
+            return current_voxel;   //Traverse list of visit voxels, return first voxel which isn't air
         }
     }
 
