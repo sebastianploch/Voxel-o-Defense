@@ -22,6 +22,8 @@ UISprite::~UISprite()
 bool UISprite::Update(float deltaTime,
 					  std::unique_ptr<InputState>& inputState)
 {
+	UNREFERENCED_PARAMETER(inputState);
+
 	if (m_lifeTime > 0.0f)
 	{
 		m_lifeTimeTimer -= deltaTime;
@@ -36,11 +38,14 @@ bool UISprite::Update(float deltaTime,
 void UISprite::Draw(SpriteBatch*
 	spriteBatch)
 {
+	if (!m_isVisible)
+		return;
+
 	if (m_isStretched)
 	{
 		RECT destRect;
-		destRect.left = m_screenPos.x;
-		destRect.top = m_screenPos.y;
+		destRect.left = (LONG)m_screenPos.x;
+		destRect.top = (LONG)m_screenPos.y;
 		destRect.right = destRect.left + m_width;
 		destRect.bottom = destRect.top + m_height;
 

@@ -53,6 +53,9 @@ public:
 
 	inline DirectX::SimpleMath::Vector3 GetLookOffset() const { return m_lookOffset; }
 	inline void SetLookOffset(const DirectX::SimpleMath::Vector3& offset) { m_lookOffset = offset; }
+
+	inline bool GetIsBuildMode() const { return m_isBuildMode; }
+	inline void SetIsBuildMode(bool isEnabled) { m_isBuildMode = isEnabled; }
 #pragma endregion Getters/Setters
 
 private:
@@ -89,4 +92,6 @@ private:
 	float						 m_minimumRotationSpeed;
 	float						 m_maximumRotationSpeed;
 	DirectX::SimpleMath::Vector3 m_lookOffset;
+	bool						 m_isBuildMode;
+	float						 m_targetYaw;
 };

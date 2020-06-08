@@ -56,6 +56,18 @@
     <Filter Include="Headers\UI">
       <UniqueIdentifier>{a654436c-e592-4afb-8a27-e489b9cf795d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\GameObjects\Particle">
+      <UniqueIdentifier>{488a1c32-083b-4a09-a12a-d737e51e0d30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameObjects\Particle">
+      <UniqueIdentifier>{7a249e4f-2453-4d02-8a40-0c154643ef3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Gameplay">
+      <UniqueIdentifier>{708b5e05-7d72-45d5-9d84-8f5780617207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Gameplay">
+      <UniqueIdentifier>{e812e5ef-29f3-4230-9800-64dd833559f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -76,8 +88,6 @@
     <ClInclude Include="Source\Commons.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ParticleEmitter.h" />
-    <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\InputState.h">
       <Filter>Headers\Utils</Filter>
     </ClInclude>
@@ -168,6 +178,15 @@
     <ClInclude Include="Source\DebugLine.h">
       <Filter>Headers\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Particle.h">
+      <Filter>Headers\GameObjects\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ParticleEmitter.h">
+      <Filter>Headers\GameObjects\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BuildManager.h">
+      <Filter>Headers\Gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -185,8 +204,6 @@
     <ClCompile Include="Source\DebugSimpleCube.cpp">
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ParticleEmitter.cpp" />
-    <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\InputState.cpp">
       <Filter>Source\Utils</Filter>
     </ClCompile>
@@ -270,6 +287,15 @@
     </ClCompile>
     <ClCompile Include="Source\DebugLine.cpp">
       <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Particle.cpp">
+      <Filter>Source\GameObjects\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ParticleEmitter.cpp">
+      <Filter>Source\GameObjects\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BuildManager.cpp">
+      <Filter>Source\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

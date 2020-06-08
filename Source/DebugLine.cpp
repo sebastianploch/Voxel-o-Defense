@@ -22,7 +22,7 @@ DebugLine::~DebugLine()
 
 void DebugLine::Update(float deltaTime)
 {
-
+	UNREFERENCED_PARAMETER(deltaTime);
 }
 
 void DebugLine::Draw(ID3D11DeviceContext* context)
