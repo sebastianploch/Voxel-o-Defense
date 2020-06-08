@@ -187,6 +187,9 @@
     <ClInclude Include="Source\BuildManager.h">
       <Filter>Headers\Gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ModelSelectionObserver.h">
+      <Filter>Headers\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -296,6 +299,9 @@
     </ClCompile>
     <ClCompile Include="Source\BuildManager.cpp">
       <Filter>Source\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModelSelectionObserver.cpp">
+      <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

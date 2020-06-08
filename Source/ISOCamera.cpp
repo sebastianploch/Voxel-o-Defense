@@ -184,6 +184,12 @@ void ISOCamera::ClampDimensions(float& width, float& height)
 	height = std::clamp(height, m_scrollInLimit / ratio, m_scrollOutLimit / ratio);
 }
 
+void ISOCamera::SetIsBuildMode(bool isEnabled) { 
+	if (isEnabled)
+		m_targetYaw = -m_yaw;
+	m_isBuildMode = isEnabled; 
+}
+
 void ISOCamera::ProcessMouse(float deltaTime, const InputState& input)
 {
 	auto state = input.GetMouse().GetState();

@@ -9,9 +9,8 @@ using namespace DirectX::SimpleMath;
 
 std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, CameraManager* cameraManager, Vector2Int winDimensions) {
 	//Rotate model
-	if (input->GetMouse().GetState().rightButton) {
+	if (input->GetMouseState().rightButton == input->GetMouseState().PRESSED) {
 		WorldManipulation::IncrementDir();
-		DEBUG_PRINT(WorldManipulation::GetDir());
 	}
 
 	//Place individual Voxel
@@ -24,25 +23,35 @@ std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, Came
 	}
 
 	//Place model
-	if (input->GetKeyboardState().pressed.Enter) {
+	if (input->GetMouseState().leftButton == input->GetMouseState().PRESSED) {
 		Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(cameraManager->GetActiveCamera(),
 																input,
 																winDimensions.x,
 																winDimensions.y);
-		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml"), rayHit + Vector3Int::UnitY);
+		WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel(currentModel), rayHit + Vector3Int::UnitY);
 	}
 
 	return GeneratePreviewVertices(input, cameraManager, winDimensions);
 }
 
 std::vector<Vector3> BuildManager::GeneratePreviewVertices(InputState* input, CameraManager* cameraManager, DirectX::SimpleMath::Vector2Int winDimensions) {
+	if (input->GetMouse().GetState().x == prevMouseCoords.x &&
+		input->GetMouse().GetState().y == prevMouseCoords.y)
+		return std::vector<Vector3>();
+
+	prevMouseCoords.x = input->GetMouse().GetState().x;
+	prevMouseCoords.y = input->GetMouse().GetState().y;
+
+	//Get current mouse hit position
 	Vector3Int rayHit = VoxelRay::VoxelRaycastFromMousePos(cameraManager->GetActiveCamera(),
 		input,
 		winDimensions.x,
 		winDimensions.y);
 
-	VoxelModel* model = VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/castle_structure.vxml");
+	//Get current model being placed
+	VoxelModel* model = VoxelModelManager::GetOrLoadModel(currentModel);
 
+	//Store values about the model
 	int dir = WorldManipulation::GetDir();
 	Vector3Int size = model->GetSize();
 	Vector3Int position = rayHit + Vector3Int::UnitY;
@@ -51,6 +60,7 @@ std::vector<Vector3> BuildManager::GeneratePreviewVertices(InputState* input, Ca
 						  position.y + 0.1f,
 						  position.z - model->GetOrigin().z + size.z / 2);
 
+	//Create vertex positions based on rotation
 	std::vector<Vector3> result;
 	switch (dir) {
 	case 1:

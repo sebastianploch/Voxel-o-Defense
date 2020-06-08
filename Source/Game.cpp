@@ -8,6 +8,11 @@
 #include "UIText.h"
 #include "PlaneGameObject.h"
 #include "ParticleEmitter.h"
+#include "Observer.h"
+#include "ModelSelectionObserver.h"
+
+#include "Camera.h"
+#include "ISOCamera.h"
 
 #include "ChunkObject.h"
 #include "ChunkHandler.h"
@@ -89,9 +94,32 @@ void Game::Initialize(HWND window,
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
 	
+	// Create initial voxel meshes and texture
 	InitialiseVoxelWorld();
 
 	Sound::InitialiseSounds(m_audioEngine.get());
+
+	// Build Mode UI
+	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
+	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924/2-1, 1020/2), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice.Get());	//1924*1020 is border img size
+	m_UIManager->Add(buildmodeBorderSprite);
+	
+	std::shared_ptr<UIButton> wallTier1Button = std::make_shared<UIButton>();
+	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
+	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
+	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
+	wallTier1Button->Initialise(SimpleMath::Vector2(136 + 225 * 0, 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier2Button->Initialise(SimpleMath::Vector2(136 + 225 * 1, 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier3Button->Initialise(SimpleMath::Vector2(136 + 225 * 2, 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier4Button->Initialise(SimpleMath::Vector2(136 + 225 * 3, 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	m_UIManager->Add(wallTier1Button);
+	m_UIManager->Add(wallTier2Button);
+	m_UIManager->Add(wallTier3Button);
+	m_UIManager->Add(wallTier4Button);
+	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
+	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
+	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
+	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -302,12 +330,6 @@ void Game::InitialiseVoxelWorld()
 	// Initialise Voxel Chunk Objects
 	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
 
-	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_1.vxml"), Vector3Int(10, 4, 10));
-	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_2.vxml"), Vector3Int(21, 4, 10));
-	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_3.vxml"), Vector3Int(32, 4, 10));
-	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_4.vxml"), Vector3Int(43, 4, 10));
-	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_4.vxml"), Vector3Int(53, 4, 10));
-
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 }
@@ -362,22 +384,36 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		ExitGame();
 	}
+	
+	ISOCamera* c = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
+	// Temporary Build Mode toggling
+	if (m_inputState->GetKeyboardState().pressed.H) {
+		c->SetIsBuildMode(!c->GetIsBuildMode());
+	}
+	// Update build manager and build preview if build mode enabled
+	if (c->GetIsBuildMode()) {
+		// Update build manager
+		std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime,
+																		m_inputState.get(),
+																		m_cameraManager.get(),
+																		SimpleMath::Vector2Int(m_windowWidth, m_windowHeight));
 
-	if (m_inputState->GetKeyboardState().pressed.H)
-	{
-		static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(Vector3(0.0f, 0.0f, 0.0f), Vector3(20.0f, 10.0f, -10.0f));
+		// Update preview with new vertex positions
+		if (verts.size()) {	//Only if verts.size() != 0. verts size == 0 when mouse hasn't moved between frame
+			static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(verts[0], verts[1]);
+			static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(verts[1], verts[2]);
+			static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(verts[2], verts[3]);
+			static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(verts[3], verts[0]);
+		}
+	} else {
+		// Set all preview vertex positions to (1, 1, 1) if not build mode
+		static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(Vector3::One, Vector3::One);
+		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3::One, Vector3::One);
+		static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(Vector3::One, Vector3::One);
+		static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(Vector3::One, Vector3::One);
 	}
 
-	// Update build manager
-	std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime, 
-																	m_inputState.get(),
-																	m_cameraManager.get(), 
-																	SimpleMath::Vector2Int(m_windowWidth, m_windowHeight));
 
-	static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(verts[0], verts[1]);
-	static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(verts[1], verts[2]);
-	static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(verts[2], verts[3]);
-	static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(verts[3], verts[0]);
 
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());

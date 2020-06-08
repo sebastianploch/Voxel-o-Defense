@@ -55,7 +55,7 @@ public:
 	inline void SetLookOffset(const DirectX::SimpleMath::Vector3& offset) { m_lookOffset = offset; }
 
 	inline bool GetIsBuildMode() const { return m_isBuildMode; }
-	inline void SetIsBuildMode(bool isEnabled) { m_isBuildMode = isEnabled; }
+	void SetIsBuildMode(bool isEnabled);
 #pragma endregion Getters/Setters
 
 private:

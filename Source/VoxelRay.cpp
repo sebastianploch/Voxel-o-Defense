@@ -69,8 +69,9 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
         visited_voxels.push_back(current_voxel);
     }
 
+    //Return first voxel which isn't air
     if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
-        return current_voxel;   //Traverse list of visit voxels, return first voxel which isn't air
+        return current_voxel;   
     }
 
     while (!(current_voxel.x == last_voxel.x && 
@@ -96,8 +97,13 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
 
         visited_voxels.push_back(current_voxel);
 
+        //Hard limit on how many voxels can be traversed to avoid memory leak
+        if (visited_voxels.size() > 60000)
+            break;
+
+        //Return first voxel which isn't air
         if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
-            return current_voxel;   //Traverse list of visit voxels, return first voxel which isn't air
+            return current_voxel;
         }
     }
 
@@ -124,11 +130,9 @@ DirectX::SimpleMath::Vector3Int VoxelRay::VoxelRaycastFromMousePos(Camera* activ
     //Get ray direction from centre of camera
     Vector3 end = activeCam->GetTarget() - activeCam->GetPosition();	//Get normalised direction
     Vector3 start = -end;
-    end *= 300;
-    start *= 300;
+    end *= 2;
     end += activeCam->GetPosition();	//Reapply the camera position
     start += activeCam->GetPosition();
-
 
     //Calculate final offset
     Vector3 finalOffset = Vector3(abs(dir.y) > abs(dir.x) ? offset.x * dir.y : offset.z * dir.x,

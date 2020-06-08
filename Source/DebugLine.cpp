@@ -46,8 +46,14 @@ void DebugLine::Draw(ID3D11DeviceContext* context)
 void DebugLine::UpdateLine(const Vector3& start,
 						   const Vector3& end)
 {
-	m_vertices[0] = VertexPositionColor(start, Colors::Magenta);
-	m_vertices[1] = VertexPositionColor(end, Colors::Magenta);
+	m_vertices[0] = VertexPositionColor(start, SimpleMath::Color(204.0f / 255.0f, 
+																54.0f / 255.0f, 
+																54.0f / 255.0f, 
+																1.0f));
+	m_vertices[1] = VertexPositionColor(end, SimpleMath::Color(204.0f / 255.0f, 
+																54.0f / 255.0f, 
+																54.0f / 255.0f, 
+																1.0f));
 
 	CreateVertexBuffer();
 }
