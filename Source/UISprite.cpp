@@ -38,6 +38,9 @@ bool UISprite::Update(float deltaTime,
 void UISprite::Draw(SpriteBatch*
 	spriteBatch)
 {
+	if (!m_isVisible)
+		return;
+
 	if (m_isStretched)
 	{
 		RECT destRect;
