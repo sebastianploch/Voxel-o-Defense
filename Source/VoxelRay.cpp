@@ -15,12 +15,11 @@ using namespace DirectX::SimpleMath;
 */
 
 Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
-	std::vector<Vector3Int> visited_voxels;
-
+    std::vector<Vector3Int> visited_voxels;
 
     // This id of the first/current voxel hit by the ray.
-  // Using floor (round down) is actually very important,
-  // the implicit int-casting will round up for negative numbers.
+    // Using floor (round down) is actually very important,
+    // the implicit int-casting will round up for negative numbers.
     Vector3Int current_voxel((int)std::floor(ray_start.x),
                              (int)std::floor(ray_start.y),
                              (int)std::floor(ray_start.z));
@@ -70,8 +69,12 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
     }
 
     //Return first voxel which isn't air
-    if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
-        return current_voxel;   
+    if ((current_voxel.x < 32 * 15 && current_voxel.x >= 0) &&
+        (current_voxel.y < 150     && current_voxel.y >= 0) &&
+        (current_voxel.z < 32 * 15 && current_voxel.z >= 0)) {
+        if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
+            return current_voxel;
+        }
     }
 
     while (!(current_voxel.x == last_voxel.x && 
@@ -102,8 +105,12 @@ Vector3Int VoxelRay::VoxelRaycast(Vector3 ray_start, Vector3 ray_end) {
             break;
 
         //Return first voxel which isn't air
-        if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
-            return current_voxel;
+        if ((current_voxel.x < 32 * 15 && current_voxel.x >= 0) &&
+            (current_voxel.y < 150     && current_voxel.y >= 0) &&
+            (current_voxel.z < 32 * 15 && current_voxel.z >= 0)) {
+            if (WorldManipulation::GetVoxel(current_voxel) != VOXEL_TYPE::AIR) {
+                return current_voxel;
+            }
         }
     }
 
@@ -131,6 +138,7 @@ DirectX::SimpleMath::Vector3Int VoxelRay::VoxelRaycastFromMousePos(Camera* activ
     Vector3 end = activeCam->GetTarget() - activeCam->GetPosition();	//Get normalised direction
     Vector3 start = -end;
     end *= 2;
+    start *= 4;
     end += activeCam->GetPosition();	//Reapply the camera position
     start += activeCam->GetPosition();
 

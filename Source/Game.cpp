@@ -328,10 +328,10 @@ void Game::InitialiseBuildModeUI() {
 	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
 
 	//Initialise Position, Sprite, etc.
-	wallTier1Button->Initialise(SimpleMath::Vector2(136 + 225 * 0, 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier2Button->Initialise(SimpleMath::Vector2(136 + 225 * 1, 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier3Button->Initialise(SimpleMath::Vector2(136 + 225 * 2, 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier4Button->Initialise(SimpleMath::Vector2(136 + 225 * 3, 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier1Button->Initialise(SimpleMath::Vector2(136 + (225 * 0), 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier2Button->Initialise(SimpleMath::Vector2(136 + (225 * 1), 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier3Button->Initialise(SimpleMath::Vector2(136 + (225 * 2), 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier4Button->Initialise(SimpleMath::Vector2(136 + (225 * 3), 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
 
 	//Add to UI Manager
 	m_UIManager->Add(wallTier1Button);
@@ -397,13 +397,13 @@ void Game::Update(DX::StepTimer const& timer)
 		ExitGame();
 	}
 	
-	ISOCamera* c = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
+	ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
 	// Temporary Build Mode toggling
 	if (m_inputState->GetKeyboardState().pressed.H) {
-		c->SetIsBuildMode(!c->GetIsBuildMode());
+		cam->SetIsBuildMode(!cam->GetIsBuildMode());
 	}
 	// Update build manager and build preview if build mode enabled
-	if (c->GetIsBuildMode()) {
+	if (cam->GetIsBuildMode()) {
 		// Update build manager
 		std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime,
 																		m_inputState.get(),

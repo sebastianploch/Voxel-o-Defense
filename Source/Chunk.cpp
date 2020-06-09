@@ -38,7 +38,7 @@ const char Chunk::GetVoxel(int x, int y, int z) {
 	}
 
 	if (y < 0 || y >= GetHeight()) {
-		return (char)0;
+		return 0x00;
 	}
 
 	if (z < 0) {
@@ -48,6 +48,9 @@ const char Chunk::GetVoxel(int x, int y, int z) {
 	}
 
 	int index = x + CHUNK_W * (y + CHUNK_H * z);
+	if (index >= CHUNK_W * CHUNK_H * CHUNK_D)
+		return 0x00;
+
 	return m_voxels[index]; 
 }
 
@@ -101,6 +104,8 @@ void Chunk::SetVoxel(char c, int x, int y, int z) {
 	if (index >= (CHUNK_W * CHUNK_H * CHUNK_D))
 		return;
 	if (index < 0)
+		return;
+	if (!m_voxels)
 		return;
 
 	m_voxels[index] = c;
