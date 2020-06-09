@@ -25,8 +25,8 @@ ISOCamera::ISOCamera(float width,
            up),
 	m_zoom(1.0f),
 	m_scrollSpeed(5.0f),
-	m_scrollInLimit(10.0f),
-	m_scrollOutLimit(150.0f),
+	m_scrollInLimit(20.0f),
+	m_scrollOutLimit(300.0f),
 	m_movementScaleBias(2.5f),
 	m_minimumMovementSpeed(10.0f),
 	m_maximumMovementSpeed(80.0f),
@@ -34,12 +34,12 @@ ISOCamera::ISOCamera(float width,
 	m_minimumRotationSpeed(0.3f),
 	m_maximumRotationSpeed(1.5f),
 	m_lookOffset(Vector3(100.0f, 0.0f, 100.0f)),
-	m_isBuildMode(true),
+	m_isBuildMode(false),
 	m_targetYaw(0.0f)
 {
 	m_movementSpeed = 80.0f;
 	m_rotationSpeed = 1.5f;
-	m_yaw = -XM_PI;
+	m_yaw = -XM_PIDIV4;
 	m_orgYaw = -2.5f;
 }
 

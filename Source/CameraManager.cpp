@@ -68,5 +68,5 @@ void CameraManager::InitialiseISOCamera(float width,
 										height,
 										-500.0f,
 										500.0f,
-										Vector3(0.0f, 20.0f, 0.0f));
+										Vector3(240.0f, 20.0f, 240.0f));
 }

@@ -190,6 +190,9 @@
     <ClInclude Include="Source\ModelSelectionObserver.h">
       <Filter>Headers\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\NextWaveObserver.h">
+      <Filter>Headers\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -301,6 +304,9 @@
       <Filter>Source\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModelSelectionObserver.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NextWaveObserver.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>

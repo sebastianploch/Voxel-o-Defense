@@ -48,6 +48,16 @@ int UIManager::Add(std::shared_ptr<IUIObject> newUI)
 	return m_currentID;
 }
 
+IUIObject* UIManager::Get(int id) {
+	for (auto object : m_UIObjects) {
+		if (object.first == id) {
+			return object.second.get();
+		}
+	}
+
+	return nullptr;
+}
+
 void UIManager::Remove(int id)
 {
 	int currentID;

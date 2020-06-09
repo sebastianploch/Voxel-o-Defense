@@ -99,4 +99,7 @@ private:
     DX::StepTimer                                       m_timer;
 
     Model                                               m_modelTest;
+
+    // Store Build Mode UI ID's
+    std::vector<int>                                    m_buildModeIDs;
 };

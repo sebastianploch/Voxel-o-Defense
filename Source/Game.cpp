@@ -10,6 +10,7 @@
 #include "ParticleEmitter.h"
 #include "Observer.h"
 #include "ModelSelectionObserver.h"
+#include "NextWaveObserver.h"
 
 #include "Camera.h"
 #include "ISOCamera.h"
@@ -97,6 +98,7 @@ void Game::Initialize(HWND window,
 	// Create initial voxel meshes and texture
 	InitialiseVoxelWorld();
 
+	// Initialise Audio
 	Sound::InitialiseSounds(m_audioEngine.get());
 
 	// Build Mode UI
@@ -316,12 +318,14 @@ void Game::InitialiseVoxelWorld()
 }
 
 void Game::InitialiseBuildModeUI() {
+	m_buildModeIDs = std::vector<int>();
+
 	//Border, Text and Icon at top left, Gradient at bottom
 	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
 	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924 / 2 - 1, 1020 / 2), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice.Get());	//1924*1020 is border img size
-	m_UIManager->Add(buildmodeBorderSprite);
+	m_buildModeIDs.push_back(m_UIManager->Add(buildmodeBorderSprite));
 
-	//Create Buttons
+	//Create Model Selection Buttons
 	std::shared_ptr<UIButton> wallTier1Button = std::make_shared<UIButton>();
 	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
 	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
@@ -334,16 +338,22 @@ void Game::InitialiseBuildModeUI() {
 	wallTier4Button->Initialise(SimpleMath::Vector2(136 + (225 * 3), 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
 
 	//Add to UI Manager
-	m_UIManager->Add(wallTier1Button);
-	m_UIManager->Add(wallTier2Button);
-	m_UIManager->Add(wallTier3Button);
-	m_UIManager->Add(wallTier4Button);
+	m_buildModeIDs.push_back(m_UIManager->Add(wallTier1Button));
+	m_buildModeIDs.push_back(m_UIManager->Add(wallTier2Button));
+	m_buildModeIDs.push_back(m_UIManager->Add(wallTier3Button));
+	m_buildModeIDs.push_back(m_UIManager->Add(wallTier4Button));
 
 	//Add observer object and specify relative model
 	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
 	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
 	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
 	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
+
+	//Create "Next Wave" Button
+	std::shared_ptr<UIButton> nextWaveButton = std::make_shared<UIButton>();
+	nextWaveButton->Initialise(SimpleMath::Vector2(1790, 940), L"Resources/Textures/UI/BuildMode/RegularButton.dds", L"Resources/Fonts/5x5.spritefont", L"Next Wave", m_d3dDevice.Get());
+	m_buildModeIDs.push_back(m_UIManager->Add(nextWaveButton));
+	nextWaveButton->Clicked()->AddObserver(std::make_shared<NextWaveObserver>(static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera())));
 }
 
 // Reset and re-initialise component upon "Device Lost" flag
@@ -397,6 +407,7 @@ void Game::Update(DX::StepTimer const& timer)
 		ExitGame();
 	}
 	
+	// Handle Build Mode
 	ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
 	// Temporary Build Mode toggling
 	if (m_inputState->GetKeyboardState().pressed.H) {
@@ -417,15 +428,22 @@ void Game::Update(DX::StepTimer const& timer)
 			static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(verts[2], verts[3]);
 			static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(verts[3], verts[0]);
 		}
+
+		//Enable UI
+		for (int id : m_buildModeIDs)
+			m_UIManager->Get(id)->SetVisible(true);
+
 	} else {
 		// Set all preview vertex positions to (1, 1, 1) if not build mode
 		static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(Vector3::One, Vector3::One);
 		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3::One, Vector3::One);
 		static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(Vector3::One, Vector3::One);
 		static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(Vector3::One, Vector3::One);
+
+		//Enable UI
+		for (int id : m_buildModeIDs)
+			m_UIManager->Get(id)->SetVisible(false);
 	}
-
-
 
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());

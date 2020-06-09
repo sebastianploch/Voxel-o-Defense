@@ -59,8 +59,6 @@ std::vector<Vector3> BuildManager::GeneratePreviewVertices(InputState* input, Ca
 						  position.y + 0.1f,
 						  position.z - model->GetOrigin().z + size.z / 2);
 
-	DEBUG_PRINT(dir);
-
 	//Create vertex positions based on rotation
 	std::vector<Vector3> result;
 	switch (dir) {
