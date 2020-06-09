@@ -11,6 +11,7 @@ std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, Came
 	//Rotate model
 	if (input->GetMouseState().rightButton == input->GetMouseState().PRESSED) {
 		WorldManipulation::IncrementDir();
+		prevMouseCoords = Vector2Int(0, 0);	//Forces build preview to update
 	}
 
 	//Place individual Voxel

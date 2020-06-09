@@ -6,5 +6,5 @@ ModelSelectionObserver::ModelSelectionObserver(std::string _modelType, BuildMana
 
 void ModelSelectionObserver::OnNotify(std::shared_ptr<Event> event) {
 	DEBUG_PRINT(modelType);
-	m_pBuildManager->SetCurrentModelDir(modelType);
+	m_pBuildManager->SetCurrentModel(modelType);
 }

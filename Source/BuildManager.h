@@ -10,8 +10,8 @@ public:
 
 	std::vector<DirectX::SimpleMath::Vector3> Update(int deltaTime, InputState* input, CameraManager* cameraManager, DirectX::SimpleMath::Vector2Int winDimensions);
 
-	inline std::string GetCurrentModelDir() const { return currentModel; }
-	inline void SetCurrentModelDir(std::string dir) { currentModel = dir; }
+	inline std::string GetCurrentModel() const { return currentModel; }
+	inline void SetCurrentModel(std::string dir) { currentModel = dir; }
 
 private:
 	std::string currentModel = "Resources/Models/Voxel/wall_tier_1.vxml";
