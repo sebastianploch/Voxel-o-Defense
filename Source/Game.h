@@ -6,8 +6,10 @@
 #include "Model.h"
 #include "CameraManager.h"
 #include "UIManager.h"
-
 #include "AiManager.h"
+#include "Enemy.h"
+
+class EnemyFactory;
 
 class Game
 {
@@ -79,7 +81,7 @@ private:
 
 	// Ai Manager
 
-	std::unique_ptr<AiManager>						m_AiManager;
+	std::shared_ptr<AiManager>						m_AiManager;
 
     // Rendering
     std::unique_ptr<ShaderManager>                  m_shaderManager;
@@ -93,11 +95,13 @@ private:
     std::unique_ptr<DirectX::AudioEngine>           m_audioEngine;
 
 	// UI
-	std::unique_ptr<UIManager>							m_UIManager;
-	std::unique_ptr<DirectX::SpriteBatch>				m_spriteBatch;
+	std::unique_ptr<UIManager>						m_UIManager;
+	std::unique_ptr<DirectX::SpriteBatch>			m_spriteBatch;
 
     // DeltaTime Timer
     DX::StepTimer                                   m_timer;
 
     Model                                           m_modelTest;
+    
+    std::shared_ptr<EnemyFactory>                   m_enemyFactory;
 };

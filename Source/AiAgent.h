@@ -14,6 +14,7 @@
 
 #include "DumbObject.h"
 #include "Node.h"
+#include "Enemy.h"
 
 //-----------//
 //-- Enums --//
@@ -25,13 +26,6 @@
 //-- Struct --//
 //------------//
 
-enum TypeOfMonster
-{
-	NULLTYPE = 0,
-	ZOMBIE,
-	SPIDER,
-	SKELETON
-};
 
 //-----------//
 //-- Class --//
@@ -39,7 +33,7 @@ enum TypeOfMonster
 class AiAgent
 {
 public:
-	AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp);
+	AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp, EnemyFactory factory);
 	~AiAgent();
 
 	void Update(float deltaTime, float time);
@@ -47,7 +41,7 @@ public:
 
 	DirectX::SimpleMath::Vector3 Lerp(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end, float t);
 
-	void Render(ID3D11DeviceContext* deviceContex);
+	void Render(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb, ID3D11DeviceContext1& context);
 
 	void SetRoute(std::vector<Nodes*> route);
 
@@ -63,7 +57,7 @@ public:
 	TypeOfMonster GetType();
 	void SetType(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp);
 
-	std::shared_ptr<DumbObject> GetGameObject();
+	std::shared_ptr<Enemy> GetGameObject();
 
 	std::vector<Nodes*> GetRoute();
 
@@ -79,7 +73,7 @@ public:
 
 private:
 	//- In Game Object -//
-	std::shared_ptr<DumbObject> m_gameObject;
+	std::shared_ptr<Enemy> m_gameObject;
 	
 	DirectX::SimpleMath::Vector3 m_position;
 	bool m_compleateStop;

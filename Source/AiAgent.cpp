@@ -3,8 +3,9 @@
 #include <DirectXMath.h>
 #include <cmath>
 
+
 #pragma region Constructor_Destructor
-AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp)
+AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp, EnemyFactory factory)
 {
 	_type = type;
 	_health = health;
@@ -14,7 +15,7 @@ AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float dama
 	_stepHeightIndex = maxStepUp;
 
 	m_position = DirectX::SimpleMath::Vector3(0.5f, 4.5f, 0.5f);
-	m_gameObject = std::make_unique<DumbObject>(m_position, DirectX::SimpleMath::Vector3(), DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f), "Resources/config/cube.json", "cube");
+	m_gameObject = factory.CreateEnemy(type);
 }
 
 AiAgent::~AiAgent()
@@ -37,7 +38,7 @@ void AiAgent::Update(float deltaTime, float time)
 				if (m_route.size() != 0)
 				{
 					m_position = m_route[m_route.size() - 1]->GetPosition() + DirectX::SimpleMath::Vector3(0.5f, 0.5f, 0.5f);
-					m_gameObject->SetPosition(m_position);
+					m_gameObject->SetTranslation(m_position);
 				}
 				else
 				{
@@ -58,11 +59,11 @@ void AiAgent::Update(float deltaTime, float time)
 	m_gameObject->Update(deltaTime);
 }
 
-void AiAgent::Render(ID3D11DeviceContext* deviceContex)
+void AiAgent::Render(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb, ID3D11DeviceContext1& context)
 {
 	if (_active == true && _SpawnOffset == 0)
 	{
-		m_gameObject->Draw(deviceContex);
+		m_gameObject->Draw(pConstantBuffer,cb,context);
 	}
 }
 #pragma endregion Game_Loop
@@ -130,7 +131,7 @@ void AiAgent::SetType(TypeOfMonster type, int health, float movementSpeed, float
 	_active = active;
 }
 
-std::shared_ptr<DumbObject> AiAgent::GetGameObject()
+std::shared_ptr<Enemy> AiAgent::GetGameObject()
 {
 	return m_gameObject;
 }

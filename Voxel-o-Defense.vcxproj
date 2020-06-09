@@ -215,6 +215,7 @@
     <ClInclude Include="Source\DebugLine.h" />
     <ClInclude Include="Source\DebugSimpleCube.h" />
     <ClInclude Include="Source\DumbObject.h" />
+    <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\GreedyVoxelMeshGeneration.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="Source\DebugLine.cpp" />
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
     <ClCompile Include="Source\DumbObject.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GreedyVoxelMeshGeneration.cpp" />

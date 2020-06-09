@@ -199,6 +199,9 @@
     <ClInclude Include="Source\RouteConstructor.h">
       <Filter>Headers\AI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Headers\GameObjects\ModelObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -320,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="Source\RouteConstructor.cpp">
       <Filter>Source\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Source\GameObjects\ModelObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

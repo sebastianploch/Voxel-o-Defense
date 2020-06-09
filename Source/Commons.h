@@ -90,6 +90,15 @@ struct Geometry
     UINT vertexBufferOffset;
 };
 
+enum TypeOfMonster
+{
+    NULLTYPE = 0,
+    ZOMBIE,
+    SPIDER,
+    SKELETON
+};
+
+
 /* Prints provided compatible data structure to the Output Window during runtime
    @Int's, Float's, Double's
    @String's, Char's

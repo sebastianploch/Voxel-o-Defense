@@ -15,9 +15,10 @@
 #include "VoxelModelManager.h"
 #include "VoxelRay.h"
 
+#include "Enemy.h"
+
 //- Required Header for threading dont delete - David -//
 #include <future>
-
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -72,8 +73,6 @@ void Game::Initialize(HWND window,
 	DumbObject::InitBuffers(m_d3dDevice.Get());
 	DumbObject::InitDebugTexture(L"Resources/Textures/AI.dds", m_d3dDevice.Get());
 
-	m_AiManager = std::make_unique<AiManager>(128, DirectX::XMFLOAT3(50,30,20));
-
 	// Initialise Water
 	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() * 0.25f),
 																			static_cast<int>(ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() * 0.25f)),
@@ -92,6 +91,10 @@ void Game::Initialize(HWND window,
 	InitialiseVoxelWorld();
 
 	Sound::InitialiseSounds(m_audioEngine.get());
+
+	m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
+
+	m_AiManager = std::make_shared<AiManager>(2700, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -310,6 +313,7 @@ void Game::InitialiseVoxelWorld()
 
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+
 }
 
 // Reset and re-initialise component upon "Device Lost" flag

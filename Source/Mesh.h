@@ -7,6 +7,7 @@
 class Mesh
 {
 public:
+	Mesh() {};
 	Mesh(ID3D11Device1* device, aiMesh& mesh, aiMaterial& material, std::string pathToFile);
 	void Draw(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb,ID3D11DeviceContext1 &context);
 	~Mesh();

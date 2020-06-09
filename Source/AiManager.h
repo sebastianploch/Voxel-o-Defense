@@ -23,6 +23,7 @@
 #include "AiAgent.h"
 #include "RouteConstructor.h"
 #include "ShaderManager.h"
+#include "Enemy.h"
 
 //-----------//
 //-- Enums --//
@@ -42,7 +43,7 @@
 class  AiManager
 {
 public:
-	AiManager(int totalAgents, DirectX::XMFLOAT3 SpawnRate);
+	AiManager(int totalAgents, DirectX::XMFLOAT3 SpawnRate,EnemyFactory *factory);
 	~AiManager();
 
 	void Update(float deltaTime, float time);
