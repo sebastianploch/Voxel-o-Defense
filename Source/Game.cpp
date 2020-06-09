@@ -100,26 +100,7 @@ void Game::Initialize(HWND window,
 	Sound::InitialiseSounds(m_audioEngine.get());
 
 	// Build Mode UI
-	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
-	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924/2-1, 1020/2), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice.Get());	//1924*1020 is border img size
-	m_UIManager->Add(buildmodeBorderSprite);
-	
-	std::shared_ptr<UIButton> wallTier1Button = std::make_shared<UIButton>();
-	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
-	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
-	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
-	wallTier1Button->Initialise(SimpleMath::Vector2(136 + 225 * 0, 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier2Button->Initialise(SimpleMath::Vector2(136 + 225 * 1, 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier3Button->Initialise(SimpleMath::Vector2(136 + 225 * 2, 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier4Button->Initialise(SimpleMath::Vector2(136 + 225 * 3, 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	m_UIManager->Add(wallTier1Button);
-	m_UIManager->Add(wallTier2Button);
-	m_UIManager->Add(wallTier3Button);
-	m_UIManager->Add(wallTier4Button);
-	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
-	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
-	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
-	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
+	InitialiseBuildModeUI();
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -332,6 +313,37 @@ void Game::InitialiseVoxelWorld()
 
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+}
+
+void Game::InitialiseBuildModeUI() {
+	//Border, Text and Icon at top left, Gradient at bottom
+	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
+	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924 / 2 - 1, 1020 / 2), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice.Get());	//1924*1020 is border img size
+	m_UIManager->Add(buildmodeBorderSprite);
+
+	//Create Buttons
+	std::shared_ptr<UIButton> wallTier1Button = std::make_shared<UIButton>();
+	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
+	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
+	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
+
+	//Initialise Position, Sprite, etc.
+	wallTier1Button->Initialise(SimpleMath::Vector2(136 + 225 * 0, 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier2Button->Initialise(SimpleMath::Vector2(136 + 225 * 1, 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier3Button->Initialise(SimpleMath::Vector2(136 + 225 * 2, 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	wallTier4Button->Initialise(SimpleMath::Vector2(136 + 225 * 3, 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+
+	//Add to UI Manager
+	m_UIManager->Add(wallTier1Button);
+	m_UIManager->Add(wallTier2Button);
+	m_UIManager->Add(wallTier3Button);
+	m_UIManager->Add(wallTier4Button);
+
+	//Add observer object and specify relative model
+	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
+	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
+	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
+	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
 }
 
 // Reset and re-initialise component upon "Device Lost" flag
