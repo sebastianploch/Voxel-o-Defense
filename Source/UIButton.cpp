@@ -94,6 +94,9 @@ bool UIButton::Update(float deltaTime,
 
 void UIButton::Draw(DirectX::SpriteBatch* spriteBatch)
 {
+	if (!m_isVisible)
+		return;
+
 	m_sprite->Draw(spriteBatch);
 	m_text->Draw(spriteBatch);
 }

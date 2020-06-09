@@ -51,6 +51,9 @@ bool UIText::Update(float deltaTime,
 void UIText::Draw(SpriteBatch*
 	spriteBatch)
 {
+	if (!m_isVisible)
+		return;
+
 	if (m_isOutlined)
 	{
 		m_font->DrawString(spriteBatch,
