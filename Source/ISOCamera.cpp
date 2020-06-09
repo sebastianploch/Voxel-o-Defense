@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ISOCamera.h"
+#include "Sound.h"
 
 using namespace DirectX;
 
@@ -140,18 +141,22 @@ Vector3 ISOCamera::ProcessKeyboard(float deltaTime, const InputState& input)
 	// Camera Rotation
 	if (kbState.Q)
 	{
-		if (m_isBuildMode)
+		if (m_isBuildMode) {
 			m_targetYaw += XM_PIDIV2;
-		else
+			Sound::Fire(L"CameraSwipe");
+		} else {
 			m_yaw += m_rotationSpeed * deltaTime;
+		}
 	}
 
 	if (kbState.E)
 	{
-		if (m_isBuildMode)
+		if (m_isBuildMode) {
 			m_targetYaw -= XM_PIDIV2;
-		else
+			Sound::Fire(L"CameraSwipe");
+		} else {
 			m_yaw -= m_rotationSpeed * deltaTime;
+		}
 	}
 
 	WrapRotation();

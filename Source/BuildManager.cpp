@@ -4,6 +4,7 @@
 #include "WorldManipulation.h"
 #include "VoxelModel.h"
 #include "VoxelModelManager.h"
+#include "Sound.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -23,8 +24,10 @@ std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, Came
 																winDimensions.y);
 
 		//If rayHit isn't (0,0,0), place voxel model
-		if(rayHit.x != 0 && rayHit.y != 0 && rayHit.z != 0)
+		if (rayHit.x != 0 && rayHit.y != 0 && rayHit.z != 0) {
 			WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel(currentModel), rayHit + Vector3Int::UnitY);
+			Sound::Fire(L"PlaceStructure");
+		}
 	}
 
 	//return std::vector<Vector3>();
