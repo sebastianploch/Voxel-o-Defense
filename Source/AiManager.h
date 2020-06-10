@@ -58,7 +58,7 @@ public:
 	void SetTotalAgents(int totalAgents);
 
 	void StartWave();
-	bool HasWaveStarted();
+	bool HasWaveEnded();
 
 private:
 	std::vector<std::shared_ptr<AiAgent>> m_aiAgents;

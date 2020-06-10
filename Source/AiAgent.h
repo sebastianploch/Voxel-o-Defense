@@ -71,6 +71,9 @@ public:
 	bool IsAgentCompleatlyStopped();
 	bool HasFinalDestinationChanged();
 
+
+	void ResetAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, STEP_UP_AMOUNT maxStepUp);
+
 private:
 	//- In Game Object -//
 	std::shared_ptr<Enemy> m_gameObject;

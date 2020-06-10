@@ -115,6 +115,21 @@ void AiManager::StartWave()
 
 	for (int i = 0; i < m_aiAgents.size(); i++)
 	{
+		switch (m_aiAgents[i]->GetType())
+		{
+		case ZOMBIE:
+			m_aiAgents[i]->ResetAgent(Zombie);
+			break;
+		case SPIDER:
+			m_aiAgents[i]->ResetAgent(Spider);
+			break;
+		case SKELETON:
+			m_aiAgents[i]->ResetAgent(Skeleton);
+			break;
+		default:
+			m_aiAgents[i]->ResetAgent(Zombie);
+			break;
+		}
 		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute(RouteSelector, m_aiAgents[i]->GetStepHeight()));
 		m_aiAgents[i]->SpawnAiAgent(i * 5);
 
@@ -131,7 +146,7 @@ void AiManager::StartWave()
 	CalculationsDone = true;
 }
 
-bool AiManager::HasWaveStarted()
+bool AiManager::HasWaveEnded()
 {
 	for (int i = 0; i < m_aiAgents.size(); i++)
 	{

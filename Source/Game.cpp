@@ -415,6 +415,11 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
+	if (m_inputState->GetKeyboardState().pressed.M)
+	{
+		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
+	}
+
 	m_cameraManager->Update(deltaTime,
 							*m_inputState);
 
@@ -433,14 +438,6 @@ void Game::Update(DX::StepTimer const& timer)
 	if (m_inputState->GetKeyboardState().pressed.H) {
 		cam->SetIsBuildMode(!cam->GetIsBuildMode());
 	}
-
-  if (m_inputState->GetKeyboardState().pressed.M)
-	{
-		//- Creating a new thread to run StartWave() -//
-		//- This thread runs untill finished with creating a route -/
-
-		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
-  }
 
 	// Update build manager and build preview if build mode enabled
 	if (cam->GetIsBuildMode()) {

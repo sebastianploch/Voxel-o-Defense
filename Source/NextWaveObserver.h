@@ -3,6 +3,7 @@
 #include "ObserverEvents.h"
 #include "ISOCamera.h"
 #include <string>
+#include "AiManager.h"
 
 class NextWaveObserver : public Observer {
 private:
@@ -10,6 +11,5 @@ private:
 
 public:
 	NextWaveObserver(ISOCamera* camera);
-
 	void OnNotify(std::shared_ptr<Event> event) override;
 };
