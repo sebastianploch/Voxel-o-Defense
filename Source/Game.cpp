@@ -370,10 +370,9 @@ void Game::InitialiseBuildModeUI() {
 	turretButton->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/turret_tier_1.vxml", m_buildManager.get()));
 
 	//Create "Next Wave" Button
-	std::shared_ptr<UIButton> nextWaveButton = std::make_shared<UIButton>();
-	nextWaveButton->Initialise(SimpleMath::Vector2(1790, 940), L"Resources/Textures/UI/BuildMode/RegularButton.dds", L"Resources/Fonts/5x5.spritefont", L"Next Wave", m_d3dDevice.Get());
-	m_buildModeIDs.push_back(m_UIManager->Add(nextWaveButton));
-	nextWaveButton->Clicked()->AddObserver(std::make_shared<NextWaveObserver>(static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera())));
+	std::shared_ptr<UIText> nextWaveText = std::make_shared<UIText>();
+	nextWaveText->Initialise(SimpleMath::Vector2(1750, 30), L"Press M for next wave", SimpleMath::Color(204.0f / 255.0f, 54.0f / 255.0f, 54.0f / 255.0f, 1.0f), L"Resources/Fonts/5x5.spritefont", m_d3dDevice.Get());
+	m_buildModeIDs.push_back(m_UIManager->Add(nextWaveText));
 }
 
 // Reset and re-initialise component upon "Device Lost" flag
@@ -414,11 +413,6 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
-
-	if (m_inputState->GetKeyboardState().pressed.M)
-	{
-		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
-	}
 
 	m_cameraManager->Update(deltaTime,
 							*m_inputState);
@@ -469,6 +463,13 @@ void Game::Update(DX::StepTimer const& timer)
 		//Enable UI
 		for (int id : m_buildModeIDs)
 			m_UIManager->Get(id)->SetVisible(false);
+	}
+
+	//Start Wave
+	if (m_inputState->GetKeyboardState().pressed.M) {
+		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
+		Sound::Fire(L"WaveStart");
+		cam->SetIsBuildMode(false);
 	}
 
 	// Update chunks if they have been modified
@@ -545,7 +546,6 @@ void Game::Render()
 	cb.world = m_worldMatrix;
 
 	// Render chunks
-
 	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
 											0,
 											nullptr,
