@@ -88,7 +88,7 @@ void Game::Initialize(HWND window,
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
-	//initialise the brazier model
+	// Initialise the brazier model
 	m_brazierModel.Initialise("Resources/Models/Mesh/brazier/brazier.obj", m_d3dDevice.Get());
 	m_brazierModel.SetScale(Vector3(2, 2, 2));
 	int yPos = WorldManipulation::GetHeightmap(SimpleMath::Vector2Int((32 * 15) / 2, (32 * 15) / 2));
