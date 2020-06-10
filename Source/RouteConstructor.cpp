@@ -5,10 +5,33 @@
 
 RouteConstructor::RouteConstructor()
 {
-	routes temp1; m_route.push_back(temp1); std::vector<Nodes*> tempNodes11; std::vector<Nodes*> tempNodes12; m_route[0].m_route.push_back(tempNodes11); m_route[0].m_route.push_back(tempNodes12);
-	routes temp2; m_route.push_back(temp2); std::vector<Nodes*> tempNodes21; std::vector<Nodes*> tempNodes22; m_route[0].m_route.push_back(tempNodes21); m_route[0].m_route.push_back(tempNodes22);
-	routes temp3; m_route.push_back(temp3); std::vector<Nodes*> tempNodes31; std::vector<Nodes*> tempNodes32; m_route[0].m_route.push_back(tempNodes31); m_route[0].m_route.push_back(tempNodes32);
-	routes temp4; m_route.push_back(temp4); std::vector<Nodes*> tempNodes41; std::vector<Nodes*> tempNodes42; m_route[0].m_route.push_back(tempNodes41); m_route[0].m_route.push_back(tempNodes42);
+	routes temp1; 
+	m_route.push_back(temp1); 
+	std::vector<Nodes*> tempNodes11; 
+	std::vector<Nodes*> tempNodes12; 
+	m_route[0].m_route.push_back(tempNodes11);
+	m_route[0].m_route.push_back(tempNodes12);
+
+	routes temp2;
+	m_route.push_back(temp2);
+	std::vector<Nodes*> tempNodes21;
+	std::vector<Nodes*> tempNodes22;
+	m_route[1].m_route.push_back(tempNodes21);
+	m_route[1].m_route.push_back(tempNodes22);
+
+	routes temp3;
+	m_route.push_back(temp3);
+	std::vector<Nodes*> tempNodes31;
+	std::vector<Nodes*> tempNodes32;
+	m_route[2].m_route.push_back(tempNodes31);
+	m_route[2].m_route.push_back(tempNodes32);
+
+	routes temp4;
+	m_route.push_back(temp4);
+	std::vector<Nodes*> tempNodes41;
+	std::vector<Nodes*> tempNodes42;
+	m_route[3].m_route.push_back(tempNodes41);
+	m_route[3].m_route.push_back(tempNodes42);
 }
 
 RouteConstructor::~RouteConstructor()
