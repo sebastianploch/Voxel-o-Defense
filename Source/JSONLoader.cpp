@@ -36,6 +36,24 @@ void JSONLoader::LoadFile(std::string filePath, SoundsCfg& cfg, std::string name
 	}
 }
 
+void JSONLoader::LoadFile(std::string filePath, ScoresCfg& cfg, std::string name)
+{
+	nlohmann::json config = _CHECKFILE(filePath);
+	try
+	{ //try to set game objects members
+		cfg.type = &name;
+		cfg.entryNum = config[name]["entryNum"];
+		for (int i = 0; i < cfg.entryNum; i++)
+		{
+			cfg.entries.push_back(std::pair<std::string, float>(config[name]["scores"][i]["name"], config[name]["scores"][i]["score"]));
+		}
+	}
+	catch (std::exception e)
+	{
+		OutputDebugStringA("Error creating score attributes from JSON file!");
+	}
+}
+
 void JSONLoader::LoadFile(std::string filePath, CamCfg& cfg, std::string name)
 {
 	nlohmann::json file = _CHECKFILE(filePath);
@@ -56,6 +74,7 @@ void JSONLoader::LoadFile(std::string filePath, JSONINFO& cfg, CONFIG_TYPE cfgTy
 {
 	GameObjectCfg* gObjCfg; //create local members since switch statements can't hold members
 	CamCfg* camCfg;
+	ScoresCfg* scCfg;
 	
 	switch (cfgType)
 	{
@@ -68,6 +87,11 @@ void JSONLoader::LoadFile(std::string filePath, JSONINFO& cfg, CONFIG_TYPE cfgTy
 		camCfg = static_cast<CamCfg*>(&cfg);
 		LoadFile(filePath, *camCfg, name);
 		cfg = static_cast<JSONINFO>(*camCfg);
+		break;
+	case CONFIG_TYPE::SCORES:
+		scCfg = static_cast<ScoresCfg*>(&cfg);
+		LoadFile(filePath, *scCfg, name);
+		cfg = static_cast<JSONINFO>(*scCfg);
 		break;
 	default:
 		break;
@@ -153,6 +177,28 @@ void JSONLoader::CreateConfig(GameObjectCfg object, std::string fileName, std::s
 		j[type]["pos"][0] = object.position.x; j[type]["pos"][1] = object.position.y; j[type]["pos"][2] = object.position.z;
 		j[type]["rot"][0] = object.rotation.x; j[type]["rot"][1] = object.rotation.y; j[type]["rot"][2] = object.rotation.z;
 		j[type]["scale"][0] = object.scale.x; j[type]["scale"][1] = object.scale.y; j[type]["scale"][2] = object.scale.z;
+
+		if (OpenAndCreateFile(fileName, j) == false)
+			throw;
+	}
+	catch (std::exception e)
+	{
+		OutputDebugStringA("Error creating Camera config file!");
+	}
+}
+
+void JSONLoader::CreateConfig(ScoresCfg config, std::string fileName, std::string type)
+{
+	nlohmann::json j;
+	try
+	{
+		j["type"] = type;
+		j["entryNum"] = config.entryNum;
+		for (int i = 0; i < config.entryNum; i++)
+		{
+			j["scores"][i]["name"] = config.entries[i].first;
+			j["scores"][i]["score"] = config.entries[i].second;
+		}
 
 		if (OpenAndCreateFile(fileName, j) == false)
 			throw;
