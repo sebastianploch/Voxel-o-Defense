@@ -107,7 +107,7 @@ private:
     // DeltaTime Timer
     DX::StepTimer                                       m_timer;
 
-    Model                                               m_modelTest;
+    Model                                               m_brazierModel;
 
     // Store Build Mode UI ID's
     std::vector<int>                                    m_buildModeIDs;

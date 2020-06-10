@@ -88,8 +88,11 @@ void Game::Initialize(HWND window,
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
-	//initialise the test model
-	//m_modelTest.Initialise("Resources/Models/bigzombie1/bigzombie.obj", m_d3dDevice.Get());
+	//initialise the brazier model
+	m_brazierModel.Initialise("Resources/Models/Mesh/brazier/brazier.obj", m_d3dDevice.Get());
+	m_brazierModel.SetScale(Vector3(2, 2, 2));
+	int yPos = WorldManipulation::GetHeightmap(SimpleMath::Vector2Int((32 * 15) / 2, (32 * 15) / 2));
+	m_brazierModel.SetTranslation(Vector3((32.0f * 15.0f) / 2.0f, yPos + m_brazierModel.GetFeetPos(), (32.0f * 15.0f) / 2.0f));		//Set brazier to centre position
 
 	// Create Debug Line
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
@@ -476,7 +479,10 @@ void Game::Update(DX::StepTimer const& timer)
   //AiPathingThread.join();
 	m_AiManager->Update(deltaTime, timer.GetTotalSeconds());
 
-	//m_modelTest.Update(deltaTime);
+	// Update brazier model
+	m_brazierModel.Update(deltaTime);
+
+	//Update UI
 	m_UIManager->Update(deltaTime, m_inputState);
 
 	UpdateAudio();
@@ -540,6 +546,10 @@ void Game::Render()
 											0, 0);
 
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
+
+	// Render brazier
+	m_shaderManager->SetShader(m_brazierModel.GetShaderType(), m_d3dContext.Get());
+	m_brazierModel.Draw(m_constantBuffer.Get(), cb, *m_d3dContext.Get());
 
 	//Render all objects
 	for (const auto& object : m_gameObjects)
