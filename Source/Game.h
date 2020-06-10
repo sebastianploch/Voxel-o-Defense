@@ -10,6 +10,7 @@
 
 #include "AiManager.h"
 #include "Enemy.h"
+#include "Turret.h"
 
 class EnemyFactory;
 
@@ -112,5 +113,7 @@ private:
     // Store Build Mode UI ID's
     std::vector<int>                                    m_buildModeIDs;
 
-	std::shared_ptr<EnemyFactory>     m_enemyFactory;
+	std::shared_ptr<EnemyFactory>                       m_enemyFactory;
+
+    std::shared_ptr<Turret>                             m_turret;
 };
