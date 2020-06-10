@@ -10,6 +10,7 @@
 
 #include "AiManager.h"
 #include "Enemy.h"
+#include "Turret.h"
 
 class EnemyFactory;
 
@@ -84,7 +85,7 @@ private:
 
 	// Ai Manager
 
-	std::shared_ptr<AiManager>						m_AiManager;
+	std::shared_ptr<AiManager>						    m_AiManager;
 
     // Rendering
     std::unique_ptr<ShaderManager>                      m_shaderManager;
@@ -98,8 +99,8 @@ private:
     std::unique_ptr<DirectX::AudioEngine>               m_audioEngine;
 
 	// UI
-	std::unique_ptr<UIManager>						m_UIManager;
-	std::unique_ptr<DirectX::SpriteBatch>			m_spriteBatch;
+	std::unique_ptr<UIManager>						    m_UIManager;
+	std::unique_ptr<DirectX::SpriteBatch>			    m_spriteBatch;
 
     // Building
     std::unique_ptr<BuildManager>                       m_buildManager;
@@ -107,10 +108,14 @@ private:
     // DeltaTime Timer
     DX::StepTimer                                       m_timer;
 
+    // Brazer in centre of map
     Model                                               m_brazierModel;
 
     // Store Build Mode UI ID's
     std::vector<int>                                    m_buildModeIDs;
 
-	std::shared_ptr<EnemyFactory>     m_enemyFactory;
+	std::shared_ptr<EnemyFactory>                       m_enemyFactory;
+
+    // Turret Object
+    std::shared_ptr<Turret>                             m_turret;
 };
