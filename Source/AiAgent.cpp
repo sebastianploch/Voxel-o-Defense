@@ -29,6 +29,11 @@ void AiAgent::Update(float deltaTime, float time)
 {
 	if (_active == true)
 	{
+		if (_health <= 0)
+		{
+			_active = false;
+		}
+
 		if (_SpawnOffset == 0)
 		{
 			if (_totalTimeCoverd > _movementSpeed)
@@ -175,5 +180,14 @@ bool AiAgent::IsAgentCompleatlyStopped()
 bool AiAgent::HasFinalDestinationChanged()
 {
 	return m_endingDestinationChanged; 
+}
+void AiAgent::ResetAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, STEP_UP_AMOUNT maxStepUp)
+{
+	_type = type;
+	_health = health;
+	_movementSpeed = movementSpeed;
+	_damage = damage;
+	_active = active;
+	_stepHeightIndex = maxStepUp;
 }
 #pragma endregion Setting_Getting_Functions

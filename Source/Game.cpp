@@ -112,9 +112,8 @@ void Game::Initialize(HWND window,
 	// Build Mode UI
 	InitialiseBuildModeUI();
 
-  m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
-
-  m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
+	m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
+	m_AiManager = std::make_shared<AiManager>(1000, DirectX::XMFLOAT3(50, 30, 20), m_enemyFactory.get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -408,6 +407,11 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
+	if (m_inputState->GetKeyboardState().pressed.M)
+	{
+		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
+	}
+
 	m_cameraManager->Update(deltaTime,
 							*m_inputState);
 
@@ -426,14 +430,6 @@ void Game::Update(DX::StepTimer const& timer)
 	if (m_inputState->GetKeyboardState().pressed.H) {
 		cam->SetIsBuildMode(!cam->GetIsBuildMode());
 	}
-
-  if (m_inputState->GetKeyboardState().pressed.M)
-	{
-		//- Creating a new thread to run StartWave() -//
-		//- This thread runs untill finished with creating a route -/
-
-		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
-  }
 
 	// Update build manager and build preview if build mode enabled
 	if (cam->GetIsBuildMode()) {
