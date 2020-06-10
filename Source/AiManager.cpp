@@ -13,7 +13,7 @@ AiManager::AiManager(int totalAgents, DirectX::XMFLOAT3 spawnRate,EnemyFactory* 
 		int MonsterSelection = rand() % 100;
 		if (MonsterSelection <= m_spawnRates.x) 
 		{
-			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Spider, *factory);
+			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Zombie, *factory);
 			m_aiAgents.push_back(temp);
 		}
 		else if (MonsterSelection <= m_spawnRates.x + m_spawnRates.y) 
@@ -23,12 +23,12 @@ AiManager::AiManager(int totalAgents, DirectX::XMFLOAT3 spawnRate,EnemyFactory* 
 		}
 		else if (MonsterSelection <= m_spawnRates.x + m_spawnRates.y + m_spawnRates.z)
 		{
-			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Spider, *factory);
+			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Skeleton, *factory);
 			m_aiAgents.push_back(temp);
 		}
 		else
 		{
-			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Spider, *factory); 
+			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Zombie, *factory); 
 			m_aiAgents.push_back(temp);
 		}
 	}
@@ -104,7 +104,7 @@ void AiManager::StartWave()
 {  
 	CalculationsDone = false;
 
-	//m_routeConstructor->UpdatePathfindingMap();
+	m_routeConstructor->UpdatePathfindingMap();
 
 	m_routeConstructor->A_star(0);
 	m_routeConstructor->A_star(1);
