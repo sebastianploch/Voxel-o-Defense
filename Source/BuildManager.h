@@ -1,6 +1,7 @@
 #pragma once
 #include "CameraManager.h"
 #include "IGameObject.h"
+#include "Turret.h"
 #include <vector>
 #include <string>
 
@@ -8,7 +9,7 @@ class BuildManager {
 public:
 	BuildManager() = default;
 
-	std::vector<DirectX::SimpleMath::Vector3> Update(int deltaTime, InputState* input, CameraManager* cameraManager, DirectX::SimpleMath::Vector2Int winDimensions);
+	std::vector<DirectX::SimpleMath::Vector3> Update(int deltaTime, InputState* input, CameraManager* cameraManager, DirectX::SimpleMath::Vector2Int winDimensions, std::vector<std::shared_ptr<Turret>>& turrets);
 
 	inline std::string GetCurrentModel() const { return currentModel; }
 	inline void SetCurrentModel(std::string dir) { currentModel = dir; }

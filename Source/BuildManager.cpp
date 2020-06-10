@@ -8,7 +8,7 @@
 
 using namespace DirectX::SimpleMath;
 
-std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, CameraManager* cameraManager, Vector2Int winDimensions) {
+std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, CameraManager* cameraManager, Vector2Int winDimensions, std::vector<std::shared_ptr<Turret>>& turrets) {
 	//Rotate model
 	if (input->GetMouseState().rightButton == input->GetMouseState().PRESSED) {
 		WorldManipulation::IncrementDir();
@@ -27,6 +27,16 @@ std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, Came
 		if (rayHit.x != 0 && rayHit.y != 0 && rayHit.z != 0) {
 			WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel(currentModel), rayHit + Vector3Int::UnitY);
 			Sound::Fire(L"PlaceStructure");
+
+			// Bad implementation, last minute code don't lynch me :(
+			if (currentModel == "Resources/Models/Voxel/turret_tier_1.vxml") {
+				for (auto& turret : turrets) {
+					if (!turret->GetIsActive()) {
+						turret->SetIsActive(true);
+						turret->SetPosition(Vector3(rayHit.x, rayHit.y, rayHit.z));
+					}
+				}
+			}
 		}
 	}
 

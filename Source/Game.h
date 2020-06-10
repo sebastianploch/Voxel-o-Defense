@@ -117,5 +117,5 @@ private:
 	std::shared_ptr<EnemyFactory>                       m_enemyFactory;
 
     // Turret Object
-    std::shared_ptr<Turret>                             m_turret;
+    std::vector<std::shared_ptr<Turret>>                m_turrets = std::vector<std::shared_ptr<Turret>>();
 };

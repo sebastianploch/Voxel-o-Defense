@@ -112,11 +112,12 @@ void Game::Initialize(HWND window,
 	// Build Mode UI
 	InitialiseBuildModeUI();
 
-  m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
+	m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
+	m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
 
-  m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
-
-  m_turret = std::make_shared<Turret>((XMFLOAT3((32.0f * 15.0f) / 2.0f, yPos, (32.0f * 15.0f) / 2.0f)));
+	// Initialise turret pool
+	for(int i = 0; i < 50; i++)
+		m_turrets.push_back(std::make_shared<Turret>(Vector3::Zero));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -345,24 +346,28 @@ void Game::InitialiseBuildModeUI() {
 	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
 	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
 	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
+	std::shared_ptr<UIButton> turretButton = std::make_shared<UIButton>();
 
 	//Initialise Position, Sprite, etc.
 	wallTier1Button->Initialise(SimpleMath::Vector2(136 + (225 * 0), 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
 	wallTier2Button->Initialise(SimpleMath::Vector2(136 + (225 * 1), 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
 	wallTier3Button->Initialise(SimpleMath::Vector2(136 + (225 * 2), 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
 	wallTier4Button->Initialise(SimpleMath::Vector2(136 + (225 * 3), 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+	turretButton->Initialise(SimpleMath::Vector2(136 + (225 * 4), 930), L"Resources/Textures/UI/BuildMode/turret_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
 
 	//Add to UI Manager
 	m_buildModeIDs.push_back(m_UIManager->Add(wallTier1Button));
 	m_buildModeIDs.push_back(m_UIManager->Add(wallTier2Button));
 	m_buildModeIDs.push_back(m_UIManager->Add(wallTier3Button));
 	m_buildModeIDs.push_back(m_UIManager->Add(wallTier4Button));
+	m_buildModeIDs.push_back(m_UIManager->Add(turretButton));
 
 	//Add observer object and specify relative model
 	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
 	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
 	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
 	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
+	turretButton->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/turret_tier_1.vxml", m_buildManager.get()));
 
 	//Create "Next Wave" Button
 	std::shared_ptr<UIButton> nextWaveButton = std::make_shared<UIButton>();
@@ -443,7 +448,7 @@ void Game::Update(DX::StepTimer const& timer)
 		std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime,
 																		m_inputState.get(),
 																		m_cameraManager.get(),
-																		SimpleMath::Vector2Int(m_windowWidth, m_windowHeight));
+																		SimpleMath::Vector2Int(m_windowWidth, m_windowHeight), m_turrets);
 
 		// Update preview with new vertex positions
 		if (verts.size()) {	//Only if verts.size() != 0. verts size == 0 when mouse hasn't moved between frame
@@ -487,7 +492,8 @@ void Game::Update(DX::StepTimer const& timer)
 	//Update UI
 	m_UIManager->Update(deltaTime, m_inputState);
 
-	m_turret->Update(deltaTime,m_AiManager->GetAiAgents());
+	for(auto& turret : m_turrets)
+		turret->Update(deltaTime, m_AiManager->GetAiAgents());
 
 	UpdateAudio();
 }
