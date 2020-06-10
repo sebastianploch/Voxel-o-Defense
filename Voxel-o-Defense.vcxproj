@@ -241,6 +241,7 @@
     <ClInclude Include="Source\ShaderManager.h" />
     <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\StepTimer.h" />
+    <ClInclude Include="Source\Turret.h" />
     <ClInclude Include="Source\VoxelModel.h" />
     <ClInclude Include="Source\VoxelModelManager.h" />
     <ClInclude Include="Source\VoxelRay.h" />
@@ -289,6 +290,7 @@
     <ClCompile Include="Source\PerlinNoise.cpp" />
     <ClCompile Include="Source\PlaneGameObject.cpp" />
     <ClCompile Include="Source\RouteConstructor.cpp" />
+    <ClCompile Include="Source\Turret.cpp" />
     <ClCompile Include="Source\VoxelModel.cpp" />
     <ClCompile Include="Source\VoxelModelManager.cpp" />
     <ClCompile Include="Source\VoxelRay.cpp" />

@@ -115,6 +115,8 @@ void Game::Initialize(HWND window,
   m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
 
   m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
+
+  m_turret = std::make_shared<Turret>((XMFLOAT3((32.0f * 15.0f) / 2.0f, yPos, (32.0f * 15.0f) / 2.0f)));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -484,6 +486,8 @@ void Game::Update(DX::StepTimer const& timer)
 
 	//Update UI
 	m_UIManager->Update(deltaTime, m_inputState);
+
+	m_turret->Update(deltaTime,m_AiManager->GetAiAgents());
 
 	UpdateAudio();
 }
