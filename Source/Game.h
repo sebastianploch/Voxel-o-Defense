@@ -8,6 +8,11 @@
 #include "UIManager.h"
 #include "BuildManager.h"
 
+#include "AiManager.h"
+#include "Enemy.h"
+
+class EnemyFactory;
+
 class Game
 {
 public:
@@ -77,6 +82,10 @@ private:
     // Game Objects
     std::vector<std::shared_ptr<IGameObject>>			m_gameObjects;
 
+	// Ai Manager
+
+	std::shared_ptr<AiManager>						m_AiManager;
+
     // Rendering
     std::unique_ptr<ShaderManager>                      m_shaderManager;
     std::unique_ptr<DirectX::CommonStates>              m_states;
@@ -89,8 +98,8 @@ private:
     std::unique_ptr<DirectX::AudioEngine>               m_audioEngine;
 
 	// UI
-	std::unique_ptr<UIManager>							m_UIManager;
-	std::unique_ptr<DirectX::SpriteBatch>				m_spriteBatch;
+	std::unique_ptr<UIManager>						m_UIManager;
+	std::unique_ptr<DirectX::SpriteBatch>			m_spriteBatch;
 
     // Building
     std::unique_ptr<BuildManager>                       m_buildManager;
@@ -102,4 +111,8 @@ private:
 
     // Store Build Mode UI ID's
     std::vector<int>                                    m_buildModeIDs;
+
+    Model                                           m_modelTest;
+
+    std::shared_ptr<EnemyFactory>     
 };

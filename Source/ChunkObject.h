@@ -17,6 +17,7 @@ public:
 	static void InitTexture(const wchar_t* texturePath, ID3D11Device* device);
 
 	VoxelMesh* GetMesh() { return &m_mesh; }
+	inline DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_worldMat; }
 
 private:
 

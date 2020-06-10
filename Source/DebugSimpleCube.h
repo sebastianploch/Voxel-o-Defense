@@ -1,8 +1,5 @@
 #pragma once
-
 #include "IGameObject.h"
-
-
 class DebugSimpleCube : public IGameObject
 {
 public:

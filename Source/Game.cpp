@@ -21,6 +21,11 @@
 #include "VoxelModelManager.h"
 #include "VoxelRay.h"
 
+#include "Enemy.h"
+
+//- Required Header for threading dont delete - David -//
+#include <future>
+
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
 
@@ -74,8 +79,8 @@ void Game::Initialize(HWND window,
 	m_buildManager = std::make_unique<BuildManager>();
 
 	// Initialise Vertex & Index buffers (static) for debug cubes
-	DebugSimpleCube::InitBuffers(m_d3dDevice.Get());
-	DebugSimpleCube::InitDebugTexture(L"Resources/Textures/DebugCubeTexture.dds", m_d3dDevice.Get());
+	DumbObject::InitBuffers(m_d3dDevice.Get());
+	DumbObject::InitDebugTexture(L"Resources/Textures/AI.dds", m_d3dDevice.Get());
 
 	// Initialise Water
 	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>((ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() + 4) * 0.25f),
@@ -94,7 +99,7 @@ void Game::Initialize(HWND window,
 
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
-	
+
 	// Create initial voxel meshes and texture
 	InitialiseVoxelWorld();
 
@@ -103,6 +108,10 @@ void Game::Initialize(HWND window,
 
 	// Build Mode UI
 	InitialiseBuildModeUI();
+
+  m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
+
+  m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -315,6 +324,7 @@ void Game::InitialiseVoxelWorld()
 
 	// Create Initial Chunk Meshes
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+
 }
 
 void Game::InitialiseBuildModeUI() {
@@ -394,7 +404,7 @@ void Game::Tick()
 void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
-	
+
 	m_cameraManager->Update(deltaTime,
 							*m_inputState);
 
@@ -406,13 +416,22 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		ExitGame();
 	}
-	
+
 	// Handle Build Mode
 	ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
 	// Temporary Build Mode toggling
 	if (m_inputState->GetKeyboardState().pressed.H) {
 		cam->SetIsBuildMode(!cam->GetIsBuildMode());
 	}
+
+  if (m_inputState->GetKeyboardState().pressed.M)
+	{
+		//- Creating a new thread to run StartWave() -//
+		//- This thread runs untill finished with creating a route -/
+
+		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
+  }
+
 	// Update build manager and build preview if build mode enabled
 	if (cam->GetIsBuildMode()) {
 		// Update build manager
@@ -453,6 +472,9 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		object->Update(deltaTime);
 	}
+
+  //AiPathingThread.join();
+	m_AiManager->Update(deltaTime, timer.GetTotalSeconds());
 
 	//m_modelTest.Update(deltaTime);
 	m_UIManager->Update(deltaTime, m_inputState);
@@ -498,7 +520,25 @@ void Game::Render()
 									&cb,
 									0, 0);
 
+	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+	Vector3 rotation = Vector3();
+	Vector3 position = Vector3();
+	Matrix m_worldMatrix = Matrix::Identity;
+
+	m_worldMatrix *= Matrix::CreateScale(scale);
+	m_worldMatrix *= Matrix::CreateRotationX(rotation.x) * Matrix::CreateRotationY(rotation.y) * Matrix::CreateRotationZ(rotation.z);
+	m_worldMatrix *= Matrix::CreateTranslation(position);
+
+	cb.world = m_worldMatrix;
+
 	// Render chunks
+
+	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+											0,
+											nullptr,
+											&cb,
+											0, 0);
+
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
 
 	//Render all objects
@@ -520,6 +560,8 @@ void Game::Render()
 		// Draw Object
 		object->Draw(m_d3dContext.Get());
 	}
+
+	m_AiManager->Render(m_d3dContext.Get(), m_d3dContext.Get(), cb,m_constantBuffer.Get(), m_shaderManager.get());
 
 	// Render sprites (UI)
 	m_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, m_states->PointClamp());
@@ -626,7 +668,7 @@ void Game::Prepare()
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = 0;
 	m_d3dDevice->CreateSamplerState(&sampDesc, &sampler);
-	
+
 	m_d3dContext->PSSetSamplers(0, 1, &sampler);
 
 	// Set Constant Buffer for VS and PS Shaders
