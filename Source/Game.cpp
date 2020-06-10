@@ -94,7 +94,7 @@ void Game::Initialize(HWND window,
 
 	m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
 
-	m_AiManager = std::make_shared<AiManager>(2700, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
+	m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.

@@ -33,7 +33,7 @@
 class AiAgent
 {
 public:
-	AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp, EnemyFactory factory);
+	AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, STEP_UP_AMOUNT maxStepUp, EnemyFactory factory);
 	~AiAgent();
 
 	void Update(float deltaTime, float time);
@@ -61,7 +61,7 @@ public:
 
 	std::vector<Nodes*> GetRoute();
 
-	int GetStepHeight();
+	STEP_UP_AMOUNT GetStepHeight();
 
 	bool IsAiAgentActive();
 	void SpawnAiAgent(int offSet);
@@ -89,7 +89,7 @@ private:
 	float _movementSpeed = 0.0f;
 	int _damage = 0;
 	bool _active = false;
-	int _stepHeightIndex = 0;
+	STEP_UP_AMOUNT _stepHeightIndex;
 	
 	float _startTime = 0.0f;
 	float _totalTimeCoverd = 0;

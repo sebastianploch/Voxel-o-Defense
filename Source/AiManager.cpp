@@ -10,25 +10,43 @@ AiManager::AiManager(int totalAgents, DirectX::XMFLOAT3 spawnRate,EnemyFactory* 
 
 	for (int i = 0; i < m_totalAmountOfAgents; i++)
 	{
-		std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Zombie,*factory);
-		
-		m_aiAgents.push_back(temp);
+		int MonsterSelection = rand() % 100;
+		if (MonsterSelection <= m_spawnRates.x) 
+		{
+			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Spider, *factory);
+			m_aiAgents.push_back(temp);
+		}
+		else if (MonsterSelection <= m_spawnRates.x + m_spawnRates.y) 
+		{
+			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Spider, *factory);
+			m_aiAgents.push_back(temp);
+		}
+		else if (MonsterSelection <= m_spawnRates.x + m_spawnRates.y + m_spawnRates.z)
+		{
+			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Spider, *factory);
+			m_aiAgents.push_back(temp);
+		}
+		else
+		{
+			std::shared_ptr<AiAgent> temp = std::make_shared<AiAgent>(Spider, *factory); 
+			m_aiAgents.push_back(temp);
+		}
 	}
 
 	m_routeConstructor = std::make_shared<RouteConstructor>();
 	ImportTerrainInfo();
 
 	SetStartLocation(DirectX::XMFLOAT3(0, 4, 0), 0);
-	SetEndLocation(DirectX::XMFLOAT3(240, 4, 240), 0);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 0);
 
 	SetStartLocation(DirectX::XMFLOAT3(480, 4, 0), 1);
-	SetEndLocation(DirectX::XMFLOAT3(240, 4, 240), 1);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 1);
 
 	SetStartLocation(DirectX::XMFLOAT3(0, 4, 480), 2);
-	SetEndLocation(DirectX::XMFLOAT3(240, 4, 240), 2);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 2);
 
 	SetStartLocation(DirectX::XMFLOAT3(480, 4, 480), 3);
-	SetEndLocation(DirectX::XMFLOAT3(240, 4, 240), 3);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 3);
 }
 
 AiManager::~AiManager()
@@ -95,7 +113,7 @@ void AiManager::StartWave()
 
 	for (int i = 0; i < m_aiAgents.size(); i++)
 	{
-		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute(RouteSelector));
+		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute(RouteSelector, m_aiAgents[i]->GetStepHeight()));
 		m_aiAgents[i]->SpawnAiAgent(i * 5);
 
 		if (RouteSelector == 3)

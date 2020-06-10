@@ -5,7 +5,7 @@
 
 
 #pragma region Constructor_Destructor
-AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp, EnemyFactory factory)
+AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, STEP_UP_AMOUNT maxStepUp, EnemyFactory factory)
 {
 	_type = type;
 	_health = health;
@@ -14,7 +14,7 @@ AiAgent::AiAgent(TypeOfMonster type, int health, float movementSpeed, float dama
 	_active = active;
 	_stepHeightIndex = maxStepUp;
 
-	m_position = DirectX::SimpleMath::Vector3(0.5f, 4.5f, 0.5f);
+	m_position = DirectX::SimpleMath::Vector3(0, 4, 0);
 	m_gameObject = factory.CreateEnemy(type);
 }
 
@@ -141,7 +141,7 @@ std::vector<Nodes*> AiAgent::GetRoute()
 	return m_route;
 }
 
-int AiAgent::GetStepHeight()
+STEP_UP_AMOUNT AiAgent::GetStepHeight()
 {
 	return _stepHeightIndex;
 }

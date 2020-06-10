@@ -32,7 +32,7 @@ struct routes
 {
 	DirectX::SimpleMath::Vector3 startPos;
 	DirectX::SimpleMath::Vector3 endPos;
-	std::vector<Nodes*> m_route;
+	std::vector<std::vector<Nodes*>> m_route;
 	bool FinalDestinationChanged = true;
 };
 
@@ -55,13 +55,13 @@ public:
 
 	std::vector<Nodes*> GetCreatedPathingMap();
 
-	std::vector<Nodes*> GetRoute(int startingLocation);
+	std::vector<Nodes*> GetRoute(int startingLocation, STEP_UP_AMOUNT stepup);
 
 protected:
 
 	//- Core Pathfinding Functions -//
 	void GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation);
-	void GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation);
+	void GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation, STEP_UP_AMOUNT stepup);
 
 	//- Code That is Resused multiple times in functions -//
 	void CalculateWeighting(Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos);

@@ -100,7 +100,7 @@ void RouteConstructor::CreatePathfindingMap()
 			//- Check if the Node Id Is valid -//
 			if (i != MAX && j != MIN)
 				//- If Node is within StepUpRange Add to ConnectedWaypoints -//
-				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i + 1, j - 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i + 1, j - 1))
+				if (tempNode->GetPosition().y + 5 >= WorldManipulation::GetHeightmap(i + 1, j - 1) && tempNode->GetPosition().y - 5 <= WorldManipulation::GetHeightmap(i + 1, j - 1) && StepUpOneConnections[0] != (IdCounter + (32*15)) - 2)
 				{
 					//- Save As Connected Waypoint -//
 					StepUpFiveConnections.push_back((IdCounter + (32 * 15)) - 2);	//Top Left
@@ -187,6 +187,9 @@ void RouteConstructor::A_star(int StartingLocation)
 
 		stepUpAmmount = (STEP_UP_AMOUNT)i;
 
+		std::vector<Nodes*> vectorTemp;
+		m_route[StartingLocation].m_route.push_back(vectorTemp);
+
 		float tempish = 0.0f; float temp2ish = 0.0f;
 
 		//- loops though all the waypoints -//
@@ -213,20 +216,19 @@ void RouteConstructor::A_star(int StartingLocation)
 
 		}
 
-		if (m_route[StartingLocation].m_route.size() == 0 && m_route[StartingLocation].FinalDestinationChanged == true)
+		if (m_route[StartingLocation].m_route[stepUpAmmount].size() == 0)
 		{
 			GetPath(_closesToTank, _closesToDestination, _nodes, stepUpAmmount, StartingLocation);
-			m_route[StartingLocation].FinalDestinationChanged = false;
 		}
 
-		if (m_route[StartingLocation].m_route.size() >= 1)
+		if (m_route[StartingLocation].m_route[stepUpAmmount].size() >= 1)
 		{
-			m_nodeToTravelTo = m_route[StartingLocation].m_route[m_route.size() - 1];
+			m_nodeToTravelTo = m_route[StartingLocation].m_route[stepUpAmmount][m_route.size() - 1];
 			if (m_route[StartingLocation].startPos.x > m_nodeToTravelTo->GetPosition().x&& m_route[StartingLocation].startPos.x < m_nodeToTravelTo->GetPosition().x &&
 				m_route[StartingLocation].startPos.y > m_nodeToTravelTo->GetPosition().y&& m_route[StartingLocation].startPos.y < m_nodeToTravelTo->GetPosition().y &&
 				m_route[StartingLocation].startPos.z > m_nodeToTravelTo->GetPosition().z&& m_route[StartingLocation].startPos.z < m_nodeToTravelTo->GetPosition().z)
 			{
-				m_route[StartingLocation].m_route.erase(m_route[StartingLocation].m_route.begin() + (m_route[StartingLocation].m_route.size() - 1));
+				m_route[StartingLocation].m_route[stepUpAmmount].erase(m_route[StartingLocation].m_route[stepUpAmmount].begin() + (m_route[StartingLocation].m_route[stepUpAmmount].size() - 1));
 			}
 		}
 		else
@@ -278,7 +280,7 @@ void RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes
 		{
 			if (ending != starting)
 			{
-				GetPathResults(m_closedNodes[i], starting, startingLocation);
+				GetPathResults(m_closedNodes[i], starting, startingLocation, stepUpAmmount);
 			}
 			break;
 		}
@@ -286,12 +288,12 @@ void RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes
 
 }
 
-void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation)
+void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation, STEP_UP_AMOUNT stepUpCount)
 {
-	m_route[startingLocation].m_route.push_back(parentNode);
+	m_route[startingLocation].m_route[stepUpCount].push_back(parentNode);
 	if (parentNode->GetParentWayPoint() != nullptr)
 	{
-		GetPathResults(parentNode->GetParentWayPoint(), startingNode, startingLocation);
+		GetPathResults(parentNode->GetParentWayPoint(), startingNode, startingLocation, stepUpCount);
 	}
 }
 
@@ -422,7 +424,7 @@ std::vector<Nodes*> RouteConstructor::GetCreatedPathingMap()
 	return m_createdPathingMap;
 }
 
-std::vector<Nodes*> RouteConstructor::GetRoute(int startingLocation)
+std::vector<Nodes*> RouteConstructor::GetRoute(int startingLocation, STEP_UP_AMOUNT stepUp)
 {
-	return m_route[startingLocation].m_route;
+	return m_route[startingLocation].m_route[stepUp];
 }
