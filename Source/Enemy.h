@@ -66,51 +66,51 @@ public:
     EnemyFactory(Microsoft::WRL::ComPtr <ID3D11Device1> device)
     {
         std::shared_ptr<eZombie> zombie1 = std::make_shared<eZombie>();
-        zombie1->Initialise("Resources/Models/zombie1/zombie.obj", device.Get());
+        zombie1->Initialise("Resources/Models/Mesh/zombie1/zombie.obj", device.Get());
         m_enemies[ZOMBIE].push_back(zombie1);
 
         std::shared_ptr<eZombie> zombie2 = std::make_shared<eZombie>();
-        zombie2->Initialise("Resources/Models/zombie2/zombie2.obj", device.Get());
+        zombie2->Initialise("Resources/Models/Mesh/zombie2/zombie2.obj", device.Get());
         m_enemies[ZOMBIE].push_back(zombie2);
 
         std::shared_ptr<eZombie> zombie3 = std::make_shared<eZombie>();
-        zombie3->Initialise("Resources/Models/zombie3/zombie3.obj", device.Get());
+        zombie3->Initialise("Resources/Models/Mesh/zombie3/zombie3.obj", device.Get());
         m_enemies[ZOMBIE].push_back(zombie3);
 
         std::shared_ptr<eZombie> zombie4 = std::make_shared<eZombie>();
-        zombie4->Initialise("Resources/Models/zombie4/zombie4.obj", device.Get());
+        zombie4->Initialise("Resources/Models/Mesh/zombie4/zombie4.obj", device.Get());
         m_enemies[ZOMBIE].push_back(zombie4);
 
         std::shared_ptr<eZombie> zombie5 = std::make_shared<eZombie>();
-        zombie5->Initialise("Resources/Models/zombie5/zombie5.obj", device.Get());
+        zombie5->Initialise("Resources/Models/Mesh/zombie5/zombie5.obj", device.Get());
         m_enemies[ZOMBIE].push_back(zombie5);
 
         std::shared_ptr<eZombie> bigZombie = std::make_shared<eZombie>();
-        bigZombie->Initialise("Resources/Models/bigzombie1/bigzombie.obj", device.Get());
+        bigZombie->Initialise("Resources/Models/Mesh/bigzombie1/bigzombie.obj", device.Get());
         m_enemies[ZOMBIE].push_back(bigZombie);
 
         std::shared_ptr<eSkeleton> skeleton1 = std::make_shared<eSkeleton>();
-        skeleton1->Initialise("Resources/Models/skeleton1/skeleton.obj", device.Get());
+        skeleton1->Initialise("Resources/Models/Mesh/skeleton1/skeleton.obj", device.Get());
         m_enemies[SKELETON].push_back(skeleton1);
 
         std::shared_ptr<eSkeleton> skeleton2 = std::make_shared<eSkeleton>();
-        skeleton2->Initialise("Resources/Models/skeleton2/skeleton2.obj", device.Get());
+        skeleton2->Initialise("Resources/Models/Mesh/skeleton2/skeleton2.obj", device.Get());
         m_enemies[SKELETON].push_back(skeleton2);
 
         std::shared_ptr<eSkeleton> skeleton3 = std::make_shared<eSkeleton>();
-        skeleton3->Initialise("Resources/Models/skeleton3/skeleton3.obj", device.Get());
+        skeleton3->Initialise("Resources/Models/Mesh/skeleton3/skeleton3.obj", device.Get());
         m_enemies[SKELETON].push_back(skeleton3);
 
         std::shared_ptr<eSpider> spider1 = std::make_shared<eSpider>();
-        spider1->Initialise("Resources/Models/spider1/spider.obj", device.Get());
+        spider1->Initialise("Resources/Models/Mesh/spider1/spider.obj", device.Get());
         m_enemies[SPIDER].push_back(spider1);
 
         std::shared_ptr<eSpider> spider2 = std::make_shared<eSpider>();
-        spider2->Initialise("Resources/Models/spider2/spider2.obj", device.Get());
+        spider2->Initialise("Resources/Models/Mesh/spider2/spider2.obj", device.Get());
         m_enemies[SPIDER].push_back(spider2);
 
         std::shared_ptr<eSpider> spider3 = std::make_shared<eSpider>();
-        spider3->Initialise("Resources/Models/spider3/spider3.obj", device.Get());
+        spider3->Initialise("Resources/Models/Mesh/spider3/spider3.obj", device.Get());
         m_enemies[SPIDER].push_back(spider3);
     }
     std::shared_ptr<Enemy> CreateEnemy(TypeOfMonster enemyType)
