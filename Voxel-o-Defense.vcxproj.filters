@@ -68,6 +68,12 @@
     <Filter Include="Source\Gameplay">
       <UniqueIdentifier>{e812e5ef-29f3-4230-9800-64dd833559f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Ai">
+      <UniqueIdentifier>{ca40803d-eaff-45b3-a671-ddbb177534bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Ai">
+      <UniqueIdentifier>{467c9de6-2a1a-4c75-bb7c-3058b46d6ab0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.h">
@@ -193,6 +199,24 @@
     <ClInclude Include="Source\NextWaveObserver.h">
       <Filter>Headers\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AiAgent.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AiManager.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DumbObject.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Node.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RouteConstructor.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Headers\Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -308,6 +332,24 @@
     </ClCompile>
     <ClCompile Include="Source\NextWaveObserver.cpp">
       <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RouteConstructor.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DumbObject.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiManager.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AiAgent.cpp">
+      <Filter>Source\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Source\Ai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

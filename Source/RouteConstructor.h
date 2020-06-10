@@ -47,6 +47,7 @@ public:
 
 	void Update();
 	void CreatePathfindingMap();
+	void UpdatePathfindingMap();
 
 	void SetStarting(DirectX::XMFLOAT3 pos, int startingPosition);
 	void SetEnding(DirectX::XMFLOAT3 pos, int endingPosition);

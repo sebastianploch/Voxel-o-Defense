@@ -104,6 +104,8 @@ void AiManager::StartWave()
 {  
 	CalculationsDone = false;
 
+	m_routeConstructor->UpdatePathfindingMap();
+
 	m_routeConstructor->A_star(0);
 	m_routeConstructor->A_star(1);
 	m_routeConstructor->A_star(2);

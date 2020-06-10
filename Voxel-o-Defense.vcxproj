@@ -204,6 +204,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AiAgent.h" />
+    <ClInclude Include="Source\AiManager.h" />
     <ClInclude Include="Source\BuildManager.h" />
     <ClInclude Include="Source\CameraManager.h" />
     <ClInclude Include="Source\Chunk.h" />
@@ -213,12 +215,15 @@
     <ClInclude Include="Source\Commons.h" />
     <ClInclude Include="Source\DebugLine.h" />
     <ClInclude Include="Source\DebugSimpleCube.h" />
+    <ClInclude Include="Source\DumbObject.h" />
+    <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\GreedyVoxelMeshGeneration.h" />
     <ClInclude Include="Source\IGameObject.h" />
     <ClInclude Include="Source\ModelSelectionObserver.h" />
     <ClInclude Include="Source\NextWaveObserver.h" />
+    <ClInclude Include="Source\Node.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\ParticleEmitter.h" />
     <ClInclude Include="Source\InputState.h" />
@@ -231,6 +236,7 @@
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\PerlinNoise.h" />
     <ClInclude Include="Source\PlaneGameObject.h" />
+    <ClInclude Include="Source\RouteConstructor.h" />
     <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\ShaderManager.h" />
     <ClInclude Include="Source\Sound.h" />
@@ -247,6 +253,8 @@
     <ClInclude Include="Source\UIText.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AiAgent.cpp" />
+    <ClCompile Include="Source\AiManager.cpp" />
     <ClCompile Include="Source\BuildManager.cpp" />
     <ClCompile Include="Source\CameraManager.cpp" />
     <ClCompile Include="Source\Chunk.cpp" />
@@ -255,6 +263,8 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\DebugLine.cpp" />
     <ClCompile Include="Source\DebugSimpleCube.cpp" />
+    <ClCompile Include="Source\DumbObject.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GreedyVoxelMeshGeneration.cpp" />
@@ -265,6 +275,7 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\ModelSelectionObserver.cpp" />
     <ClCompile Include="Source\NextWaveObserver.cpp" />
+    <ClCompile Include="Source\Node.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\ParticleEmitter.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
@@ -277,6 +288,7 @@
     </ClCompile>
     <ClCompile Include="Source\PerlinNoise.cpp" />
     <ClCompile Include="Source\PlaneGameObject.cpp" />
+    <ClCompile Include="Source\RouteConstructor.cpp" />
     <ClCompile Include="Source\VoxelModel.cpp" />
     <ClCompile Include="Source\VoxelModelManager.cpp" />
     <ClCompile Include="Source\VoxelRay.cpp" />

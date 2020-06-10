@@ -112,7 +112,5 @@ private:
     // Store Build Mode UI ID's
     std::vector<int>                                    m_buildModeIDs;
 
-    Model                                           m_modelTest;
-
-    std::shared_ptr<EnemyFactory>     
+	std::shared_ptr<EnemyFactory>     m_enemyFactory;
 };
