@@ -55,7 +55,7 @@ void MenuScene::Initialise(int windowWidth,
 
 	// Create start button
 	std::shared_ptr<UIButton> startButton = std::make_shared<UIButton>();
-	startButton->Initialise(SimpleMath::Vector2((float)windowWidth / 2.0f, (float)windowHeight * 0.7f), L"Resources/Textures/RegularButton.dds", L"Resources/Fonts/Calibri.spritefont", L"Start", device);
+	startButton->Initialise(SimpleMath::Vector2((float)windowWidth / 2.0f, (float)windowHeight * 0.7f), L"Resources/Textures/RegularButton.dds", L"Resources/Fonts/5x5.spritefont", L"Start", device);
 	m_uiID[2] = uiManager.Add(startButton);
 	startButton->Clicked()->AddObserver(this);
 }

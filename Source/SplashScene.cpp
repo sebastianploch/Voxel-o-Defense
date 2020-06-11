@@ -57,7 +57,7 @@ void SplashScene::Initialise(int windowWidth,
 int SplashScene::CreateText(const wchar_t* name, DirectX::SimpleMath::Vector2 pos, UIManager& uiManager, ID3D11Device* device)
 {
 	std::shared_ptr<UIText> nameText = std::make_shared<UIText>();
-	nameText->Initialise(pos, name, SimpleMath::Color(0.0f, 0.0f, 0.0f), L"Resources/Fonts/Calibri.spritefont", device);
+	nameText->Initialise(pos, name, SimpleMath::Color(0.0f, 0.0f, 0.0f), L"Resources/Fonts/5x5.spritefont", device);
 	return uiManager.Add(nameText);
 }
 
