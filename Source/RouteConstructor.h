@@ -32,7 +32,7 @@ struct routes
 {
 	DirectX::SimpleMath::Vector3 startPos;
 	DirectX::SimpleMath::Vector3 endPos;
-	std::vector<std::vector<Nodes*>> m_route;
+	std::vector<std::vector<Nodes*>> m_InternalRoute;
 	bool FinalDestinationChanged = true;
 };
 

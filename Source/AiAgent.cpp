@@ -29,13 +29,13 @@ void AiAgent::Update(float deltaTime, float time)
 {
 	UNREFERENCED_PARAMETER(time);
 
+	if (_health <= 0)
+	{
+		_active = false;
+	}
+
 	if (_active == true)
 	{
-		if (_health <= 0)
-		{
-			_active = false;
-		}
-
 		if (_SpawnOffset == 0)
 		{
 			if (_totalTimeCoverd > _movementSpeed)

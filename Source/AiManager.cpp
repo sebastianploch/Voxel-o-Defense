@@ -65,7 +65,6 @@ void AiManager::Update(float deltaTime, float time)
 			m_aiAgents[i]->Update(deltaTime, time);
 		}
 	}
-	temp++;
 }
 
 void AiManager::Render(ID3D11DeviceContext* deviceContext, ID3D11DeviceContext1* dc1, ConstantBuffer cb, ID3D11Buffer* constBuffer, ShaderManager* m_shaderManager)
@@ -107,15 +106,6 @@ void AiManager::StartWave()
 {  
 	CalculationsDone = false;
 
-	m_routeConstructor->UpdatePathfindingMap();
-
-	m_routeConstructor->A_star(0);
-	m_routeConstructor->A_star(1);
-	m_routeConstructor->A_star(2);
-	m_routeConstructor->A_star(3);
-
-	int RouteSelector = 0;
-
 	for (int i = 0; i < m_aiAgents.size(); i++)
 	{
 		switch (m_aiAgents[i]->GetType())
@@ -133,6 +123,31 @@ void AiManager::StartWave()
 			m_aiAgents[i]->ResetAgent(Zombie);
 			break;
 		}
+	}
+
+	m_routeConstructor->UpdatePathfindingMap();
+
+	SetStartLocation(DirectX::XMFLOAT3(0, 4, 0), 0);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 0);
+
+	SetStartLocation(DirectX::XMFLOAT3(480, 4, 0), 1);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 1);
+
+	SetStartLocation(DirectX::XMFLOAT3(0, 4, 480), 2);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 2);
+
+	SetStartLocation(DirectX::XMFLOAT3(480, 4, 480), 3);
+	SetEndLocation(DirectX::XMFLOAT3(((32 * 15) / 2), 4, ((32 * 15) / 2)), 3);
+
+	m_routeConstructor->A_star(0);
+	m_routeConstructor->A_star(1);
+	m_routeConstructor->A_star(2);
+	m_routeConstructor->A_star(3);
+
+	int RouteSelector = 0;
+
+	for (int i = 0; i < m_aiAgents.size(); i++)
+	{
 		m_aiAgents[i]->SetRoute(m_routeConstructor->GetRoute(RouteSelector, m_aiAgents[i]->GetStepHeight()));
 		m_aiAgents[i]->SpawnAiAgent(i * 5);
 

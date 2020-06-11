@@ -67,6 +67,5 @@ private:
 	std::shared_ptr<RouteConstructor> m_routeConstructor;
 
 	bool CalculationsDone = false;
-	int temp = 0;
 };
 #endif // !AI_MANAGER

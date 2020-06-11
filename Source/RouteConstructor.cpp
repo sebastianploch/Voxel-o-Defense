@@ -9,29 +9,29 @@ RouteConstructor::RouteConstructor()
 	m_route.push_back(temp1); 
 	std::vector<Nodes*> tempNodes11; 
 	std::vector<Nodes*> tempNodes12; 
-	m_route[0].m_route.push_back(tempNodes11);
-	m_route[0].m_route.push_back(tempNodes12);
+	m_route[0].m_InternalRoute.push_back(tempNodes11);
+	m_route[0].m_InternalRoute.push_back(tempNodes12);
 
 	routes temp2;
 	m_route.push_back(temp2);
 	std::vector<Nodes*> tempNodes21;
 	std::vector<Nodes*> tempNodes22;
-	m_route[1].m_route.push_back(tempNodes21);
-	m_route[1].m_route.push_back(tempNodes22);
+	m_route[1].m_InternalRoute.push_back(tempNodes21);
+	m_route[1].m_InternalRoute.push_back(tempNodes22);
 
 	routes temp3;
 	m_route.push_back(temp3);
 	std::vector<Nodes*> tempNodes31;
 	std::vector<Nodes*> tempNodes32;
-	m_route[2].m_route.push_back(tempNodes31);
-	m_route[2].m_route.push_back(tempNodes32);
+	m_route[2].m_InternalRoute.push_back(tempNodes31);
+	m_route[2].m_InternalRoute.push_back(tempNodes32);
 
 	routes temp4;
 	m_route.push_back(temp4);
 	std::vector<Nodes*> tempNodes41;
 	std::vector<Nodes*> tempNodes42;
-	m_route[3].m_route.push_back(tempNodes41);
-	m_route[3].m_route.push_back(tempNodes42);
+	m_route[3].m_InternalRoute.push_back(tempNodes41);
+	m_route[3].m_InternalRoute.push_back(tempNodes42);
 }
 
 RouteConstructor::~RouteConstructor()
@@ -184,6 +184,38 @@ void RouteConstructor::CreatePathfindingMap()
 
 void RouteConstructor::UpdatePathfindingMap()
 {
+	m_route.clear();
+
+
+	routes temp1;
+	m_route.push_back(temp1);
+	std::vector<Nodes*> tempNodes11;
+	std::vector<Nodes*> tempNodes12;
+	m_route[0].m_InternalRoute.push_back(tempNodes11);
+	m_route[0].m_InternalRoute.push_back(tempNodes12);
+
+	routes temp2;
+	m_route.push_back(temp2);
+	std::vector<Nodes*> tempNodes21;
+	std::vector<Nodes*> tempNodes22;
+	m_route[1].m_InternalRoute.push_back(tempNodes21);
+	m_route[1].m_InternalRoute.push_back(tempNodes22);
+
+	routes temp3;
+	m_route.push_back(temp3);
+	std::vector<Nodes*> tempNodes31;
+	std::vector<Nodes*> tempNodes32;
+	m_route[2].m_InternalRoute.push_back(tempNodes31);
+	m_route[2].m_InternalRoute.push_back(tempNodes32);
+
+	routes temp4;
+	m_route.push_back(temp4);
+	std::vector<Nodes*> tempNodes41;
+	std::vector<Nodes*> tempNodes42;
+	m_route[3].m_InternalRoute.push_back(tempNodes41);
+	m_route[3].m_InternalRoute.push_back(tempNodes42);
+
+
 	int IdCounter = 0;
 
 	for (int i = 0; i < m_createdPathingMap.size(); i++)
@@ -377,19 +409,19 @@ void RouteConstructor::A_star(int StartingLocation)
 
 		}
 
-		if (m_route[StartingLocation].m_route[stepUpAmmount].size() == 0)
+		if (m_route[StartingLocation].m_InternalRoute[stepUpAmmount].size() == 0)
 		{
 			GetPath(_closesToTank, _closesToDestination, _nodes, stepUpAmmount, StartingLocation);
 		}
 
-		if (m_route[StartingLocation].m_route[stepUpAmmount].size() >= 1)
+		if (m_route[StartingLocation].m_InternalRoute[stepUpAmmount].size() >= 1)
 		{
-			m_nodeToTravelTo = m_route[StartingLocation].m_route[stepUpAmmount][m_route.size() - 1];
-			if (m_route[StartingLocation].startPos.x > m_nodeToTravelTo->GetPosition().x&& m_route[StartingLocation].startPos.x < m_nodeToTravelTo->GetPosition().x &&
-				m_route[StartingLocation].startPos.y > m_nodeToTravelTo->GetPosition().y&& m_route[StartingLocation].startPos.y < m_nodeToTravelTo->GetPosition().y &&
-				m_route[StartingLocation].startPos.z > m_nodeToTravelTo->GetPosition().z&& m_route[StartingLocation].startPos.z < m_nodeToTravelTo->GetPosition().z)
+			m_nodeToTravelTo = m_route[StartingLocation].m_InternalRoute[stepUpAmmount][m_route[StartingLocation].m_InternalRoute[stepUpAmmount].size() - 1];
+			if (m_route[StartingLocation].startPos.x > m_nodeToTravelTo->GetPosition().x && m_route[StartingLocation].startPos.x < m_nodeToTravelTo->GetPosition().x &&
+				m_route[StartingLocation].startPos.y > m_nodeToTravelTo->GetPosition().y && m_route[StartingLocation].startPos.y < m_nodeToTravelTo->GetPosition().y &&
+				m_route[StartingLocation].startPos.z > m_nodeToTravelTo->GetPosition().z && m_route[StartingLocation].startPos.z < m_nodeToTravelTo->GetPosition().z)
 			{
-				m_route[StartingLocation].m_route[stepUpAmmount].erase(m_route[StartingLocation].m_route[stepUpAmmount].begin() + (m_route[StartingLocation].m_route[stepUpAmmount].size() - 1));
+				m_route[StartingLocation].m_InternalRoute[stepUpAmmount].erase(m_route[StartingLocation].m_InternalRoute[stepUpAmmount].begin() + (m_route[StartingLocation].m_InternalRoute[stepUpAmmount].size() - 1));
 			}
 		}
 		else
@@ -454,7 +486,7 @@ void RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes
 
 void RouteConstructor::GetPathResults(Nodes* parentNode, Nodes* startingNode, int startingLocation, STEP_UP_AMOUNT stepUpCount)
 {
-	m_route[startingLocation].m_route[stepUpCount].push_back(parentNode);
+	m_route[startingLocation].m_InternalRoute[stepUpCount].push_back(parentNode);
 	if (parentNode->GetParentWayPoint() != nullptr)
 	{
 		GetPathResults(parentNode->GetParentWayPoint(), startingNode, startingLocation, stepUpCount);
@@ -592,5 +624,7 @@ std::vector<Nodes*> RouteConstructor::GetCreatedPathingMap()
 
 std::vector<Nodes*> RouteConstructor::GetRoute(int startingLocation, STEP_UP_AMOUNT stepUp)
 {
-	return m_route[startingLocation].m_route[stepUp];
+
+	return m_route[startingLocation].m_InternalRoute[stepUp];
+
 }

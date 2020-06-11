@@ -57,7 +57,7 @@ void Game::Initialize(HWND window,
 		*m_shaderManager.get(),
 		*m_states.get());
 
-	m_sceneManager->Add(SCENETYPE::SPLASH);
+	m_sceneManager->Add(SCENETYPE::MENU);
 	m_sceneManager->Add(SCENETYPE::PLAY);
 
     CreateResources();
