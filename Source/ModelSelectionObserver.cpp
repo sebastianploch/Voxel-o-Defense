@@ -5,7 +5,7 @@
 ModelSelectionObserver::ModelSelectionObserver(std::string _modelType, BuildManager* bm) : modelType(_modelType), m_pBuildManager(bm) {
 }
 
-void ModelSelectionObserver::OnNotify(std::shared_ptr<Event> event) {
+void ModelSelectionObserver::OnNotify(Event* event) {
 	Sound::Fire(L"ModelSelect");
 	m_pBuildManager->SetCurrentModel(modelType);
 }

@@ -14,7 +14,9 @@ public:
 	~DebugSimpleCube();
 
 	void Update(float deltaTime) override;
-	void Draw(ID3D11DeviceContext* context) override;
+	void Draw(ID3D11DeviceContext1* context,
+			  ConstantBuffer& cb,
+			  ID3D11Buffer* constantBuffer) override;
 
 	// Static Data Init
 

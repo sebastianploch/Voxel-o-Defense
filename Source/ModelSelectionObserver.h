@@ -12,5 +12,5 @@ private:
 public:
 	ModelSelectionObserver(std::string _modelType, BuildManager* bm);
 
-	void OnNotify(std::shared_ptr<Event> event) override;
+	void OnNotify(Event* event) override;
 };

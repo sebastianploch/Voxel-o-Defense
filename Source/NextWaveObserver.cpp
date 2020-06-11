@@ -7,7 +7,7 @@
 NextWaveObserver::NextWaveObserver(ISOCamera* camera) : cam(camera) {
 }
 
-void NextWaveObserver::OnNotify(std::shared_ptr<Event> event) {
+void NextWaveObserver::OnNotify(Event* event) {
 	Sound::Fire(L"WaveStart");
 	cam->SetIsBuildMode(false);
 }

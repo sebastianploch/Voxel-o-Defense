@@ -81,7 +81,7 @@ void AiManager::Render(ID3D11DeviceContext* deviceContext, ID3D11DeviceContext1*
 			&cb,
 			0, 0);
 
-		m_aiAgents[i]->Render(constBuffer,cb,*dc1);
+		m_aiAgents[i]->Render(constBuffer,cb,dc1);
 	}
 }
 

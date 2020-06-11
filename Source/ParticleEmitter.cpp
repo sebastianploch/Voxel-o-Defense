@@ -180,11 +180,13 @@ void ParticleEmitter::updateParticles(float deltaTime)
 	}
 }
 
-void ParticleEmitter::drawParticles(ID3D11DeviceContext* context)
+void ParticleEmitter::drawParticles(ID3D11DeviceContext1* context,
+									ConstantBuffer& cb,
+									ID3D11Buffer* constantBuffer)
 {
 	for (Particle* particle : m_particles)
 	{
-		particle->Draw(context);
+		particle->Draw(context, cb, constantBuffer);
 	}
 }
 

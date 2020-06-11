@@ -48,13 +48,13 @@ void UISprite::Draw(SpriteBatch*
 		destRect.top = (LONG)m_screenPos.y;
 		destRect.right = destRect.left + m_width;
 		destRect.bottom = destRect.top + m_height;
+		destRect.bottom = 1080;
 
 		spriteBatch->Draw(m_texture.Get(),
 			destRect,
 			nullptr,
 			m_tint,
-			m_rotation,
-			m_origin);
+			m_rotation);
 	}
 	else
 	{
@@ -65,6 +65,28 @@ void UISprite::Draw(SpriteBatch*
 			m_rotation,
 			m_origin,
 			m_scale);
+	}
+}
+
+void UISprite::Resize(float width, float height, float oldWidth, float oldHeight)
+{
+	float widthMultiplier = GetRatio(width, oldWidth);
+	float heightMultiplier = GetRatio(height, oldHeight);
+
+	m_screenPos.x *= widthMultiplier;
+	m_screenPos.y *= heightMultiplier;
+
+	if (m_isStretched)
+	{
+		m_width *= widthMultiplier;
+		m_height *= heightMultiplier;
+	}
+	else
+	{
+		m_scale *= widthMultiplier / heightMultiplier;
+
+		m_origin.x = (float)(m_width / 2);
+		m_origin.y = (float)(m_height / 2);
 	}
 }
 
@@ -95,6 +117,9 @@ void UISprite::Initialise(DirectX::SimpleMath::Vector2 screenPos,
 
 		m_width = texDesc.Width;
 		m_height = texDesc.Height;
+
+		m_origin.x = (float)(m_width / 2);
+		m_origin.y = (float)(m_height / 2);
 	}
 	else
 	{
@@ -108,9 +133,6 @@ void UISprite::Initialise(DirectX::SimpleMath::Vector2 screenPos,
 		m_width = width;
 		m_height = height;
 	}
-
-	m_origin.x = (float)(m_width / 2);
-	m_origin.y = (float)(m_height / 2);
 
 	m_lifeTime = lifeTime;
 	m_lifeTimeTimer = lifeTime;

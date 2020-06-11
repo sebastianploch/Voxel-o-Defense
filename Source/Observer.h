@@ -1,11 +1,22 @@
 #pragma once
 
 #include "ObserverEvents.h"
+#include "Subject.h"
 
 class Observer
 {
 public:
-	virtual ~Observer() {}
+	virtual ~Observer()
+	{
+		for (Subject* subject : m_subjects)
+		{
+			subject->RemoveObserver(this);
+		}
+	}
 
-	virtual void OnNotify(std::shared_ptr<Event> event) = 0;
+	virtual void OnNotify(Event* event) = 0;
+
+private:
+	std::vector<Subject*> m_subjects;
+
 };

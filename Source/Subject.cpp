@@ -3,19 +3,19 @@
 
 #include "Observer.h"
 
-void Subject::AddObserver(std::shared_ptr<Observer> observer)
+void Subject::AddObserver(Observer* observer)
 {
 	mObservers.push_back(observer);
 }
 
-void Subject::RemoveObserver(std::shared_ptr<Observer> observer)
+void Subject::RemoveObserver(Observer* observer)
 {
 	mObservers.erase(std::remove(mObservers.begin(), mObservers.end(), observer), mObservers.end());
 }
 
-void Subject::Notify(std::shared_ptr<Event> event)
+void Subject::Notify(Event* event)
 {
-	for (std::shared_ptr<Observer> observer : mObservers)
+	for (Observer* observer : mObservers)
 	{
 		observer->OnNotify(event);
 	}

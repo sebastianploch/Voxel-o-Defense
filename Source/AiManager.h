@@ -6,12 +6,12 @@
 //- Defines -//
 //-----------//
 
-// movementSpeed lower is slowere
-// type health movementSPeed damage active stepup
-#define NullType NULLTYPE, 4, 1, 2, false, ONE
-#define Zombie ZOMBIE, 4, 1, 2, false, ONE
-#define Spider SPIDER, 4, 1, 2, false, FIVE
-#define Skeleton SKELETON, 4, 1, 2, false, ONE
+// movementSpeed lower is slower
+// Type Health MovementSpeed Damage Active Stepup
+#define NullType	NULLTYPE,	10, 1, 2, false, ONE
+#define Zombie		ZOMBIE,		10, 1, 2, false, ONE
+#define Spider		SPIDER,		10, 1, 2, false, FIVE
+#define Skeleton	SKELETON,	10, 1, 2, false, ONE
 
 //------------//
 //- Includes -//

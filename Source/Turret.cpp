@@ -10,7 +10,7 @@ Turret::Turret(DirectX::XMFLOAT3 pos)
 	this->m_position = pos;
 	this->m_fireRate = 0.1f;
 	this->m_radius = 45.0f;
-	this->m_damage = 2;
+	this->m_damage = 1;
 }
 
 void Turret::Update(float deltaTime, std::vector<std::shared_ptr<AiAgent>> agents)

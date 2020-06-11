@@ -14,8 +14,9 @@ public:
 	Model();
 	bool Initialise(const std::string& filePath, Microsoft::WRL::ComPtr <ID3D11Device1> device);
 	void Update(float deltaTime) override;
-	void Draw(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb,ID3D11DeviceContext1 &context);
-	void Draw(ID3D11DeviceContext* context) override;
+	void Draw(ID3D11DeviceContext1* context,
+			  ConstantBuffer& cb,
+			  ID3D11Buffer* constantBuffer) override;
 
 	void SetScale(DirectX::XMFLOAT3 scale) { this->m_Scale = scale; m_Bounds.Extents = DirectX::XMFLOAT3((m_BoxDist.x / 2) * scale.x, (m_BoxDist.y / 2) * scale.y, (m_BoxDist.z / 2) * scale.z); }
 	void SetRotation(DirectX::XMFLOAT3 rotation) { this->m_Rotation = rotation; }

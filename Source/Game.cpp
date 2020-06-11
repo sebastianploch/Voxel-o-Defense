@@ -9,8 +9,8 @@
 #include "PlaneGameObject.h"
 #include "ParticleEmitter.h"
 #include "Observer.h"
-#include "ModelSelectionObserver.h"
-#include "NextWaveObserver.h"
+//#include "ModelSelectionObserver.h"
+//#include "NextWaveObserver.h"
 
 #include "Camera.h"
 #include "ISOCamera.h"
@@ -38,6 +38,7 @@ using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector3Int;
 using DirectX::SimpleMath::Matrix;
 
+
 Game::Game() noexcept :
     m_window(nullptr),
     m_windowWidth(800),
@@ -55,12 +56,30 @@ void Game::Initialize(HWND window,
     m_window = window;
     m_windowWidth = std::max(width, 1);
     m_windowHeight = std::max(height, 1);
+	m_oldWindowWidth = m_windowWidth;
+	m_oldWindowHeight = m_windowHeight;
 
     CreateDevice();
 
 	// Create Camera Manager
 	m_cameraManager = std::make_unique<CameraManager>((float)m_windowWidth,
 													  (float)m_windowHeight);
+	m_cameraManager->GetActiveCamera()->SetPosition(SimpleMath::Vector3(250.0f, 20.0f, 200.0f));
+
+	// Initialise UI Manager
+	m_UIManager = std::make_unique<UIManager>();
+
+	// Initialise Scene Manager; begin on menu screen
+	m_sceneManager = std::make_unique<SceneManager>(m_windowWidth,
+		m_windowHeight,
+		m_d3dDevice,
+		*m_UIManager.get(),
+		*m_cameraManager.get(),
+		*m_shaderManager.get(),
+		*m_states.get());
+
+	m_sceneManager->Add(SCENETYPE::SPLASH);
+	m_sceneManager->Add(SCENETYPE::PLAY);
 
     CreateResources();
 	CreateAudioEngine();
@@ -72,12 +91,6 @@ void Game::Initialize(HWND window,
 	// Initialise Input Handler
 	m_inputState = std::make_unique<InputState>(m_window);
 
-	// Initialise UI Manager
-	m_UIManager = std::make_unique<UIManager>();
-
-	// Initialise Build Manager
-	m_buildManager = std::make_unique<BuildManager>();
-
 	// Initialise Vertex & Index buffers (static) for debug cubes
 	DumbObject::InitBuffers(m_d3dDevice.Get());
 	DumbObject::InitDebugTexture(L"Resources/Textures/AI.dds", m_d3dDevice.Get());
@@ -88,36 +101,29 @@ void Game::Initialize(HWND window,
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
-	// Initialise the brazier model
-	m_brazierModel.Initialise("Resources/Models/Mesh/brazier/brazier.obj", m_d3dDevice.Get());
-	m_brazierModel.SetScale(Vector3(2, 2, 2));
-	int yPos = WorldManipulation::GetHeightmap(SimpleMath::Vector2Int((32 * 15) / 2, (32 * 15) / 2));
-	m_brazierModel.SetTranslation(Vector3((32.0f * 15.0f) / 2.0f, yPos + m_brazierModel.GetFeetPos(), (32.0f * 15.0f) / 2.0f));		//Set brazier to centre position
 
-	// Create Debug Line
-	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
-	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
-	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
-	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
+	//// Create Debug Line
+	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
+	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
+	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
+	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
 
-	// Create Water
-	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
+	//// Create Water
+	//m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
 
 	// Create initial voxel meshes and texture
 	InitialiseVoxelWorld();
-
-	// Initialise Audio
 	Sound::InitialiseSounds(m_audioEngine.get());
 
-	// Build Mode UI
-	InitialiseBuildModeUI();
+	//// Build Mode UI
+	//InitialiseBuildModeUI();
 
-	m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
-	m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
+	//m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
+	//m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
 
-	// Initialise turret pool
-	for(int i = 0; i < 50; i++)
-		m_turrets.push_back(std::make_shared<Turret>(Vector3::Zero));
+	//// Initialise turret pool
+	//for(int i = 0; i < 50; i++)
+	//	m_turrets.push_back(std::make_shared<Turret>(Vector3::Zero));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -294,6 +300,9 @@ void Game::CreateResources()
 	// Resize camera to current window size
 	m_cameraManager->Resize((float)backBufferWidth,
 							(float)backBufferHeight);
+
+	m_UIManager->Resize((float)backBufferWidth, (float)backBufferHeight, m_oldWindowWidth, m_oldWindowHeight);
+	m_sceneManager->SetWindowDimensions(backBufferWidth, backBufferHeight);
 }
 
 void Game::CreateAudioEngine()
@@ -333,48 +342,48 @@ void Game::InitialiseVoxelWorld()
 
 }
 
-void Game::InitialiseBuildModeUI() {
-	m_buildModeIDs = std::vector<int>();
-
-	//Border, Text and Icon at top left, Gradient at bottom
-	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
-	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924 / 2 - 1, 1020 / 2), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice.Get());	//1924*1020 is border img size
-	m_buildModeIDs.push_back(m_UIManager->Add(buildmodeBorderSprite));
-
-	//Create Model Selection Buttons
-	std::shared_ptr<UIButton> wallTier1Button = std::make_shared<UIButton>();
-	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
-	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
-	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
-	std::shared_ptr<UIButton> turretButton = std::make_shared<UIButton>();
-
-	//Initialise Position, Sprite, etc.
-	wallTier1Button->Initialise(SimpleMath::Vector2(136 + (225 * 0), 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier2Button->Initialise(SimpleMath::Vector2(136 + (225 * 1), 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier3Button->Initialise(SimpleMath::Vector2(136 + (225 * 2), 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	wallTier4Button->Initialise(SimpleMath::Vector2(136 + (225 * 3), 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-	turretButton->Initialise(SimpleMath::Vector2(136 + (225 * 4), 930), L"Resources/Textures/UI/BuildMode/turret_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-
-	//Add to UI Manager
-	m_buildModeIDs.push_back(m_UIManager->Add(wallTier1Button));
-	m_buildModeIDs.push_back(m_UIManager->Add(wallTier2Button));
-	m_buildModeIDs.push_back(m_UIManager->Add(wallTier3Button));
-	m_buildModeIDs.push_back(m_UIManager->Add(wallTier4Button));
-	m_buildModeIDs.push_back(m_UIManager->Add(turretButton));
-
-	//Add observer object and specify relative model
-	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
-	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
-	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
-	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
-	turretButton->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/turret_tier_1.vxml", m_buildManager.get()));
-
-	//Create "Next Wave" Button
-	std::shared_ptr<UIButton> nextWaveButton = std::make_shared<UIButton>();
-	nextWaveButton->Initialise(SimpleMath::Vector2(1790, 940), L"Resources/Textures/UI/BuildMode/RegularButton.dds", L"Resources/Fonts/5x5.spritefont", L"Next Wave", m_d3dDevice.Get());
-	m_buildModeIDs.push_back(m_UIManager->Add(nextWaveButton));
-	nextWaveButton->Clicked()->AddObserver(std::make_shared<NextWaveObserver>(static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera())));
-}
+//void Game::InitialiseBuildModeUI() {
+//	m_buildModeIDs = std::vector<int>();
+//
+//	//Border, Text and Icon at top left, Gradient at bottom
+//	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
+//	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924 / 2 - 1, 1020 / 2), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice.Get());	//1924*1020 is border img size
+//	m_buildModeIDs.push_back(m_UIManager->Add(buildmodeBorderSprite));
+//
+//	//Create Model Selection Buttons
+//	std::shared_ptr<UIButton> wallTier1Button = std::make_shared<UIButton>();
+//	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
+//	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
+//	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
+//	std::shared_ptr<UIButton> turretButton = std::make_shared<UIButton>();
+//
+//	//Initialise Position, Sprite, etc.
+//	wallTier1Button->Initialise(SimpleMath::Vector2(136 + (225 * 0), 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+//	wallTier2Button->Initialise(SimpleMath::Vector2(136 + (225 * 1), 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+//	wallTier3Button->Initialise(SimpleMath::Vector2(136 + (225 * 2), 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+//	wallTier4Button->Initialise(SimpleMath::Vector2(136 + (225 * 3), 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+//	turretButton->Initialise(SimpleMath::Vector2(136 + (225 * 4), 930), L"Resources/Textures/UI/BuildMode/turret_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
+//
+//	//Add to UI Manager
+//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier1Button));
+//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier2Button));
+//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier3Button));
+//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier4Button));
+//	m_buildModeIDs.push_back(m_UIManager->Add(turretButton));
+//
+//	//Add observer object and specify relative model
+//	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
+//	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
+//	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
+//	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
+//	turretButton->Clicked()->AddObserver(new ModelSelectionObserver("Resources/Models/Voxel/turret_tier_1.vxml", m_buildManager.get());
+//
+//	//Create "Next Wave" Button
+//	std::shared_ptr<UIButton> nextWaveButton = std::make_shared<UIButton>();
+//	nextWaveButton->Initialise(SimpleMath::Vector2(1790, 940), L"Resources/Textures/UI/BuildMode/RegularButton.dds", L"Resources/Fonts/5x5.spritefont", L"Next Wave", m_d3dDevice.Get());
+//	m_buildModeIDs.push_back(m_UIManager->Add(nextWaveButton));
+//	nextWaveButton->Clicked()->AddObserver(std::make_shared<NextWaveObserver>(static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera())));
+//}
 
 // Reset and re-initialise component upon "Device Lost" flag
 void Game::OnDeviceLost()
@@ -415,10 +424,10 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
-	if (m_inputState->GetKeyboardState().pressed.M)
-	{
-		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
-	}
+	//if (m_inputState->GetKeyboardState().pressed.M)
+	//{
+	//	const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
+	//}
 
 	m_cameraManager->Update(deltaTime,
 							*m_inputState);
@@ -432,65 +441,70 @@ void Game::Update(DX::StepTimer const& timer)
 		ExitGame();
 	}
 
-	// Handle Build Mode
-	ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
-	// Temporary Build Mode toggling
-	if (m_inputState->GetKeyboardState().pressed.H) {
-		cam->SetIsBuildMode(!cam->GetIsBuildMode());
-	}
+	//// Handle Build Mode
+	//ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
+	//// Temporary Build Mode toggling
+	//if (m_inputState->GetKeyboardState().pressed.H) {
+	//	cam->SetIsBuildMode(!cam->GetIsBuildMode());
+	//}
 
-	// Update build manager and build preview if build mode enabled
-	if (cam->GetIsBuildMode()) {
-		// Update build manager
-		std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime,
-																		m_inputState.get(),
-																		m_cameraManager.get(),
-																		SimpleMath::Vector2Int(m_windowWidth, m_windowHeight), m_turrets);
+	//// Update build manager and build preview if build mode enabled
+	//if (cam->GetIsBuildMode()) {
+	//	// Update build manager
+	//	std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime,
+	//																	m_inputState.get(),
+	//																	m_cameraManager.get(),
+	//																	SimpleMath::Vector2Int(m_windowWidth, m_windowHeight), m_turrets);
 
-		// Update preview with new vertex positions
-		if (verts.size()) {	//Only if verts.size() != 0. verts size == 0 when mouse hasn't moved between frame
-			static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(verts[0], verts[1]);
-			static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(verts[1], verts[2]);
-			static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(verts[2], verts[3]);
-			static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(verts[3], verts[0]);
-		}
+	//	// Update preview with new vertex positions
+	//	if (verts.size()) {	//Only if verts.size() != 0. verts size == 0 when mouse hasn't moved between frame
+	//		static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(verts[0], verts[1]);
+	//		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(verts[1], verts[2]);
+	//		static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(verts[2], verts[3]);
+	//		static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(verts[3], verts[0]);
+	//	}
 
-		//Enable UI
-		for (int id : m_buildModeIDs)
-			m_UIManager->Get(id)->SetVisible(true);
+	//	//Enable UI
+	//	for (int id : m_buildModeIDs)
+	//		m_UIManager->Get(id)->SetVisible(true);
 
-	} else {
-		// Set all preview vertex positions to (1, 1, 1) if not build mode
-		static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(Vector3::One, Vector3::One);
-		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3::One, Vector3::One);
-		static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(Vector3::One, Vector3::One);
-		static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(Vector3::One, Vector3::One);
+	//} else {
+	//	// Set all preview vertex positions to (1, 1, 1) if not build mode
+	//	static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(Vector3::One, Vector3::One);
+	//	static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3::One, Vector3::One);
+	//	static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(Vector3::One, Vector3::One);
+	//	static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(Vector3::One, Vector3::One);
 
-		//Enable UI
-		for (int id : m_buildModeIDs)
-			m_UIManager->Get(id)->SetVisible(false);
-	}
+	//	//Enable UI
+	//	for (int id : m_buildModeIDs)
+	//		m_UIManager->Get(id)->SetVisible(false);
+	//}
+
+	////Start Wave
+	//if (m_inputState->GetKeyboardState().pressed.M) {
+	//	const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
+	//	Sound::Fire(L"WaveStart");
+	//	cam->SetIsBuildMode(false);
+	//}
 
 	// Update chunks if they have been modified
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
+	//ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
 
 	// Update all objects
-	for (auto object : m_gameObjects)
-	{
-		object->Update(deltaTime);
-	}
+	//for (auto object : m_gameObjects)
+	//{
+	//	object->Update(deltaTime);
+	//}
 
-  //AiPathingThread.join();
-	m_AiManager->Update(deltaTime, timer.GetTotalSeconds());
-
-	// Update brazier model
-	m_brazierModel.Update(deltaTime);
 
 	//Update UI
 	m_UIManager->Update(deltaTime, m_inputState);
 
-	for(auto& turret : m_turrets)
-		turret->Update(deltaTime, m_AiManager->GetAiAgents());
+	// Update scene
+	m_sceneManager->Update(deltaTime, timer.GetTotalSeconds(), *m_inputState.get());
+
+	//for(auto& turret : m_turrets)
+	//	turret->Update(deltaTime, m_AiManager->GetAiAgents());
 
 	UpdateAudio();
 }
@@ -509,13 +523,13 @@ void Game::UpdateAudio()
 
 void Game::Render()
 {
-    // Don't try to render anything before the first Update.
-    if (m_timer.GetFrameCount() == 0)
-    {
-        return;
-    }
+	// Don't try to render anything before the first Update.
+	if (m_timer.GetFrameCount() == 0)
+	{
+		return;
+	}
 
-    Clear();
+	Clear();
 	Prepare();
 
 	Camera* activeCamera = m_cameraManager->GetActiveCamera();
@@ -526,67 +540,47 @@ void Game::Render()
 	cb.projection = activeCamera->GetProjection();
 	cb.view = activeCamera->GetView();
 
-	//Update Constant Buffer
-	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
-									0,
-									nullptr,
-									&cb,
-									0, 0);
-
-	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
-	Vector3 rotation = Vector3();
-	Vector3 position = Vector3();
-	Matrix m_worldMatrix = Matrix::Identity;
-
-	m_worldMatrix *= Matrix::CreateScale(scale);
-	m_worldMatrix *= Matrix::CreateRotationX(rotation.x) * Matrix::CreateRotationY(rotation.y) * Matrix::CreateRotationZ(rotation.z);
-	m_worldMatrix *= Matrix::CreateTranslation(position);
-
-	cb.world = m_worldMatrix;
+	m_sceneManager->Render(m_d3dContext.Get(), cb, m_constantBuffer.Get(), m_spriteBatch.get());
 
 	// Render chunks
-
 	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
 											0,
 											nullptr,
 											&cb,
 											0, 0);
 
-	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
+	//ChunkHandler::DrawChunks(m_d3dContext.Get(), cb, m_constantBuffer.Get(), m_shaderManager.get());
 
-	// Render brazier
-	m_shaderManager->SetShader(m_brazierModel.GetShaderType(), m_d3dContext.Get());
-	m_brazierModel.Draw(m_constantBuffer.Get(), cb, *m_d3dContext.Get());
 
-	//Render all objects
-	for (const auto& object : m_gameObjects)
-	{
-		// Assign Shader to be used to render upcoming object
-		m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
 
-		// Assign Object World Mat data to ConstantBuffer
-		cb.world = object->GetWorldMatrix();
+	////Render all objects
+	//for (const auto& object : m_gameObjects)
+	//{
+	//	// Assign Shader to be used to render upcoming object
+	//	m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
 
-		// Update Constant Buffer
-		m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
-										0,
-										nullptr,
-										&cb,
-										0, 0);
+	//	// Assign Object World Mat data to ConstantBuffer
+	//	cb.world = object->GetWorldMatrix();
 
-		// Draw Object
-		object->Draw(m_d3dContext.Get());
-	}
+	//	// Update Constant Buffer
+	//	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
+	//									0,
+	//									nullptr,
+	//									&cb,
+	//									0, 0);
 
-	m_AiManager->Render(m_d3dContext.Get(), m_d3dContext.Get(), cb,m_constantBuffer.Get(), m_shaderManager.get());
+	//	// Draw Object
+	//	object->Draw(m_d3dContext.Get());
+	//}
 
-	// Render sprites (UI)
+	//m_AiManager->Render(m_d3dContext.Get(), m_d3dContext.Get(), cb,m_constantBuffer.Get(), m_shaderManager.get());
+
 	m_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, m_states->PointClamp());
 	m_UIManager->Render(m_spriteBatch.get());
 	m_spriteBatch->End();
 
 	// Swap backbuffer
-    Present();
+	Present();
 }
 #pragma endregion GameLoop
 
@@ -598,52 +592,6 @@ void Game::GetDefaultSize(int& width,
 	// TODO: Change to desired default window size (note minimum size is 320x200).
 	width = 800;
 	height = 600;
-}
-
-// Compile shader (hlsl) using d3dcompiler
-HRESULT Game::CompileShader(LPCTSTR path,
-							LPCSTR entryPoint,
-							LPCSTR profile,
-							ID3DBlob** blob)
-{
-	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
-
-#ifdef _DEBUG
-	flags |= D3DCOMPILE_DEBUG;
-#endif // _DEBUG
-
-	ID3DBlob* shaderBlob = nullptr;
-	ID3DBlob* errorBlob = nullptr;
-
-	HRESULT hr = D3DCompileFromFile(path,
-									NULL,
-									D3D_COMPILE_STANDARD_FILE_INCLUDE,
-									entryPoint,
-									profile,
-									flags,
-									0,
-									&shaderBlob,
-									&errorBlob);
-
-	if (FAILED(hr))
-	{
-		if (errorBlob)
-		{
-			OutputDebugStringA(static_cast<char*>(errorBlob->GetBufferPointer()));
-			errorBlob->Release();
-		}
-
-		if (shaderBlob)
-		{
-			shaderBlob->Release();
-		}
-
-		return hr;
-	}
-
-	*blob = shaderBlob;
-
-	return hr;
 }
 
 // Helper method to clear the back buffers and set device states.
@@ -743,6 +691,10 @@ void Game::OnResuming()
 
 void Game::OnWindowSizeChanged(int width, int height)
 {
+	// Save old dimensions; UI elements need this to reposition based on ratio change
+	m_oldWindowWidth = m_windowWidth;
+	m_oldWindowHeight = m_windowHeight;
+
     m_windowWidth = std::max(width, 1);
     m_windowHeight = std::max(height, 1);
 

@@ -6,7 +6,8 @@
 using namespace DirectX;
 
 UIManager::UIManager() :
-	m_currentID(-1) // First ID will be 0
+	m_currentID(-1), // First ID will be 0
+	m_clearAtEnd(false)
 {
 }
 
@@ -24,12 +25,26 @@ void UIManager::Update(float deltaTime,
 		if (object.second && object.second->Update(deltaTime, inputState))
 			Remove(object.first);
 	}
+
+	if (m_clearAtEnd)
+	{
+		Clear();
+		m_clearAtEnd = false;
+	}
 }
 
 void UIManager::Render(SpriteBatch* spriteBatch)
 {
 	for (const auto& object : m_UIObjects)
 		object.second->Draw(spriteBatch);
+}
+
+void UIManager::Resize(float width, float height, float oldWidth, float oldHeight)
+{
+	for (auto object : m_UIObjects)
+	{
+		object.second->Resize(width, height, oldWidth, oldHeight);
+	}
 }
 
 int UIManager::Add(std::shared_ptr<IUIObject> newUI)

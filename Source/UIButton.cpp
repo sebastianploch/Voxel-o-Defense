@@ -67,7 +67,7 @@ bool UIButton::Update(float deltaTime,
 		// Check for mouse up
 		if (!mouseState.leftButton)
 		{
-			m_clickedSubject->Notify(std::make_shared<ClickEvent>());
+			m_clickedSubject->Notify(new ClickEvent());
 			m_state = BUTTONSTATE::INACTIVE;
 			m_sprite->SetTint(SimpleMath::Color(Colors::White));
 
@@ -99,6 +99,23 @@ void UIButton::Draw(DirectX::SpriteBatch* spriteBatch)
 
 	m_sprite->Draw(spriteBatch);
 	m_text->Draw(spriteBatch);
+}
+
+void UIButton::Resize(float width, float height, float oldWidth, float oldHeight)
+{
+	float widthMultiplier = GetRatio(width, oldWidth);
+	float heightMultiplier = GetRatio(height, oldHeight);
+
+	m_screenPos.x *= widthMultiplier;
+	m_screenPos.y *= heightMultiplier;
+
+	m_sprite->Resize(width, height, oldWidth, oldHeight);
+	m_text->Resize(width, height, oldWidth, oldHeight);
+
+	SimpleMath::Vector2 origin = m_sprite->GetOrigin();
+	m_screenPos;
+	m_bounds = SimpleMath::Rectangle((long)(m_screenPos.x - origin.x), (long)(m_screenPos.y - origin.y), (long)m_sprite->GetWidth(), (long)m_sprite->GetHeight());
+	m_bounds;
 }
 
 void UIButton::Initialise(DirectX::SimpleMath::Vector2 screenPos,

@@ -18,7 +18,7 @@ UIText::~UIText()
 	m_font.reset();
 }
 
-void UIText::OnNotify(std::shared_ptr<Event> event)
+void UIText::OnNotify(Event* event)
 {
 	switch (event->m_type)
 	{
@@ -26,7 +26,7 @@ void UIText::OnNotify(std::shared_ptr<Event> event)
 
 		break;
 	case EVENTTYPE::VALCHANGE:
-		std::shared_ptr<ValChangeEvent> valChangeEvent = std::static_pointer_cast<ValChangeEvent>(event);
+		ValChangeEvent* valChangeEvent = static_cast<ValChangeEvent*>(event);
 		SetText(std::to_wstring(valChangeEvent->m_newVal).c_str());
 		break;
 	}
@@ -93,6 +93,15 @@ void UIText::Draw(SpriteBatch*
 					   0.0f,
 					   m_origin,
 					   m_scale);
+}
+
+void UIText::Resize(float width, float height, float oldWidth, float oldHeight)
+{
+	float widthMultiplier = GetRatio(width, oldWidth);
+	float heightMultiplier = GetRatio(height, oldHeight);
+
+	m_screenPos.x *= widthMultiplier;
+	m_screenPos.y *= heightMultiplier;
 }
 
 void UIText::Initialise(DirectX::SimpleMath::Vector2 screenPos,

@@ -25,8 +25,13 @@ void DebugLine::Update(float deltaTime)
 	UNREFERENCED_PARAMETER(deltaTime);
 }
 
-void DebugLine::Draw(ID3D11DeviceContext* context)
+void DebugLine::Draw(ID3D11DeviceContext1* context,
+					 ConstantBuffer& cb,
+					 ID3D11Buffer* constantBuffer)
 {
+	UNREFERENCED_PARAMETER(cb);
+	UNREFERENCED_PARAMETER(constantBuffer);
+
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	auto stride = static_cast<UINT>(sizeof(VertexPositionColor));

@@ -6,7 +6,9 @@ public:
 	virtual ~IGameObject() = default;
 
 	virtual void Update(float deltaTime) = 0;
-	virtual void Draw(ID3D11DeviceContext* context) = 0;
+	virtual void Draw(ID3D11DeviceContext1* context,
+					  ConstantBuffer& cb,
+					  ID3D11Buffer* constantBuffer) = 0;
 
 	inline Shaders GetShaderType() const { return m_shaderType; }
 

@@ -11,5 +11,5 @@ private:
 
 public:
 	NextWaveObserver(ISOCamera* camera);
-	void OnNotify(std::shared_ptr<Event> event) override;
+	void OnNotify(Event* event) override;
 };

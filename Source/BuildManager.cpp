@@ -23,6 +23,10 @@ std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, Came
 																winDimensions.x,
 																winDimensions.y);
 
+		//If hit is below water line, return
+		if (rayHit.y < 11)
+			return std::vector<Vector3>();
+
 		//If rayHit isn't (0,0,0), place voxel model
 		if (rayHit.x != 0 && rayHit.y != 0 && rayHit.z != 0) {
 			WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel(currentModel), rayHit + Vector3Int::UnitY);
@@ -34,13 +38,13 @@ std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, Came
 					if (!turret->GetIsActive()) {
 						turret->SetIsActive(true);
 						turret->SetPosition(Vector3(rayHit.x, rayHit.y, rayHit.z));
+						break;
 					}
 				}
 			}
 		}
 	}
 
-	//return std::vector<Vector3>();
 	return GeneratePreviewVertices(input, cameraManager, winDimensions);
 }
 

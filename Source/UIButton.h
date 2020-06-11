@@ -23,6 +23,8 @@ public:
 	bool Update(float deltaTime, std::unique_ptr<InputState>& inputState) override;
 	void Draw(DirectX::SpriteBatch* spriteBatch) override;
 
+	void Resize(float width, float height, float oldWidth, float oldHeight) override;
+
 	void Initialise(DirectX::SimpleMath::Vector2 screenPos,
 					const wchar_t* texturePath,
 					const wchar_t* fontPath,

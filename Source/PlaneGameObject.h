@@ -15,7 +15,9 @@ public:
 	~PlaneGameObject();
 
 	void Update(float deltaTime) override;
-	void Draw(ID3D11DeviceContext* context) override;
+	void Draw(ID3D11DeviceContext1* context,
+			  ConstantBuffer& cb,
+			  ID3D11Buffer* constantBuffer) override;
 
 	// Static Data Init
 	static void InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int planeSize, ID3D11Device* device);

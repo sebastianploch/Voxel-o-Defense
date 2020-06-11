@@ -15,7 +15,10 @@ public:
 	static Chunk* GetChunk(DirectX::SimpleMath::Vector3Int worldPos);
 
 	static void UpdateChunkMeshes(ID3D11Device* device);
-	static void DrawChunks(ID3D11DeviceContext1* context, ShaderManager* shaderManager);
+	static void DrawChunks(ID3D11DeviceContext1* context,
+						   ConstantBuffer& cb,
+						   ID3D11Buffer* constantBuffer,
+						   ShaderManager* shaderManager);
 
 	static const int GetMapSize();
 

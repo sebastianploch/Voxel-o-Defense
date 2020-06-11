@@ -50,7 +50,9 @@ public:
 	
 	// Update and Draw
 	void updateParticles(float deltaTime);
-	void drawParticles(ID3D11DeviceContext* context);
+	void drawParticles(ID3D11DeviceContext1* context,
+					   ConstantBuffer& cb,
+					   ID3D11Buffer* constantBuffer);
 
 private:
 

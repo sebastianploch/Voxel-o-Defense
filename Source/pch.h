@@ -72,6 +72,10 @@
 
 // Camera
 #include "Camera.h"
+#include "CameraManager.h"
+
+#include "UIManager.h"
+#include "ShaderManager.h"
 
 namespace DX
 {

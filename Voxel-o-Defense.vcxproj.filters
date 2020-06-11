@@ -68,6 +68,12 @@
     <Filter Include="Source\Gameplay">
       <UniqueIdentifier>{e812e5ef-29f3-4230-9800-64dd833559f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Scenes">
+      <UniqueIdentifier>{3d05ff18-d925-4db4-af57-cb9ffe3f00a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Scenes">
+      <UniqueIdentifier>{e28342fe-7639-4a4c-a2b4-806867ddce71}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Headers\Ai">
       <UniqueIdentifier>{ca40803d-eaff-45b3-a671-ddbb177534bb}</UniqueIdentifier>
     </Filter>
@@ -192,6 +198,21 @@
     </ClInclude>
     <ClInclude Include="Source\BuildManager.h">
       <Filter>Headers\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MenuScene.h">
+      <Filter>Headers\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IScene.h">
+      <Filter>Headers\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene.h">
+      <Filter>Headers\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Headers\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SplashScene.h">
+      <Filter>Headers\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModelSelectionObserver.h">
       <Filter>Headers\UI</Filter>
@@ -329,6 +350,21 @@
     </ClCompile>
     <ClCompile Include="Source\BuildManager.cpp">
       <Filter>Source\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IScene.cpp">
+      <Filter>Source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MenuScene.cpp">
+      <Filter>Source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene.cpp">
+      <Filter>Source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SplashScene.cpp">
+      <Filter>Source\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Source\ModelSelectionObserver.cpp">
       <Filter>Source\UI</Filter>

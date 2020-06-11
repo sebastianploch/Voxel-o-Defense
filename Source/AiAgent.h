@@ -41,7 +41,7 @@ public:
 
 	DirectX::SimpleMath::Vector3 Lerp(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end, float t);
 
-	void Render(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb, ID3D11DeviceContext1& context);
+	void Render(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb, ID3D11DeviceContext1* context);
 
 	void SetRoute(std::vector<Nodes*> route);
 

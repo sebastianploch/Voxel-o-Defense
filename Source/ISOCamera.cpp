@@ -40,7 +40,7 @@ ISOCamera::ISOCamera(float width,
 {
 	m_movementSpeed = 80.0f;
 	m_rotationSpeed = 1.5f;
-	m_yaw = -XM_PIDIV4;
+	m_yaw = -XM_PI;
 	m_orgYaw = -2.5f;
 }
 
