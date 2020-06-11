@@ -20,6 +20,7 @@
 #include "VoxelRay.h"
 
 #include "Enemy.h"
+#include "Skybox.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
