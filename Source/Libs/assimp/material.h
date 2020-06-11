@@ -54,6 +54,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
+
 // Name for default materials (2nd is used if meshes have UV coords)
 #define AI_DEFAULT_MATERIAL_NAME          "DefaultMaterial"
 

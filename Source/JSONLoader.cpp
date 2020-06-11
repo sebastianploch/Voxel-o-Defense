@@ -43,7 +43,7 @@ void JSONLoader::LoadFile(std::string filePath, ScoresCfg& cfg, std::string name
 	{ //try to set game objects members
 		cfg.type = &name;
 		cfg.entryNum = config[name]["entryNum"];
-		for (int i = 0; i < cfg.entryNum; i++)
+		for (unsigned int i = 0; i < cfg.entryNum; i++)
 		{
 			cfg.entries.push_back(std::pair<std::string, float>(config[name]["scores"][i]["name"], config[name]["scores"][i]["score"]));
 		}
@@ -194,7 +194,7 @@ void JSONLoader::CreateConfig(ScoresCfg config, std::string fileName, std::strin
 	{
 		j["type"] = type;
 		j["entryNum"] = config.entryNum;
-		for (int i = 0; i < config.entryNum; i++)
+		for (unsigned int i = 0; i < config.entryNum; i++)
 		{
 			j["scores"][i]["name"] = config.entries[i].first;
 			j["scores"][i]["score"] = config.entries[i].second;

@@ -9,6 +9,8 @@
 using namespace DirectX::SimpleMath;
 
 std::vector<Vector3> BuildManager::Update(int deltaTime, InputState* input, CameraManager* cameraManager, Vector2Int winDimensions, std::vector<std::shared_ptr<Turret>>& turrets) {
+	UNREFERENCED_PARAMETER(deltaTime);
+
 	//Rotate model
 	if (input->GetMouseState().rightButton == input->GetMouseState().PRESSED) {
 		WorldManipulation::IncrementDir();

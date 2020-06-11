@@ -57,6 +57,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
+
 // ---------------------------------------------------------------------------
 /** A time-value pair specifying a certain 3D vector for the given time. */
 struct aiVectorKey

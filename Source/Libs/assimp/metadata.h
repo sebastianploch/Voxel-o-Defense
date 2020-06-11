@@ -54,6 +54,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #  include <stdint.h>
 #endif
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
+
 // -------------------------------------------------------------------------------
 /**
   * Enum used to distinguish data types

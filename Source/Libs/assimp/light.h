@@ -55,6 +55,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
+
 // ---------------------------------------------------------------------------
 /** Enumerates all supported types of light sources.
  */

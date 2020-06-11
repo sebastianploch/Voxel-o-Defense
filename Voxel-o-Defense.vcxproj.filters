@@ -241,6 +241,9 @@
     <ClInclude Include="Source\Turret.h">
       <Filter>Headers\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Skybox.h">
+      <Filter>Headers\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -391,6 +394,9 @@
       <Filter>Source\Ai</Filter>
     </ClCompile>
     <ClCompile Include="Source\Turret.cpp">
+      <Filter>Source\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Skybox.cpp">
       <Filter>Source\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>

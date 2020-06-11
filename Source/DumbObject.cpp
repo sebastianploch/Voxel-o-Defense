@@ -37,6 +37,8 @@ DumbObject::~DumbObject()
 #pragma region GameLoops
 void DumbObject::Update(float deltaTime)
 {
+	UNREFERENCED_PARAMETER(deltaTime);
+
 	m_worldMatrix = Matrix();
 	m_worldMatrix *= Matrix::CreateScale(m_scaling);
 	m_worldMatrix *= Matrix::CreateRotationX(m_rotation.x) * Matrix::CreateRotationY(m_rotation.y) * Matrix::CreateRotationZ(m_rotation.z);

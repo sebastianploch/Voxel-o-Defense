@@ -6,6 +6,8 @@ ModelSelectionObserver::ModelSelectionObserver(std::string _modelType, BuildMana
 }
 
 void ModelSelectionObserver::OnNotify(Event* event) {
+	UNREFERENCED_PARAMETER(event);
+
 	Sound::Fire(L"ModelSelect");
 	m_pBuildManager->SetCurrentModel(modelType);
 }

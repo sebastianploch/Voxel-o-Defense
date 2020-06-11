@@ -27,6 +27,8 @@ AiAgent::~AiAgent()
 #pragma region Game_Loops
 void AiAgent::Update(float deltaTime, float time)
 {
+	UNREFERENCED_PARAMETER(time);
+
 	if (_active == true)
 	{
 		if (_health <= 0)
@@ -129,6 +131,8 @@ TypeOfMonster AiAgent::GetType()
 
 void AiAgent::SetType(TypeOfMonster type, int health, float movementSpeed, float damage, bool active, int maxStepUp)
 {
+	UNREFERENCED_PARAMETER(maxStepUp);
+
 	_type = type;
 	_health = health;
 	_movementSpeed = movementSpeed;
