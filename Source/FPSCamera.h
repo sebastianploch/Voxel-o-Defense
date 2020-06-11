@@ -21,6 +21,8 @@ public:
 	void Resize(float width,
 				float height) override;
 
+	DirectX::SimpleMath::Matrix GetViewAtOrigin(float yawOffset = 0.0f);
+
 private:
 	void ProcessMouse(float deltaTime,
 					  const InputState& input) override;

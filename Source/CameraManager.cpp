@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "CameraManager.h"
 
-#include "ISOCamera.h"
-#include "FPSCamera.h"
-
 using namespace DirectX;
 
 using DirectX::SimpleMath::Vector3;

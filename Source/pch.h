@@ -72,6 +72,8 @@
 
 // Camera
 #include "Camera.h"
+#include "ISOCamera.h"
+#include "FPSCamera.h"
 #include "CameraManager.h"
 
 namespace DX

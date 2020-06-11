@@ -76,6 +76,24 @@ void FPSCamera::Resize(float width,
 														m_farPlane);
 }
 
+DirectX::SimpleMath::Matrix FPSCamera::GetViewAtOrigin(float yawOffset)
+{
+	Quaternion orientation = Quaternion::CreateFromYawPitchRoll(m_orgYaw + yawOffset, m_pitch, m_roll);
+	Vector3 tempPos = Vector3::Transform(m_orgPosition,
+										  orientation);
+
+	float y = sinf(m_pitch);
+	float r = cosf(m_pitch);
+	float z = r * cosf(m_orgYaw + yawOffset);
+	float x = r * sinf(m_orgYaw + yawOffset);
+
+	Vector3 tempTarget = tempPos + Vector3(-x, y, -z);
+
+	return Matrix::CreateLookAt(tempPos,
+								tempTarget,
+								m_up);
+}
+
 void FPSCamera::ProcessMouse(float deltaTime,
 								  const InputState& input)
 {

@@ -17,8 +17,8 @@ public:
 			  ID3D11Buffer* constantBuffer) override;
 
 private:
-	void UpdatePosition();
 	void InitDepthDesc(ID3D11Device1* device);
+	void UpdatePosition();
 
 private:
 	CameraManager& m_cmRef;

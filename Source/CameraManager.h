@@ -18,6 +18,9 @@ public:
 
 	inline Camera* GetActiveCamera() { return m_isoActive ? (Camera*)m_iso.get() : (Camera*)m_fps.get(); }
 
+	inline FPSCamera* GetFPSCamera() const { return m_fps.get(); }
+	inline ISOCamera* GetISOCamera() const { return m_iso.get(); }
+
 private:
 	void InitialiseFPSCamera(float width, float height);
 	void InitialiseISOCamera(float width, float height);
