@@ -4,7 +4,6 @@
 #include "IGameObject.h"
 #include "ShaderManager.h"
 #include "Model.h"
-#include "CameraManager.h"
 #include "UIManager.h"
 #include "BuildManager.h"
 

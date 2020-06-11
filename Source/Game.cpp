@@ -22,6 +22,7 @@
 #include "VoxelRay.h"
 
 #include "Enemy.h"
+#include "Skybox.h"
 
 //- Required Header for threading dont delete - David -//
 #include <future>
@@ -101,6 +102,10 @@ void Game::Initialize(HWND window,
 	int yPos = WorldManipulation::GetHeightmap(SimpleMath::Vector2Int((32 * 15) / 2, (32 * 15) / 2));
 	brazier->SetTranslation(Vector3((32.0f * 15.0f) / 2.0f, yPos + brazier->GetFeetPos(), (32.0f * 15.0f) / 2.0f));		//Set brazier to centre position
 	m_gameObjects.push_back(brazier);
+
+	// Initialise skydome
+	std::shared_ptr<Skybox> skybox = std::make_shared<Skybox>(m_d3dDevice.Get(), *m_cameraManager, *m_states);
+	m_gameObjects.push_back(skybox);
 
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
@@ -430,6 +435,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 	// Handle Build Mode
 	ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
+
 	// Temporary Build Mode toggling
 	if (m_inputState->GetKeyboardState().pressed.H) {
 		cam->SetIsBuildMode(!cam->GetIsBuildMode());
@@ -532,13 +538,6 @@ void Game::Render()
 									nullptr,
 									&cb,
 									0, 0);
-
-	// Render chunks
-	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
-											0,
-											nullptr,
-											&cb,
-											0, 0);
 
 	ChunkHandler::DrawChunks(m_d3dContext.Get(), cb, m_constantBuffer.Get(), m_shaderManager.get());
 

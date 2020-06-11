@@ -72,6 +72,7 @@
 
 // Camera
 #include "Camera.h"
+#include "CameraManager.h"
 
 namespace DX
 {

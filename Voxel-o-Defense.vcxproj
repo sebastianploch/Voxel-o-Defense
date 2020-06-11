@@ -239,6 +239,7 @@
     <ClInclude Include="Source\RouteConstructor.h" />
     <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\ShaderManager.h" />
+    <ClInclude Include="Source\Skybox.h" />
     <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\StepTimer.h" />
     <ClInclude Include="Source\Turret.h" />
@@ -290,6 +291,7 @@
     <ClCompile Include="Source\PerlinNoise.cpp" />
     <ClCompile Include="Source\PlaneGameObject.cpp" />
     <ClCompile Include="Source\RouteConstructor.cpp" />
+    <ClCompile Include="Source\Skybox.cpp" />
     <ClCompile Include="Source\Turret.cpp" />
     <ClCompile Include="Source\VoxelModel.cpp" />
     <ClCompile Include="Source\VoxelModelManager.cpp" />
