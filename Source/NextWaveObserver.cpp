@@ -8,6 +8,8 @@ NextWaveObserver::NextWaveObserver(ISOCamera* camera) : cam(camera) {
 }
 
 void NextWaveObserver::OnNotify(Event* event) {
+	UNREFERENCED_PARAMETER(event);
+
 	Sound::Fire(L"WaveStart");
 	cam->SetIsBuildMode(false);
 }

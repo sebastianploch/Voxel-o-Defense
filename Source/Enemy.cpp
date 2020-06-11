@@ -7,6 +7,9 @@
 #include <vector>
 #include <unordered_map>
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
+
 std::vector<Mesh> eZombie::zombieMeshes = {};
 std::vector<Mesh> eSkeleton::skeletonMeshes = {};
 std::vector<Mesh> eSpider::spiderMeshes = {};

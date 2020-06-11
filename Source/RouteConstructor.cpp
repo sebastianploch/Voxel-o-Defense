@@ -397,7 +397,6 @@ void RouteConstructor::A_star(int StartingLocation)
 			//cout << "ARRIVED AT CLOSEST NODE" << endl;
 		}
 	}
-	int tempBrakepoint = 0;
 }
 
 void RouteConstructor::GetPath(Nodes* starting, Nodes* ending, std::vector<Nodes*> AllNodes, STEP_UP_AMOUNT stepUpAmmount, int startingLocation)
@@ -467,7 +466,7 @@ Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 {
 	int SameFCostCount = 1;
 
-	int lowest_fCost = 9999999999999;
+	auto lowest_fCost = INT_FAST64_MAX;
 	Nodes* currentLowestFNode = nullptr;
 	//- go though open nodes and see whats the lowest and set it an the next node -//
 	//- looping though this method gives a prefrance to later squares if they have the same _fCost -//
@@ -488,7 +487,7 @@ Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 
 	if (SameFCostCount >= 2)
 	{
-		int lowest_hCost = 9999999999999;
+		auto lowest_hCost = INT_FAST64_MAX;
 		Nodes* currentLowest = nullptr;
 		//- go though open nodes and see whats the lowest and set it an the next node -//
 		//- looping though this method gives a prefrance to later squares if they have the same _fCost -//
@@ -509,6 +508,8 @@ Nodes* RouteConstructor::GetNextLowestNode(std::vector<Nodes*> openList)
 
 void RouteConstructor::CalculateWeighting(Nodes* node, DirectX::XMFLOAT3 startPos, DirectX::XMFLOAT3 endPos)
 {
+	UNREFERENCED_PARAMETER(startPos);
+
 	node->SetGCost(node->GetParentWayPoint()->GetGCost() + 10);
 	node->SetHCost(ReturnDistance(node->GetPosition(), endPos));
 	node->SetFCost(node->GetGCost() + node->GetHCost());

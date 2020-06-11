@@ -1,13 +1,8 @@
 #pragma once
 
 #include "StepTimer.h"
-#include "IGameObject.h"
-#include "Model.h"
 #include "IScene.h"
-
 #include "AiManager.h"
-#include "Enemy.h"
-#include "Turret.h"
 
 class EnemyFactory;
 
@@ -48,8 +43,6 @@ private:
     void CreateConstantBuffer();
 
     void OnDeviceLost();
-
-    void InitialiseVoxelWorld();
 	
     void Clear();
 	void Present();

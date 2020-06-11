@@ -22,6 +22,8 @@ namespace ABI { namespace Windows { namespace UI { namespace Core { struct ICore
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #endif
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
 
 namespace DirectX
 {

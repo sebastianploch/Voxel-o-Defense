@@ -56,6 +56,9 @@
 #pragma comment(lib,"xapofx.lib")
 #endif
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 26812)
+
 #include <DirectXMath.h>
 
 

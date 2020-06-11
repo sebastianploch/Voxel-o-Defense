@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "PlayScene.h"
 
+#include "Skybox.h"
 #include "DebugLine.h"
 #include "DebugSimpleCube.h"
 #include "PlaneGameObject.h"
@@ -56,6 +57,9 @@ PlayScene::PlayScene(SceneManager* sceneManager,
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice));
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice));
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice));
+
+	// Create Skybox
+	m_gameObjects.push_back(std::make_shared<Skybox>(m_d3dDevice, m_cameraManager, m_states));
 
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));

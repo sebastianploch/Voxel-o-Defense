@@ -3,6 +3,9 @@
 #include "ChunkHandler.h"
 #include <thread>
 
+// Ignore 'unscoped enum' warning
+#pragma warning(disable : 4458)
+
 AiManager::AiManager(int totalAgents, DirectX::XMFLOAT3 spawnRate,EnemyFactory* factory)
 {
 	m_totalAmountOfAgents = totalAgents;

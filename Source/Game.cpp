@@ -1,26 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 
-#include "DebugLine.h"
-#include "DebugSimpleCube.h"
-#include "UIButton.h"
-#include "UISprite.h"
-#include "UIText.h"
-#include "PlaneGameObject.h"
-#include "ParticleEmitter.h"
 #include "Observer.h"
-
-#include "Camera.h"
-#include "ISOCamera.h"
-
-#include "ChunkObject.h"
-#include "ChunkHandler.h"
-#include "VoxelModel.h"
-#include "VoxelModelManager.h"
-#include "VoxelRay.h"
-
-#include "Enemy.h"
-#include "Skybox.h"
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -39,6 +20,8 @@ Game::Game() noexcept :
     m_window(nullptr),
     m_windowWidth(800),
     m_windowHeight(600),
+	m_oldWindowWidth(m_windowWidth),
+	m_oldWindowHeight(m_windowHeight),
     m_featureLevel(D3D_FEATURE_LEVEL_11_1)
 {
 }
@@ -87,19 +70,6 @@ void Game::Initialize(HWND window,
 	// Initialise Input Handler
 	m_inputState = std::make_unique<InputState>(m_window);
 
-	// Initialise Vertex & Index buffers (static) for debug cubes
-	DumbObject::InitBuffers(m_d3dDevice.Get());
-	DumbObject::InitDebugTexture(L"Resources/Textures/AI.dds", m_d3dDevice.Get());
-
-	// Initialise Water
-	PlaneGameObject::InitMeshDataAndBuffers(DirectX::SimpleMath::Vector2Int(static_cast<int>((ChunkHandler::GetChunk(0, 0)->GetWidth() * ChunkHandler::GetMapSize() + 4) * 0.25f),
-																			static_cast<int>((ChunkHandler::GetChunk(0, 0)->GetDepth() * ChunkHandler::GetMapSize() + 4) * 0.25f)),
-											m_d3dDevice.Get());
-	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
-
-
-	// Create initial voxel meshes and texture
-	InitialiseVoxelWorld();
 	Sound::InitialiseSounds(m_audioEngine.get());
 }
 
@@ -307,16 +277,6 @@ void Game::CreateConstantBuffer()
 	DX::ThrowIfFailed(m_d3dDevice->CreateBuffer(&cbd,
 												nullptr,
 												m_constantBuffer.ReleaseAndGetAddressOf()));
-}
-
-void Game::InitialiseVoxelWorld()
-{
-	// Initialise Voxel Chunk Objects
-	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice.Get());
-
-	// Create Initial Chunk Meshes
-	ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
-
 }
 
 // Reset and re-initialise component upon "Device Lost" flag

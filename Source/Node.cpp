@@ -7,7 +7,8 @@ Nodes::Nodes()
 
 Nodes::Nodes(Nodes* itSelf, Nodes* parent)
 {
-
+	UNREFERENCED_PARAMETER(itSelf);
+	UNREFERENCED_PARAMETER(parent);
 }
 
 Nodes::Nodes(int ID, DirectX::XMFLOAT3 position)
@@ -31,6 +32,8 @@ std::vector<int> Nodes::GetConnectedWaypointIDs(STEP_UP_AMOUNT stepUpAmmount)
 
 bool Nodes::IsConnectedTo(STEP_UP_AMOUNT stepUpAmount ,int waypointIDToCheck)
 {
+	UNREFERENCED_PARAMETER(waypointIDToCheck);
+
 	for (int i = 0; i < m_connectedWaypointIDs[stepUpAmount].size(); i++)
 	{
 		if (m_connectedWaypointIDs[stepUpAmount][i] == m_ID)

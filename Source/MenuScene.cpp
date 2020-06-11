@@ -74,6 +74,7 @@ void MenuScene::Render(ID3D11DeviceContext1* context, ConstantBuffer& cb, ID3D11
 	UNREFERENCED_PARAMETER(cb);
 	UNREFERENCED_PARAMETER(constantBuffer);
 	UNREFERENCED_PARAMETER(context);
+	UNREFERENCED_PARAMETER(spriteBatch);
 
 	//spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, m_states.PointClamp());
 	//m_uiManager.Render(spriteBatch);
