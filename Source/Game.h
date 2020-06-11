@@ -1,0 +1,89 @@
+#pragma once
+
+#include "StepTimer.h"
+#include "IScene.h"
+#include "AiManager.h"
+
+class EnemyFactory;
+
+class Game
+{
+public:
+    Game() noexcept;
+    ~Game() = default;
+
+    // Initialization and management
+    void Initialize(HWND window,
+                    int width,
+                    int height);
+
+    // Game Loop
+    void Tick();
+
+    // Window Messages
+    void OnActivated();
+    void OnDeactivated();
+    void OnSuspending();
+    void OnResuming();
+    void OnWindowSizeChanged(int width,
+                             int height);
+    // Properties
+    void GetDefaultSize(int& width,
+                        int& height) const noexcept;
+
+private:
+    void Update(DX::StepTimer const& timer);
+    void UpdateAudio();
+
+    void Render();
+
+    void CreateDevice();
+    void CreateResources();
+    void CreateAudioEngine();
+    void CreateConstantBuffer();
+
+    void OnDeviceLost();
+	
+    void Clear();
+	void Present();
+	void Prepare();
+
+private:
+    // Device resources.
+    HWND												m_window;
+    int													m_windowWidth;
+    int													m_windowHeight;
+	int													m_oldWindowWidth;
+	int													m_oldWindowHeight;
+
+    D3D_FEATURE_LEVEL									m_featureLevel;
+    Microsoft::WRL::ComPtr<ID3D11Device1>				m_d3dDevice;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext1>		m_d3dContext;
+
+    Microsoft::WRL::ComPtr<IDXGISwapChain1>				m_swapChain;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView>		m_renderTargetView;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>		m_depthStencilView;
+
+    // Input Handler
+    std::unique_ptr<InputState>							m_inputState;
+
+    // Rendering
+    std::unique_ptr<ShaderManager>                      m_shaderManager;
+    std::unique_ptr<DirectX::CommonStates>              m_states;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>                m_constantBuffer;
+
+    // Basic Camera
+    std::unique_ptr<CameraManager>                      m_cameraManager;
+
+    // Audio
+    std::unique_ptr<DirectX::AudioEngine>               m_audioEngine;
+
+	// UI
+	std::unique_ptr<UIManager>						    m_UIManager;
+	std::unique_ptr<DirectX::SpriteBatch>			    m_spriteBatch;
+
+    // DeltaTime Timer
+    DX::StepTimer                                       m_timer;
+	
+	std::unique_ptr<SceneManager>						m_sceneManager;
+};

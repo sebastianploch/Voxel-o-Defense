@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -30,3 +29,28 @@
 *.exe
 *.out
 *.app
+
+# VS Files
+*.user
+
+# Debug
+Debug/
+.vs/
+
+# Release
+Bin/Win32/Release/
+Bin/x64/Release/
+
+#Whitelist .dll and .lib for assimp
+!Source/Libs/assimp/assimp-vc142-mtd.dll
+!Source/Libs/assimp/assimp-vc142-mtd.lib
+
+# Whitelist .dll, .pbd and .lib for XAudio2
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/debug/bin/x64/*.*
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/debug/bin/x86/*.*
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/debug/lib/x64/*.*
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/debug/lib/x86/*.*
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/release/bin/x64/*.*
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/release/bin/x86/*.*
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/release/lib/x64/*.*
+!packages/Microsoft.XAudio2.Redist.1.2.1/build/native/release/lib/x86/*.*

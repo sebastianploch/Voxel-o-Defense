@@ -1,0 +1,6 @@
+{
+    "sounds": {
+        "amount": 6,
+        "paths": ["Resources/Audio/test.wav", "Resources/Audio/PlaceStructure.wav", "Resources/Audio/CameraSwipe.wav", "Resources/Audio/ModelSelect.wav", "Resources/Audio/WaveStart.wav", "Resources/Audio/TurretTier1Shoot.wav"]
+    }
+}
