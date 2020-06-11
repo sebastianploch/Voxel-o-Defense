@@ -35,18 +35,15 @@ void Model::Update(float deltaTime)
 	DirectX::XMStoreFloat4x4(&m_worldMat, scale * rotation * translate);
 }
 
-void Model::Draw(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb,ID3D11DeviceContext1 &context)
+void Model::Draw(ID3D11DeviceContext1* context,
+				 ConstantBuffer& cb,
+				 ID3D11Buffer* constantBuffer)
 {
 	cb.world = this->GetWorldMatrix(); //transpose the matrix to the position in the world
 	for (int i = 0; i < m_Meshes.size(); i++)
 	{
-		m_Meshes[i].Draw(pConstantBuffer, cb,context);
+		m_Meshes[i].Draw(constantBuffer, cb, *context);
 	}
-}
-
-void Model::Draw(ID3D11DeviceContext* context)
-{
-	UNREFERENCED_PARAMETER(context);
 }
 
 bool Model::LoadModel(const std::string& filePath,ID3D11Device1 * device)

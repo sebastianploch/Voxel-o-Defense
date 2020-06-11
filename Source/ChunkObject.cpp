@@ -40,7 +40,13 @@ void ChunkObject::Update(float deltaTime) {
 	UNREFERENCED_PARAMETER(deltaTime);
 }
 
-void ChunkObject::Draw(ID3D11DeviceContext* context) {
+void ChunkObject::Draw(ID3D11DeviceContext1* context,
+					   ConstantBuffer& cb,
+					   ID3D11Buffer* constantBuffer)
+{
+	UNREFERENCED_PARAMETER(cb);
+	UNREFERENCED_PARAMETER(constantBuffer);
+
 	context->PSSetShaderResources(0,
 		1,
 		s_texture.GetAddressOf());

@@ -15,7 +15,9 @@ public:
 	~Chunk(); 
 
 	void UpdateMesh(ID3D11Device* device);
-	void Draw(ID3D11DeviceContext1* context);
+	void Draw(ID3D11DeviceContext1* context,
+			  ConstantBuffer& cb,
+			  ID3D11Buffer* constantBuffer);
 
 	const char GetVoxel(int x, int y, int z);
 	const char GetVoxel(DirectX::SimpleMath::Vector3Int pos);

@@ -64,11 +64,11 @@ void AiAgent::Update(float deltaTime, float time)
 	m_gameObject->Update(deltaTime);
 }
 
-void AiAgent::Render(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb, ID3D11DeviceContext1& context)
+void AiAgent::Render(ID3D11Buffer* pConstantBuffer, ConstantBuffer& cb, ID3D11DeviceContext1* context)
 {
 	if (_active == true && _SpawnOffset == 0)
 	{
-		m_gameObject->Draw(pConstantBuffer,cb,context);
+		m_gameObject->Draw(context, cb, pConstantBuffer);
 	}
 }
 #pragma endregion Game_Loop

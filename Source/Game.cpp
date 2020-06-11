@@ -88,17 +88,19 @@ void Game::Initialize(HWND window,
 											m_d3dDevice.Get());
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
-	// Initialise the brazier model
-	m_brazierModel.Initialise("Resources/Models/Mesh/brazier/brazier.obj", m_d3dDevice.Get());
-	m_brazierModel.SetScale(Vector3(2, 2, 2));
-	int yPos = WorldManipulation::GetHeightmap(SimpleMath::Vector2Int((32 * 15) / 2, (32 * 15) / 2));
-	m_brazierModel.SetTranslation(Vector3((32.0f * 15.0f) / 2.0f, yPos + m_brazierModel.GetFeetPos(), (32.0f * 15.0f) / 2.0f));		//Set brazier to centre position
-
 	// Create Debug Line
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
 	m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
+
+	// Initialise the brazier model
+	std::shared_ptr<Model> brazier = std::make_shared<Model>();
+	brazier->Initialise("Resources/Models/Mesh/brazier/brazier.obj", m_d3dDevice.Get());
+	brazier->SetScale(Vector3(2, 2, 2));
+	int yPos = WorldManipulation::GetHeightmap(SimpleMath::Vector2Int((32 * 15) / 2, (32 * 15) / 2));
+	brazier->SetTranslation(Vector3((32.0f * 15.0f) / 2.0f, yPos + brazier->GetFeetPos(), (32.0f * 15.0f) / 2.0f));		//Set brazier to centre position
+	m_gameObjects.push_back(brazier);
 
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
@@ -484,9 +486,6 @@ void Game::Update(DX::StepTimer const& timer)
   //AiPathingThread.join();
 	m_AiManager->Update(deltaTime, timer.GetTotalSeconds());
 
-	// Update brazier model
-	m_brazierModel.Update(deltaTime);
-
 	//Update UI
 	m_UIManager->Update(deltaTime, m_inputState);
 
@@ -534,17 +533,6 @@ void Game::Render()
 									&cb,
 									0, 0);
 
-	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
-	Vector3 rotation = Vector3();
-	Vector3 position = Vector3();
-	Matrix m_worldMatrix = Matrix::Identity;
-
-	m_worldMatrix *= Matrix::CreateScale(scale);
-	m_worldMatrix *= Matrix::CreateRotationX(rotation.x) * Matrix::CreateRotationY(rotation.y) * Matrix::CreateRotationZ(rotation.z);
-	m_worldMatrix *= Matrix::CreateTranslation(position);
-
-	cb.world = m_worldMatrix;
-
 	// Render chunks
 	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
 											0,
@@ -552,11 +540,7 @@ void Game::Render()
 											&cb,
 											0, 0);
 
-	ChunkHandler::DrawChunks(m_d3dContext.Get(), m_shaderManager.get());
-
-	// Render brazier
-	m_shaderManager->SetShader(m_brazierModel.GetShaderType(), m_d3dContext.Get());
-	m_brazierModel.Draw(m_constantBuffer.Get(), cb, *m_d3dContext.Get());
+	ChunkHandler::DrawChunks(m_d3dContext.Get(), cb, m_constantBuffer.Get(), m_shaderManager.get());
 
 	//Render all objects
 	for (const auto& object : m_gameObjects)
@@ -575,7 +559,7 @@ void Game::Render()
 										0, 0);
 
 		// Draw Object
-		object->Draw(m_d3dContext.Get());
+		object->Draw(m_d3dContext.Get(), cb, m_constantBuffer.Get());
 	}
 
 	m_AiManager->Render(m_d3dContext.Get(), m_d3dContext.Get(), cb,m_constantBuffer.Get(), m_shaderManager.get());

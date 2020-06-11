@@ -11,7 +11,9 @@ public:
 	~DebugLine();
 
 	void Update(float deltaTime) override;
-	void Draw(ID3D11DeviceContext* context) override;
+	void Draw(ID3D11DeviceContext1* context,
+			  ConstantBuffer& cb,
+			  ID3D11Buffer* constantBuffer) override;
 
 	void UpdateLine(const DirectX::SimpleMath::Vector3& start,
 					const DirectX::SimpleMath::Vector3& end);

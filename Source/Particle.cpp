@@ -74,8 +74,13 @@ void Particle::Update(float deltaTime)
 	m_lifetime -= deltaTime;
 }
 
-void Particle::Draw(ID3D11DeviceContext* context)
+void Particle::Draw(ID3D11DeviceContext1* context,
+					ConstantBuffer& cb,
+					ID3D11Buffer* constantBuffer)
 {
+	UNREFERENCED_PARAMETER(cb);
+	UNREFERENCED_PARAMETER(constantBuffer);
+
 	auto stride = static_cast<UINT>(sizeof(Vertex));
 	UINT offset = 0;
 

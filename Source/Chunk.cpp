@@ -25,8 +25,11 @@ void Chunk::UpdateMesh(ID3D11Device* device) {
 	}
 }
 
-void Chunk::Draw(ID3D11DeviceContext1* context) {
-	m_chunkGameObject->Draw(context);
+void Chunk::Draw(ID3D11DeviceContext1* context,
+				 ConstantBuffer& cb,
+				 ID3D11Buffer* constantBuffer)
+{
+	m_chunkGameObject->Draw(context, cb, constantBuffer);
 }
 
 #pragma region Voxel Getters/Setters
