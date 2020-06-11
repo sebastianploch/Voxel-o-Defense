@@ -12,6 +12,7 @@
 #include "VoxelRay.h"
 #include "UIButton.h"
 #include "UISprite.h"
+#include "UIText.h"
 #include "ModelSelectionObserver.h"
 #include "NextWaveObserver.h"
 
@@ -59,6 +60,7 @@ PlayScene::PlayScene(SceneManager* sceneManager,
 	// Create Water
 	m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
 
+	// AI
 	m_enemyFactory = std::make_shared<EnemyFactory>(device);
 	m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20), m_enemyFactory.get());
 
@@ -68,6 +70,14 @@ PlayScene::PlayScene(SceneManager* sceneManager,
 
 	// Build Mode UI
 	InitialiseBuildModeUI();
+
+	// Create Brazier
+	m_brazierObject.Initialise("Resources/Models/Mesh/brazier/brazier.obj", m_d3dDevice);
+	int halfMap = (32 * 15) / 2;
+	m_brazierObject.SetTranslation(Vector3(halfMap, 
+										   WorldManipulation::GetHeightmap(Vector2Int(halfMap, halfMap)) + m_brazierObject.GetFeetPos(), 
+										   halfMap));
+	m_brazierObject.SetScale(Vector3::One * 2);
 
 	InitialiseVoxelWorld();
 }
@@ -84,10 +94,7 @@ void PlayScene::OnNotify(Event* event)
 
 bool PlayScene::Update(const float deltaTime, float time, InputState& inputState)
 {
-	if (inputState.GetKeyboardState().pressed.M)
-	{
-		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
-	}
+	IUIObject* uiObject;
 
 	// Handle Build Mode
 	ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager.GetActiveCamera());
@@ -95,8 +102,6 @@ bool PlayScene::Update(const float deltaTime, float time, InputState& inputState
 	if (inputState.GetKeyboardState().pressed.H) {
 		cam->SetIsBuildMode(!cam->GetIsBuildMode());
 	}
-
-	IUIObject* uiObject;
 
 	// Update build manager and build preview if build mode enabled
 	if (cam->GetIsBuildMode()) {
@@ -139,14 +144,25 @@ bool PlayScene::Update(const float deltaTime, float time, InputState& inputState
 		}
 	}
 
+	// Begin wave input
+	if (inputState.GetKeyboardState().pressed.M && cam->GetIsBuildMode()) {
+		const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
+		Sound::Fire(L"WaveStart");
+		cam->SetIsBuildMode(false);
+	}
+
 	//AiPathingThread.join();
 	m_AiManager->Update(deltaTime, time);
 
 	// Update chunks if they have been modified
 	ChunkHandler::UpdateChunkMeshes(m_d3dDevice);
 
+	// Update Turret Objects
 	for (auto& turret : m_turrets)
 		turret->Update(deltaTime, m_AiManager->GetAiAgents());
+
+	// Update Brazier GameObject
+	m_brazierObject.Update(deltaTime);
 
 	// Update all objects
 	for (auto object : m_gameObjects)
@@ -157,9 +173,48 @@ bool PlayScene::Update(const float deltaTime, float time, InputState& inputState
 	return false;
 }
 
-void PlayScene::InitialiseVoxelWorld()
+void PlayScene::Render(ID3D11DeviceContext1* context, ConstantBuffer& cb, ID3D11Buffer* constantBuffer, DirectX::SpriteBatch* spriteBatch)
 {
-		// Initialise Voxel Chunk Objects
+	UNREFERENCED_PARAMETER(spriteBatch);
+
+	context->UpdateSubresource(constantBuffer,
+							   0,
+							   nullptr,
+							   &cb,
+							   0, 0);
+
+	// Render chunks
+	ChunkHandler::DrawChunks(context, cb, constantBuffer, &m_shaderManager);
+
+	// Render AI
+	m_AiManager->Render(context, context, cb, constantBuffer, &m_shaderManager);
+
+	// Render Brazier
+	m_brazierObject.Draw(context, cb, constantBuffer);
+
+	//Render all objects
+	for (const auto& object : m_gameObjects)
+	{
+		// Assign Shader to be used to render upcoming object
+		m_shaderManager.SetShader(object->GetShaderType(), context);
+
+		// Assign Object World Mat data to ConstantBuffer
+		cb.world = object->GetWorldMatrix();
+
+		// Update Constant Buffer
+		context->UpdateSubresource(constantBuffer,
+								   0,
+								   nullptr,
+								   &cb,
+								   0, 0);
+
+		// Draw Object
+		object->Draw(context, cb, constantBuffer);
+	}
+}
+
+void PlayScene::InitialiseVoxelWorld() {
+	// Initialise Voxel Chunk Objects
 	ChunkObject::InitTexture(L"Resources/Textures/block_textures.dds", m_d3dDevice);
 
 	WorldManipulation::PlaceVoxelModel(VoxelModelManager::GetOrLoadModel("Resources/Models/Voxel/wall_tier_1.vxml"), Vector3Int(10, 4, 10));
@@ -177,7 +232,6 @@ void PlayScene::InitialiseBuildModeUI() {
 
 	//Border, Text and Icon at top left, Gradient at bottom
 	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
-	//buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924 / 2 - 1, 1020 / 2), L"Resources/Textures/UI/BuildMode/Border.dds", &device);	//1924*1020 is border img size
 	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(0.0f, 0.0f), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice, -1.0f, m_windowWidth, m_windowHeight);
 	m_buildModeIDs.push_back(m_uiManager.Add(buildmodeBorderSprite));
 
@@ -209,45 +263,12 @@ void PlayScene::InitialiseBuildModeUI() {
 	wallTier4Button->Clicked()->AddObserver(new ModelSelectionObserver("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
 	turretButton->Clicked()->AddObserver(new ModelSelectionObserver("Resources/Models/Voxel/turret_tier_1.vxml", m_buildManager.get()));
 
-	//Create "Next Wave" Button
-	std::shared_ptr<UIButton> nextWaveButton = std::make_shared<UIButton>();
-	nextWaveButton->Initialise(SimpleMath::Vector2(m_windowWidth * 0.9f, m_windowHeight * 0.9f), L"Resources/Textures/UI/BuildMode/RegularButton.dds", L"Resources/Fonts/5x5.spritefont", L"Next Wave", m_d3dDevice);
-	m_buildModeIDs.push_back(m_uiManager.Add(nextWaveButton));
-	nextWaveButton->Clicked()->AddObserver(new NextWaveObserver(static_cast<ISOCamera*>(m_cameraManager.GetActiveCamera())));
-}
-
-void PlayScene::Render(ID3D11DeviceContext1* context, ConstantBuffer& cb, ID3D11Buffer* constantBuffer, DirectX::SpriteBatch* spriteBatch)
-{
-	UNREFERENCED_PARAMETER(spriteBatch);
-
-	context->UpdateSubresource(constantBuffer,
-							   0,
-							   nullptr,
-							   &cb,
-							   0, 0);
-
-	// Render chunks
-	ChunkHandler::DrawChunks(context, cb, constantBuffer, &m_shaderManager);
-
-	m_AiManager->Render(context, context, cb, constantBuffer, &m_shaderManager);
-
-	//Render all objects
-	for (const auto& object : m_gameObjects)
-	{
-		// Assign Shader to be used to render upcoming object
-		m_shaderManager.SetShader(object->GetShaderType(), context);
-
-		// Assign Object World Mat data to ConstantBuffer
-		cb.world = object->GetWorldMatrix();
-
-		// Update Constant Buffer
-		context->UpdateSubresource(constantBuffer,
-								   0,
-								   nullptr,
-								   &cb,
-								   0, 0);
-
-		// Draw Object
-		object->Draw(context, cb, constantBuffer);
-	}
+	//Create "Next Wave" Button 
+	std::shared_ptr<UIText> nextWaveText = std::make_shared<UIText>();
+	nextWaveText->Initialise(Vector2(0.9 * m_windowWidth, 0.02 * m_windowWidth), 
+							L"Press M to start wave", 
+							SimpleMath::Color(204.0f / 255.0f, 54.0f / 255.0f, 54.0f / 255.0f, 1.0f), 
+							L"Resources/Fonts/5x5.spritefont", 
+							m_d3dDevice);
+	m_buildModeIDs.push_back(m_uiManager.Add(nextWaveText));
 }

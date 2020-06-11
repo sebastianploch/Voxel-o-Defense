@@ -9,8 +9,6 @@
 #include "PlaneGameObject.h"
 #include "ParticleEmitter.h"
 #include "Observer.h"
-//#include "ModelSelectionObserver.h"
-//#include "NextWaveObserver.h"
 
 #include "Camera.h"
 #include "ISOCamera.h"
@@ -22,9 +20,6 @@
 #include "VoxelRay.h"
 
 #include "Enemy.h"
-
-//- Required Header for threading dont delete - David -//
-#include <future>
 
 // Ignore 'unscoped enum' warning
 #pragma warning(disable : 26812)
@@ -102,28 +97,9 @@ void Game::Initialize(HWND window,
 	PlaneGameObject::InitDebugTexture(L"Resources/Textures/water.dds", m_d3dDevice.Get());
 
 
-	//// Create Debug Line
-	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
-	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
-	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
-	//m_gameObjects.push_back(std::make_shared<DebugLine>(Vector3(0.0f, 20.0f, 0.0f), Vector3(0.0f, 0.0f, -30.0f), m_d3dDevice.Get()));
-
-	//// Create Water
-	//m_gameObjects.push_back(std::make_shared<PlaneGameObject>(Vector3(0, 11.5f, 0), Vector3(), Vector3(4, 4, 4)));
-
 	// Create initial voxel meshes and texture
 	InitialiseVoxelWorld();
 	Sound::InitialiseSounds(m_audioEngine.get());
-
-	//// Build Mode UI
-	//InitialiseBuildModeUI();
-
-	//m_enemyFactory = std::make_shared<EnemyFactory>(m_d3dDevice);
-	//m_AiManager = std::make_shared<AiManager>(2800, DirectX::XMFLOAT3(50, 30, 20),m_enemyFactory.get());
-
-	//// Initialise turret pool
-	//for(int i = 0; i < 50; i++)
-	//	m_turrets.push_back(std::make_shared<Turret>(Vector3::Zero));
 }
 
 // Create direct3d context and allocate resources that don't depend on window size change.
@@ -342,49 +318,6 @@ void Game::InitialiseVoxelWorld()
 
 }
 
-//void Game::InitialiseBuildModeUI() {
-//	m_buildModeIDs = std::vector<int>();
-//
-//	//Border, Text and Icon at top left, Gradient at bottom
-//	std::shared_ptr<UISprite> buildmodeBorderSprite = std::make_shared<UISprite>();
-//	buildmodeBorderSprite->Initialise(SimpleMath::Vector2(1924 / 2 - 1, 1020 / 2), L"Resources/Textures/UI/BuildMode/Border.dds", m_d3dDevice.Get());	//1924*1020 is border img size
-//	m_buildModeIDs.push_back(m_UIManager->Add(buildmodeBorderSprite));
-//
-//	//Create Model Selection Buttons
-//	std::shared_ptr<UIButton> wallTier1Button = std::make_shared<UIButton>();
-//	std::shared_ptr<UIButton> wallTier2Button = std::make_shared<UIButton>();
-//	std::shared_ptr<UIButton> wallTier3Button = std::make_shared<UIButton>();
-//	std::shared_ptr<UIButton> wallTier4Button = std::make_shared<UIButton>();
-//	std::shared_ptr<UIButton> turretButton = std::make_shared<UIButton>();
-//
-//	//Initialise Position, Sprite, etc.
-//	wallTier1Button->Initialise(SimpleMath::Vector2(136 + (225 * 0), 930), L"Resources/Textures/UI/BuildMode/wall_1_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-//	wallTier2Button->Initialise(SimpleMath::Vector2(136 + (225 * 1), 930), L"Resources/Textures/UI/BuildMode/wall_2_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-//	wallTier3Button->Initialise(SimpleMath::Vector2(136 + (225 * 2), 930), L"Resources/Textures/UI/BuildMode/wall_3_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-//	wallTier4Button->Initialise(SimpleMath::Vector2(136 + (225 * 3), 930), L"Resources/Textures/UI/BuildMode/wall_4_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-//	turretButton->Initialise(SimpleMath::Vector2(136 + (225 * 4), 930), L"Resources/Textures/UI/BuildMode/turret_button.dds", L"Resources/Fonts/Calibri.spritefont", L"", m_d3dDevice.Get());
-//
-//	//Add to UI Manager
-//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier1Button));
-//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier2Button));
-//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier3Button));
-//	m_buildModeIDs.push_back(m_UIManager->Add(wallTier4Button));
-//	m_buildModeIDs.push_back(m_UIManager->Add(turretButton));
-//
-//	//Add observer object and specify relative model
-//	wallTier1Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_1.vxml", m_buildManager.get()));
-//	wallTier2Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_2.vxml", m_buildManager.get()));
-//	wallTier3Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_3.vxml", m_buildManager.get()));
-//	wallTier4Button->Clicked()->AddObserver(std::make_shared<ModelSelectionObserver>("Resources/Models/Voxel/wall_tier_4.vxml", m_buildManager.get()));
-//	turretButton->Clicked()->AddObserver(new ModelSelectionObserver("Resources/Models/Voxel/turret_tier_1.vxml", m_buildManager.get());
-//
-//	//Create "Next Wave" Button
-//	std::shared_ptr<UIButton> nextWaveButton = std::make_shared<UIButton>();
-//	nextWaveButton->Initialise(SimpleMath::Vector2(1790, 940), L"Resources/Textures/UI/BuildMode/RegularButton.dds", L"Resources/Fonts/5x5.spritefont", L"Next Wave", m_d3dDevice.Get());
-//	m_buildModeIDs.push_back(m_UIManager->Add(nextWaveButton));
-//	nextWaveButton->Clicked()->AddObserver(std::make_shared<NextWaveObserver>(static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera())));
-//}
-
 // Reset and re-initialise component upon "Device Lost" flag
 void Game::OnDeviceLost()
 {
@@ -424,11 +357,6 @@ void Game::Update(DX::StepTimer const& timer)
 {
     float deltaTime = static_cast<float>(timer.GetElapsedSeconds());
 
-	//if (m_inputState->GetKeyboardState().pressed.M)
-	//{
-	//	const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
-	//}
-
 	m_cameraManager->Update(deltaTime,
 							*m_inputState);
 
@@ -441,70 +369,11 @@ void Game::Update(DX::StepTimer const& timer)
 		ExitGame();
 	}
 
-	//// Handle Build Mode
-	//ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
-	//// Temporary Build Mode toggling
-	//if (m_inputState->GetKeyboardState().pressed.H) {
-	//	cam->SetIsBuildMode(!cam->GetIsBuildMode());
-	//}
-
-	//// Update build manager and build preview if build mode enabled
-	//if (cam->GetIsBuildMode()) {
-	//	// Update build manager
-	//	std::vector<SimpleMath::Vector3> verts = m_buildManager->Update(deltaTime,
-	//																	m_inputState.get(),
-	//																	m_cameraManager.get(),
-	//																	SimpleMath::Vector2Int(m_windowWidth, m_windowHeight), m_turrets);
-
-	//	// Update preview with new vertex positions
-	//	if (verts.size()) {	//Only if verts.size() != 0. verts size == 0 when mouse hasn't moved between frame
-	//		static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(verts[0], verts[1]);
-	//		static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(verts[1], verts[2]);
-	//		static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(verts[2], verts[3]);
-	//		static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(verts[3], verts[0]);
-	//	}
-
-	//	//Enable UI
-	//	for (int id : m_buildModeIDs)
-	//		m_UIManager->Get(id)->SetVisible(true);
-
-	//} else {
-	//	// Set all preview vertex positions to (1, 1, 1) if not build mode
-	//	static_cast<DebugLine*>(m_gameObjects[0].get())->UpdateLine(Vector3::One, Vector3::One);
-	//	static_cast<DebugLine*>(m_gameObjects[1].get())->UpdateLine(Vector3::One, Vector3::One);
-	//	static_cast<DebugLine*>(m_gameObjects[2].get())->UpdateLine(Vector3::One, Vector3::One);
-	//	static_cast<DebugLine*>(m_gameObjects[3].get())->UpdateLine(Vector3::One, Vector3::One);
-
-	//	//Enable UI
-	//	for (int id : m_buildModeIDs)
-	//		m_UIManager->Get(id)->SetVisible(false);
-	//}
-
-	////Start Wave
-	//if (m_inputState->GetKeyboardState().pressed.M) {
-	//	const auto result = std::async(std::launch::async, &AiManager::StartWave, m_AiManager.get());
-	//	Sound::Fire(L"WaveStart");
-	//	cam->SetIsBuildMode(false);
-	//}
-
-	// Update chunks if they have been modified
-	//ChunkHandler::UpdateChunkMeshes(m_d3dDevice.Get());
-
-	// Update all objects
-	//for (auto object : m_gameObjects)
-	//{
-	//	object->Update(deltaTime);
-	//}
-
-
 	//Update UI
 	m_UIManager->Update(deltaTime, m_inputState);
 
 	// Update scene
 	m_sceneManager->Update(deltaTime, timer.GetTotalSeconds(), *m_inputState.get());
-
-	//for(auto& turret : m_turrets)
-	//	turret->Update(deltaTime, m_AiManager->GetAiAgents());
 
 	UpdateAudio();
 }
@@ -548,32 +417,6 @@ void Game::Render()
 											nullptr,
 											&cb,
 											0, 0);
-
-	//ChunkHandler::DrawChunks(m_d3dContext.Get(), cb, m_constantBuffer.Get(), m_shaderManager.get());
-
-
-
-	////Render all objects
-	//for (const auto& object : m_gameObjects)
-	//{
-	//	// Assign Shader to be used to render upcoming object
-	//	m_shaderManager->SetShader(object->GetShaderType(), m_d3dContext.Get());
-
-	//	// Assign Object World Mat data to ConstantBuffer
-	//	cb.world = object->GetWorldMatrix();
-
-	//	// Update Constant Buffer
-	//	m_d3dContext->UpdateSubresource(m_constantBuffer.Get(),
-	//									0,
-	//									nullptr,
-	//									&cb,
-	//									0, 0);
-
-	//	// Draw Object
-	//	object->Draw(m_d3dContext.Get());
-	//}
-
-	//m_AiManager->Render(m_d3dContext.Get(), m_d3dContext.Get(), cb,m_constantBuffer.Get(), m_shaderManager.get());
 
 	m_spriteBatch->Begin(SpriteSortMode_Deferred, nullptr, m_states->PointClamp());
 	m_UIManager->Render(m_spriteBatch.get());

@@ -78,7 +78,7 @@ void SceneManager::Add(SCENETYPE sceneType)
 		case SCENETYPE::MENU:
 				MenuScene* menuScene;
 				menuScene = new MenuScene(this, m_UIManager, m_states);
-				menuScene->Initialise(m_windowWidth, m_windowHeight, m_UIManager, m_d3dDevice.Get());
+				menuScene->Initialise(m_windowWidth, m_windowHeight, m_UIManager, m_d3dDevice.Get(), &m_cameraManager);
 
 				m_scenes.emplace_back(std::unique_ptr<MenuScene>(menuScene));
 			break;

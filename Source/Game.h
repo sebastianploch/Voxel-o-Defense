@@ -50,9 +50,8 @@ private:
     void OnDeviceLost();
 
     void InitialiseVoxelWorld();
-    void InitialiseBuildModeUI();
-
-	void Clear();
+	
+    void Clear();
 	void Present();
 	void Prepare();
 
@@ -75,10 +74,6 @@ private:
     // Input Handler
     std::unique_ptr<InputState>							m_inputState;
 
-	//// Ai Manager
-
-	//std::shared_ptr<AiManager>						    m_AiManager;
-
     // Rendering
     std::unique_ptr<ShaderManager>                      m_shaderManager;
     std::unique_ptr<DirectX::CommonStates>              m_states;
@@ -96,14 +91,6 @@ private:
 
     // DeltaTime Timer
     DX::StepTimer                                       m_timer;
-
-    // Store Build Mode UI ID's
-    //std::vector<int>                                    m_buildModeIDs;
-
-	/*std::shared_ptr<EnemyFactory>                       m_enemyFactory;*/
-
-    // Turret Object
-    //std::vector<std::shared_ptr<Turret>>                m_turrets = std::vector<std::shared_ptr<Turret>>();
 	
 	std::unique_ptr<SceneManager>						m_sceneManager;
 };

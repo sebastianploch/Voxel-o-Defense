@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "MenuScene.h"
 
+#include "ISOCamera.h"
+
 #include "UIButton.h"
 #include "UISprite.h"
 #include "UIManager.h"
@@ -25,8 +27,9 @@ void MenuScene::OnNotify(Event* event)
 	switch (event->m_type)
 	{
 	case EVENTTYPE::CLICK:
+		ISOCamera* cam = static_cast<ISOCamera*>(m_cameraManager->GetActiveCamera());
+		cam->SetIsBuildMode(true);
 		m_sceneManager->Remove(SCENETYPE::MENU);
-
 		break;
 	}
 }
@@ -34,8 +37,11 @@ void MenuScene::OnNotify(Event* event)
 void MenuScene::Initialise(int windowWidth,
 						   int windowHeight,
 						   UIManager& uiManager,
-						   ID3D11Device* device)
+						   ID3D11Device* device, 
+						   CameraManager* cameraManager)
 {
+	m_cameraManager = cameraManager;
+
 	// Create background image
 	std::shared_ptr<UISprite> backgroundImage = std::make_shared<UISprite>();
 	backgroundImage->Initialise(SimpleMath::Vector2(0.0f, 0.0f), L"Resources/Textures/MainMenuOverlay.dds", device, -1.0f, windowWidth, windowHeight);

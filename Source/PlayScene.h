@@ -51,6 +51,9 @@ private:
 	std::unique_ptr<BuildManager>				m_buildManager;
 	std::vector<int>                            m_buildModeIDs;	// Store Build Mode UI ID's
 
+	// Brazier Object
+	Model										m_brazierObject;
+
 	// Turret Object
 	std::vector<std::shared_ptr<Turret>>		m_turrets = std::vector<std::shared_ptr<Turret>>();
 };

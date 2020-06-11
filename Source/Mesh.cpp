@@ -169,8 +169,8 @@ void Mesh::ReleaseObjects()
     if (this->m_MeshGeometry.indexBuffer)
         this->m_MeshGeometry.indexBuffer->Release();
 
-    if (this->m_Texture)
-        this->m_Texture->Release();
+    //if (this->m_Texture)
+    //    this->m_Texture->Release();
 }
 
 ID3D11ShaderResourceView* Mesh::CreateTextureFromFile(std::string texturePath,ID3D11Device1 * device)
