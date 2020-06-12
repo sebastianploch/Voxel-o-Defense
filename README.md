@@ -5,6 +5,6 @@ Voxel-o-Defence is a voxel-based tower defence game made using DirectX11 in 6 we
 
 ![Image of build mode](https://i.imgur.com/RtvYdJ3.png)
 
-For a video of gameplay, [click here.](https://www.youtube.com/watch?v=FMve3t1q6Rc)
+For a video of gameplay, [click here.](https://youtu.be/FMve3t1q6Rc)
 
 ###### *Staffordshire University*
